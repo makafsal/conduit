@@ -7,7 +7,7 @@ export class AppService {
     return { message: 'Welcome to auth-service!' };
   }
 
-  handleUserCreated(data: CreateUserEvent) {
-    console.log('handleUserCreated - AUTH-SERVICE ', data);
+  handleUserCreated(userCreatedEvent: CreateUserEvent) {
+    console.log('handleUserCreated - AUTH-SERVICE ', userCreatedEvent);
   }
 }

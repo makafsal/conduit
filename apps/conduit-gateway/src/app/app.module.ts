@@ -9,7 +9,16 @@ import { AppService } from './app.service';
     ClientsModule.register([
       {
         name: 'AUTH-SERVICE',
-        transport: Transport.TCP,
+        transport: Transport.KAFKA,
+        options: {
+          client: {
+            clientId: 'auth-service',
+            brokers: ['localhost:9092']
+          },
+          consumer: {
+            groupId: 'auth-service-consumer'
+          }
+        }
       },
     ]),
   ],
