@@ -10,10 +10,14 @@ export class AppService {
 
   constructor(
     @Inject('AUTH-SERVICE') private readonly communicationClient: ClientKafka
-  ) {}
+  ) { }
 
   getData(): { message: string } {
     return { message: 'Welcome to conduit-backend!' };
+  }
+
+  getUsers() {
+    this.communicationClient.emit('users_list', {});
   }
 
   createUser(createUserInput: CreateUserInput) {

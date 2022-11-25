@@ -13,6 +13,11 @@ export class AppController {
     return this.appService.getData();
   }
 
+  @EventPattern('users_list')
+  handleGetUsers() {
+    this.appService.handleGetUsers();
+  }
+
   @EventPattern('user_created')
   handleUserCreated(data: CreateUserEvent) {
     this.appService.handleUserCreated(data);
