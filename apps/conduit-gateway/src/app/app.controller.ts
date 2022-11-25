@@ -17,4 +17,9 @@ export class AppController {
     console.log('App controller');
     this.appService.createUser(createUserInput);
   }
+
+  @Get('/users')
+  getUsers() {
+    this.appService.getUsers();
+  }
 }
