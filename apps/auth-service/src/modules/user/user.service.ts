@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { CreateUserEvent } from './events/create-user.event';
-import { UserRepository } from './user.respository';
+import { UserRepository } from './user.repository';
 
 const logger = new Logger();
 
