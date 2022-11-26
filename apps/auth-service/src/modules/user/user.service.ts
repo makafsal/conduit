@@ -12,7 +12,8 @@ export class UserService {
   async handleGetUsers() {
     logger.log('HandleGetUsers - AUTH-SERVICE ');
     const users = await this.userRepository.getUsers();
-    logger.log('Users: ', users);
+    logger.log('Users: ', JSON.stringify(users));
+    return users;
   }
 
   handleUserCreated(userCreatedEvent: CreateUserEvent) {
