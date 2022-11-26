@@ -17,15 +17,9 @@ export class AuthService implements OnModuleInit {
     this.communicationClient.subscribeToResponseOf('users_list');
   }
 
-  async getUsers() {
-    // return this.communicationClient.send('users_list', {}).subscribe((users) => {
-    //   logger.log('Response ', users)
-    //   return users;
-    // });
+  getUsers() {
     return this.communicationClient.send('users_list', {}).pipe(
-      map((message) => ({
-        message
-      }))
+      map((message) => (message))
     )
   }
 

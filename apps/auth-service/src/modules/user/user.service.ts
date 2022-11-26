@@ -13,11 +13,7 @@ export class UserService {
     logger.log('HandleGetUsers - AUTH-SERVICE ');
     const users = await this.userRepository.getUsers();
     logger.log('Users: ', JSON.stringify(users));
-    return {
-      users: [
-        { id: 1, name: 'He' }
-      ]
-    };
+    return users;
   }
 
   handleUserCreated(userCreatedEvent: CreateUserEvent) {
