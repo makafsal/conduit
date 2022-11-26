@@ -1,5 +1,5 @@
 import { Controller } from '@nestjs/common';
-import { EventPattern } from '@nestjs/microservices';
+import { EventPattern, MessagePattern } from '@nestjs/microservices';
 import { CreateUserEvent } from './events/create-user.event';
 import { UserService } from './user.service';
 
@@ -8,9 +8,10 @@ export class UserController {
 
   constructor(private readonly appService: UserService) { }
 
-  @EventPattern('users_list')
+  // TODO: Remove below listing
+  @MessagePattern('users_list')
   handleGetUsers() {
-    this.appService.handleGetUsers();
+    return this.appService.handleGetUsers();
   }
 
   @EventPattern('user_created')
