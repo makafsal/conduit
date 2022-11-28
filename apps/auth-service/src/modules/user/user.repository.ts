@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { mapping } from 'cassandra-driver';
 import { User } from './models/user.model';
 import { CassandraService } from '../cassandra/cassandra.service';
@@ -15,7 +15,7 @@ export class UserRepository implements OnModuleInit {
       models: {
         'User': {
           tables: ['users'],
-          mappings: new mapping.UnderscoreCqlToCamelCaseMappings
+          mappings: new mapping.UnderscoreCqlToCamelCaseMappings,
         }
       }
     }
@@ -25,5 +25,13 @@ export class UserRepository implements OnModuleInit {
 
   async getUsers() {
     return (await this.userMapper.findAll()).toArray();
+  }
+
+  createUser(user: User) {
+    return this.userMapper.insert(user);
+  }
+
+  async updateUser(user: User) {
+    await this.userMapper.update(user);
   }
 }
