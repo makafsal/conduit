@@ -16,4 +16,7 @@ export class UpdateUserInput {
 
   @Field()
   image: string;
+
+  @Field()
+  token: string;
 }

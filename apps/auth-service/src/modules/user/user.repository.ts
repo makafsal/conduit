@@ -27,11 +27,15 @@ export class UserRepository implements OnModuleInit {
     return (await this.userMapper.findAll()).toArray();
   }
 
+  async findUser(user: User) {
+    return await this.userMapper.find({ email: user.email });
+  }
+
   createUser(user: User) {
     return this.userMapper.insert(user);
   }
 
   async updateUser(user: User) {
-    await this.userMapper.update(user);
+    return await this.userMapper.update(user);
   }
 }

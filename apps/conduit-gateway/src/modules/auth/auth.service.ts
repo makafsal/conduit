@@ -1,6 +1,6 @@
 import { Injectable, Inject, Logger, OnModuleInit } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { ClientKafka } from '@nestjs/microservices';
+import { ClientKafka, RpcException } from '@nestjs/microservices';
 import { map } from 'rxjs';
 import { CreateUserInput } from './dto/input/create-user.input';
 import { UpdateUserInput } from './dto/input/update-user.input';
@@ -44,13 +44,18 @@ export class AuthService implements OnModuleInit {
 
   // TODO: Protect with AuthGuard
   async updateUser(user: UpdateUserInput) {
-    logger.log('GATEWAY - Update user service')
+    logger.log('GATEWAY - Update user service');
 
     return this.authClient.send('user_update', user).pipe(
       map(updatedUser => {
-        logger.log('GATEWAY - User updated successfully');
+        if (!updatedUser) {
+          logger.log('GATEWAY - User not updated');
 
-        return updatedUser
+          return new RpcException('User not found');
+        }
+
+        logger.log('GATEWAY - User updated successfully');
+        return updatedUser;
       })
     );
   }

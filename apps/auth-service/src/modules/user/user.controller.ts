@@ -21,8 +21,6 @@ export class UserController {
 
   @MessagePattern('user_update')
   handleUseUpdate(user: User) {
-    // TODO: Check user exists
-    // TODO: Fetch and return the updated user 
     return this.userService.handleUserUpdate(user);
   }
 }

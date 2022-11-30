@@ -3,6 +3,7 @@ import { AuthService } from "./auth.service";
 import { User } from "./dto/output/user.dto";
 import { CreateUserInput } from "./dto/input/create-user.input";
 import { UpdateUserInput } from "./dto/input/update-user.input";
+import { UpdatedUserOutput } from "./dto/output/update-user.output";
 
 @Resolver()
 export class AuthResolver {
@@ -20,7 +21,7 @@ export class AuthResolver {
     return this.authService.createUser(user);
   }
 
-  @Mutation(() => User)
+  @Mutation(() => UpdatedUserOutput)
   updateUser(@Args('user') user: UpdateUserInput) {
     return this.authService.updateUser(user);
   }

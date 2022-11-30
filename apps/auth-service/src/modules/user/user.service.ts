@@ -13,10 +13,15 @@ export class UserService {
   ) { }
 
   async handleGetUsers() {
-    logger.log('HandleGetUsers - AUTH-SERVICE ');
+    logger.log('AUTH-SERVICE - HandleGetUsers');
     const users = await this.userRepository.getUsers();
     logger.log('Users: ', JSON.stringify(users));
     return users;
+  }
+
+  async findUser(user: User) {
+    logger.log('AUTH-SERVICE: FindUser triggered')
+    return this.userRepository.findUser(user);
   }
 
   async handleUserCreated(user: User) {
@@ -37,6 +42,17 @@ export class UserService {
 
   async handleUserUpdate(user: User) {
     logger.log('AUTH-SERVICE - handleUserUpdate');
-    return this.userRepository.updateUser(user);
+    const currentUser = await (await this.findUser(user)).first();
+
+    if (currentUser) {
+      logger.log('AUTH-SERVICE - User found');
+      await this.userRepository.updateUser(user);
+
+      const updatedUser = await (await this.findUser(user)).first();
+
+      return updatedUser;
+    }
+
+    return;
   }
 }
