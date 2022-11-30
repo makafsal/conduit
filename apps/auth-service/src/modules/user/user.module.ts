@@ -15,4 +15,4 @@ import { UserService } from './user.service';
     // CassandraService
   ]
 })
-export class UserModule {}
+export class UserModule { }
