@@ -23,6 +23,7 @@
     "@types/jest": "28.1.1",
     "@types/node": "18.7.1",
     "@types/passport-jwt": "^3.0.7",
+    "@types/passport-local": "^1.0.34",
     "@typescript-eslint/eslint-plugin": "^5.36.1",
     "@typescript-eslint/parser": "^5.36.1",
     "eslint": "~8.15.0",
@@ -51,6 +52,7 @@
     "kafkajs": "^2.2.3",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.0.0",
     "tslib": "^2.3.0"

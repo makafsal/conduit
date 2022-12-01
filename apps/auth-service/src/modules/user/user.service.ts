@@ -49,6 +49,7 @@ export class UserService {
       await this.userRepository.updateUser(user);
 
       const updatedUser = await (await this.findUser(user)).first();
+      delete updatedUser.password;
 
       return updatedUser;
     }

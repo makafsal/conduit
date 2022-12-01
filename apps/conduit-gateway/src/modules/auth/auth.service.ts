@@ -50,7 +50,6 @@ export class AuthService implements OnModuleInit {
       map(updatedUser => {
         if (!updatedUser) {
           logger.log('GATEWAY - User not updated');
-
           return new RpcException('User not found');
         }
 

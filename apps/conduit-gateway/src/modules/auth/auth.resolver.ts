@@ -16,6 +16,11 @@ export class AuthResolver {
     return this.authService.getUsers();
   }
 
+  // @Query(() => User)
+  // getUser(@Args('user')) {
+  //   return this.authService.getUser()
+  // }
+
   @Mutation(() => User)
   createUser(@Args('user') user: CreateUserInput) {
     return this.authService.createUser(user);
