@@ -2,8 +2,12 @@ import { Injectable, Inject, Logger, OnModuleInit } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ClientKafka, RpcException } from '@nestjs/microservices';
 import { map } from 'rxjs';
+import { jwtConstants } from '../../shared/constants';
 import { CreateUserInput } from './dto/input/create-user.input';
+import { GetUserInput } from './dto/input/get-user.input';
+import { LoginUserInput } from './dto/input/login-user.input';
 import { UpdateUserInput } from './dto/input/update-user.input';
+import { ValidateUserInput } from './dto/input/validate-user.input';
 import { User } from './dto/output/user.dto';
 
 const logger = new Logger();
@@ -20,6 +24,8 @@ export class AuthService implements OnModuleInit {
     this.authClient.subscribeToResponseOf('users_list');
     this.authClient.subscribeToResponseOf('user_creation');
     this.authClient.subscribeToResponseOf('user_update');
+    this.authClient.subscribeToResponseOf('get_user');
+    this.authClient.subscribeToResponseOf('validate_user');
   }
 
   getUsers() {
@@ -28,7 +34,13 @@ export class AuthService implements OnModuleInit {
     )
   }
 
-  async createUser(user: CreateUserInput) {
+  getUser(user: GetUserInput) {
+    return this.authClient.send('get_user', user).pipe(
+      map(r_user => r_user)
+    )
+  }
+
+  createUser(user: CreateUserInput) {
     logger.log('GATEWAY - Create user service')
 
     return this.authClient.send('user_creation', user).pipe(
@@ -43,7 +55,7 @@ export class AuthService implements OnModuleInit {
   }
 
   // TODO: Protect with AuthGuard
-  async updateUser(user: UpdateUserInput) {
+  updateUser(user: UpdateUserInput) {
     logger.log('GATEWAY - Update user service');
 
     return this.authClient.send('user_update', user).pipe(
@@ -57,5 +69,15 @@ export class AuthService implements OnModuleInit {
         return updatedUser;
       })
     );
+  }
+
+  validateUser(user: ValidateUserInput) {
+    return this.authClient.send('validate_user', user).pipe(
+      map(status => status)
+    );
+  }
+
+  async login(user: LoginUserInput) {
+    console.log('Login logic')
   }
 }

@@ -27,7 +27,7 @@ export class UserRepository implements OnModuleInit {
     return (await this.userMapper.findAll()).toArray();
   }
 
-  findUser(user: User) {
+  getUser(user: User) {
     return this.userMapper.find({ email: user.email });
   }
 
