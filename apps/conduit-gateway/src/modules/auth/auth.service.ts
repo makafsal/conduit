@@ -1,4 +1,5 @@
-import { Injectable, Inject, Logger, OnModuleInit } from '@nestjs/common';
+import { Injectable, Inject, Logger, OnModuleInit, NotFoundException } from '@nestjs/common';
+import { ExceptionsHandler } from '@nestjs/core/exceptions/exceptions-handler';
 import { JwtService } from '@nestjs/jwt';
 import { ClientKafka, RpcException } from '@nestjs/microservices';
 import { map } from 'rxjs';
@@ -71,13 +72,24 @@ export class AuthService implements OnModuleInit {
     );
   }
 
-  validateUser(user: ValidateUserInput) {
+  async validateUser(user: ValidateUserInput) {
     return this.authClient.send('validate_user', user).pipe(
-      map(status => status)
+      map(validUser => validUser)
     );
   }
 
   async login(user: LoginUserInput) {
-    console.log('Login logic')
+    return this.authClient.send('validate_user', user).pipe(
+      map(validUser => {
+        if (validUser) {
+          return {
+            ...validUser,
+            token: this.jwtService.sign(validUser)
+          }
+        }
+
+        throw new NotFoundException('User not found.');
+      })
+    );
   }
 }
