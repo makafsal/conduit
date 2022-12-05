@@ -14,6 +14,11 @@ export class UserController {
     return this.userService.handleGetUsers();
   }
 
+  @MessagePattern('get_user')
+  handleGetUser(user: User) {
+    return this.userService.handleGetUser(user);
+  }
+
   @MessagePattern('user_creation')
   handleUserCreation(user: User) {
     return this.userService.handleUserCreated(user);
@@ -22,5 +27,10 @@ export class UserController {
   @MessagePattern('user_update')
   handleUseUpdate(user: User) {
     return this.userService.handleUserUpdate(user);
+  }
+
+  @MessagePattern('validate_user')
+  handleValidateUser(user: User) {
+    return this.userService.handleValidateUser(user);
   }
 }

@@ -9,10 +9,6 @@ export class UpdatedUserOutput {
 
   @Field({ nullable: true })
   @Field()
-  password: string;
-
-  @Field({ nullable: true })
-  @Field()
   username: string;
 
   @Field({ nullable: true })

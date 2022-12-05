@@ -19,9 +19,19 @@ export class UserService {
     return users;
   }
 
-  async findUser(user: User) {
+  async handleGetUser(user: User) {
     logger.log('AUTH-SERVICE: FindUser triggered')
-    return this.userRepository.findUser(user);
+    const found_user = await (await this.userRepository.getUser(user)).first();
+
+    if (found_user) {
+      logger.log('AUTH-SERVICE - User found');
+      delete found_user.password;
+
+      return found_user;
+    }
+
+    logger.log('AUTH-SERVICE - User not found');
+    return;
   }
 
   async handleUserCreated(user: User) {
@@ -42,15 +52,26 @@ export class UserService {
 
   async handleUserUpdate(user: User) {
     logger.log('AUTH-SERVICE - handleUserUpdate');
-    const currentUser = await (await this.findUser(user)).first();
+    const currentUser = await this.handleGetUser(user);
 
     if (currentUser) {
-      logger.log('AUTH-SERVICE - User found');
       await this.userRepository.updateUser(user);
 
-      const updatedUser = await (await this.findUser(user)).first();
+      const updatedUser = await this.handleGetUser(user);
+      delete updatedUser.password;
 
       return updatedUser;
+    }
+  }
+
+  async handleValidateUser(user: User) {
+    logger.log('AUTH-SERVICE - handleValidateUser');
+
+    const found_user = await (await this.userRepository.getUser(user)).first();
+    const isPasswordOk = await bcrypt.compare(user.password, found_user.password);
+
+    if (isPasswordOk) {
+      return found_user;
     }
 
     return;
