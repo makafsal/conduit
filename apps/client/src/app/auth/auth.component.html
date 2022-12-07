@@ -8,9 +8,9 @@
           <a href="">{{switchQuestion }}</a>
         </p>
 
-        <!-- <ul class="error-messages">
-          <li>That email is already taken</li>
-        </ul> -->
+        <ul class="error-messages">
+          <li *ngIf="authErr">{{authErr}}</li>
+        </ul>
 
         <form>
           <fieldset class="form-group" *ngIf="pageType === 'register'">

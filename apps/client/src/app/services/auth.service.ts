@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
-import { GET_USERS, LOGIN } from '../shared/constants/auth-queries';
+import { LOGIN } from '../shared/constants/auth-queries';
 
 @Injectable()
 export class AuthService {

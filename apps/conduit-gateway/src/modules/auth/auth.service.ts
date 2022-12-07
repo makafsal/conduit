@@ -88,7 +88,7 @@ export class AuthService implements OnModuleInit {
           }
         }
 
-        throw new NotFoundException('User not found.');
+        throw new NotFoundException('Incorrect Username or Password');
       })
     );
   }

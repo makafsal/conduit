@@ -6,6 +6,6 @@ export class LoginUserOutput {
   @Field()
   email: string;
 
-  @Field({ nullable: true })
+  @Field()
   token: string;
 }
