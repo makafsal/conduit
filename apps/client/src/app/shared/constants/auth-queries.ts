@@ -19,6 +19,7 @@ export const LOGIN = gql`
       ) {
         email
         token
+        username
       }
     }
 `;

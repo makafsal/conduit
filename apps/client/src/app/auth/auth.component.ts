@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ApolloQueryResult } from '@apollo/client/core';
-import { catchError, observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { AuthService } from '../services/auth.service';
+import { AppStateService } from '../services/common/appStateService';
 
 @Component({
   selector: 'conduit-auth',
@@ -45,11 +45,18 @@ export class AuthComponent implements OnInit, OnDestroy {
           }
 
           if (response.data) {
+            console.log(response.data)
             this.authErr = '';
             const data = response.data;
             const dataObj = Object(data);
             const access_token = dataObj.loginUser.token;
-            localStorage.setItem('conduit-token', access_token);
+            AppStateService.setUserToken(access_token);
+            const userInfo = {
+              email: dataObj.loginUser.email,
+              username: dataObj.loginUser.username
+            };
+            AppStateService.setUserInfo(JSON.stringify(userInfo));
+            console.log(AppStateService.getUserInfo())
           }
         });
     }

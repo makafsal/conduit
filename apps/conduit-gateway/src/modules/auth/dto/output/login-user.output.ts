@@ -8,4 +8,7 @@ export class LoginUserOutput {
 
   @Field()
   token: string;
+
+  @Field()
+  username: string;
 }

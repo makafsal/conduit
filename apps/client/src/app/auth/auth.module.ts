@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { AuthComponent } from './auth.component';
 import { RouterModule } from '@angular/router';
 import { authRoutes } from './auth.routes';
+import { AppStateService } from '../services/common/appStateService';
 
 @NgModule({
   declarations: [AuthComponent],
@@ -12,6 +13,7 @@ import { authRoutes } from './auth.routes';
     CommonModule,
     RouterModule.forRoot(authRoutes),
   ],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers:[AppStateService]
 })
 export class AuthModule { }
