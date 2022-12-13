@@ -9,6 +9,7 @@ import { UseGuards } from "@nestjs/common";
 import { LoginUserOutput } from "./dto/output/login-user.output";
 import { LoginUserInput } from "./dto/input/login-user.input";
 import { GraphQLAuthGuard } from "../../shared/jwt/jwt-auth.guard";
+import { CreateUserOutput } from "./dto/output/create-user.output";
 
 @Resolver()
 export class AuthResolver {
@@ -28,8 +29,7 @@ export class AuthResolver {
     return this.authService.getUser(user);
   }
 
-  @Mutation(() => User)
-  @UseGuards(GraphQLAuthGuard)
+  @Mutation(() => CreateUserOutput)
   createUser(@Args('user') user: CreateUserInput) {
     return this.authService.createUser(user);
   }

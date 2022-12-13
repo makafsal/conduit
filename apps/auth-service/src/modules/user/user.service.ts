@@ -36,7 +36,13 @@ export class UserService {
   }
 
   async handleUserCreated(user: User) {
-    logger.log('AUTH-SERVICE - Creating User');
+    logger.log('AUTH-SERVICE - Create User triggered');
+
+    const found_user = await (await this.userRepository.getUser(user)).first();
+    if (found_user) {
+      logger.log('AUTH-SERVICE - Email already taken');
+      return;
+    }
 
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(user.password, salt);
@@ -44,11 +50,7 @@ export class UserService {
     await this.userRepository.createUser(user);
     delete user.password;
 
-    return {
-      ...user,
-      bio: '',
-      image: ''
-    }
+    return user;
   }
 
   async handleUserUpdate(user: User) {

@@ -80,5 +80,10 @@
     "secure-ls": "^1.2.6",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
+  },
+  "overrides": {
+    "apollo-angular": {
+      "@angular/core": "$@angular/core"
+    }
   }
 }

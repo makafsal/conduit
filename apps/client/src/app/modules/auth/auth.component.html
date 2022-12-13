@@ -11,10 +11,13 @@
         <ul class="error-messages">
           <li *ngIf="authErr">{{authErr}}</li>
         </ul>
+        <div class="alert alert-success" *ngIf="authSuccessText">
+          {{authSuccessText}}
+        </div>
 
         <form>
           <fieldset class="form-group" *ngIf="pageType === 'register'">
-            <input class="form-control form-control-lg" type="text" placeholder="Your Name">
+            <input class="form-control form-control-lg" type="text" name="username" [(ngModel)]="username" placeholder="Your Name">
           </fieldset>
           <fieldset class="form-group">
             <input class="form-control form-control-lg" type="text" placeholder="Email" name="email" [(ngModel)]="userEmail">

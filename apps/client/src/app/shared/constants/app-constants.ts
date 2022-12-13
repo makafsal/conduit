@@ -1,5 +1,5 @@
 export const enum AppConstants {
-  SECRET_KEY = "conduit_key",
+  SECRET_KEY = "%$@c0Ndu!t_key)(*$&!@",
   AUTH_TOKEN_KEY = 'token',
   USER_INFO_KEY = 'user-info'
 }

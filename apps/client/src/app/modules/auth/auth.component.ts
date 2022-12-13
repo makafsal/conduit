@@ -1,8 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { AuthService } from '../services/auth.service';
-import { AppStateService } from '../services/common/appStateService';
+import { AuthService } from '../../services/auth.service';
+import { AppStateService } from '../../services/common/appStateService';
+import { TEXTS } from '../../shared/constants/common';
 
 @Component({
   selector: 'conduit-auth',
@@ -17,14 +18,18 @@ export class AuthComponent implements OnInit, OnDestroy {
   public switchQuestion = '';
   public userEmail = '';
   public userPassword = '';
+  public username = '';
   public authErr = '';
+  public authSuccessText = '';
 
   private routeSubscription: Subscription = new Subscription();
   // private getUserSubscription: Subscription | undefined;
 
   constructor(
     private route: ActivatedRoute,
-    private authService: AuthService
+    private router: Router,
+    private authService: AuthService,
+    private appStateService: AppStateService,
   ) { }
 
   ngOnInit(): void {
@@ -36,7 +41,33 @@ export class AuthComponent implements OnInit, OnDestroy {
   }
 
   public onSubmit() {
+    if (this.pageType === 'login') {
+      this.login();
+    } else if (this.pageType === 'register') {
+      this.register();
+    }
+  }
+
+  private register() {
+    if (this.username?.trim() && this.userEmail?.trim().length && this.userPassword?.trim().length) {
+      this.authService
+        .register(this.username, this.userEmail, this.userPassword)
+        .subscribe((response) => {
+          if (response.errors) {
+            this.authErr = response.errors[0].message;
+          }
+
+          this.authSuccessText = TEXTS.AuthSuccessText;
+          setTimeout(() => {
+            this.router.navigate(['/login']);
+          }, 3000);
+        });
+    }
+  }
+
+  private login() {
     if (this.userEmail?.trim().length && this.userPassword?.trim().length) {
+      this.appStateService.resetUser();
       this.authService
         .login(this.userEmail, this.userPassword)
         .subscribe((response) => {
@@ -45,18 +76,16 @@ export class AuthComponent implements OnInit, OnDestroy {
           }
 
           if (response.data) {
-            console.log(response.data)
             this.authErr = '';
             const data = response.data;
             const dataObj = Object(data);
             const access_token = dataObj.loginUser.token;
-            AppStateService.setUserToken(access_token);
+            this.appStateService.setUserToken(access_token);
             const userInfo = {
               email: dataObj.loginUser.email,
               username: dataObj.loginUser.username
             };
-            AppStateService.setUserInfo(JSON.stringify(userInfo));
-            console.log(AppStateService.getUserInfo())
+            this.appStateService.setUserInfo(JSON.stringify(userInfo));
           }
         });
     }
