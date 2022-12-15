@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import { LOGIN, REGISTER } from '../shared/constants/auth-queries';
+import { URLs } from '../shared/constants/common';
 
 @Injectable()
 export class AuthService {
@@ -9,13 +10,14 @@ export class AuthService {
     private readonly apollo: Apollo
   ) { }
 
-  register(username: string, email: string, password: string) {
+  register(username: string, email: string, password: string, image: string = URLs.PROFILE_IMAGE) {
     return this.apollo.mutate({
       mutation: REGISTER,
       variables: {
         username,
         email,
-        password
+        password,
+        image
       }
     });
   }
@@ -29,12 +31,4 @@ export class AuthService {
       }
     }).valueChanges;
   }
-
-  // testFun() {
-  //   this.login();
-  //   console.log('test-fun called')
-  //   return this.apollo.watchQuery({
-  //     query: GET_USERS
-  //   }).valueChanges;
-  // }
 }

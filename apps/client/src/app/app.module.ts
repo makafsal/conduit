@@ -11,6 +11,7 @@ import { FooterComponent } from './shared/layout/footer/footer.component';
 import { AuthModule } from './modules/auth/auth.module';
 import { HttpClientModule } from '@angular/common/http';
 import { createApollo } from './shared/apollo/createApollo';
+import { SettingsModule } from './modules/settings/settings.module';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { createApollo } from './shared/apollo/createApollo';
   imports: [
     BrowserModule,
     AuthModule,
+    SettingsModule,
     ApolloModule,
     HttpClientModule,
     RouterModule.forRoot(appRoutes, {

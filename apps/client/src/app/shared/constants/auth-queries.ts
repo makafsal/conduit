@@ -1,14 +1,5 @@
 import { gql } from 'apollo-angular';
 
-export const GET_USERS = gql`
-  query getUsers {
-    users {
-        email
-        username
-      }
-  }
-`;
-
 export const LOGIN = gql`
   query login($email: String!, $password: String!) {
     loginUser(
@@ -25,17 +16,20 @@ export const LOGIN = gql`
 `;
 
 export const REGISTER = gql`
-  mutation createUser($username: String!, $email: String!, $password: String!) {
+  mutation createUser($username: String!, $email: String!, $password: String!, $image: String!) {
     createUser(
       user: {
         username: $username,
         email: $email,
-        password: $password
+        password: $password,
+        image: $image
       }
     ) {
       username
       email
       token
+      bio
+      image
     }
   }
 `;

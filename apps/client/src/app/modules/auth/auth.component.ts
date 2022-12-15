@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 import { AppStateService } from '../../services/common/appStateService';
 import { TEXTS } from '../../shared/constants/common';
+import { IUser } from '../../shared/model/IUser';
 
 @Component({
   selector: 'conduit-auth',
@@ -81,11 +82,15 @@ export class AuthComponent implements OnInit, OnDestroy {
             const dataObj = Object(data);
             const access_token = dataObj.loginUser.token;
             this.appStateService.setUserToken(access_token);
-            const userInfo = {
+            const userInfo: IUser = {
               email: dataObj.loginUser.email,
-              username: dataObj.loginUser.username
+              username: dataObj.loginUser.username,
+              password: this.userPassword,
+              bio: dataObj.loginUser.username,
+              image: dataObj.loginUser.username
             };
-            this.appStateService.setUserInfo(JSON.stringify(userInfo));
+            this.appStateService.setCurrentUser(userInfo);
+            this.router.navigate(['/']);
           }
         });
     }

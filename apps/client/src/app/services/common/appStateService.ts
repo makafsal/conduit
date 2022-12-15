@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 import { AppConstants } from "../../shared/constants/app-constants";
+import { IUser } from "../../shared/model/IUser";
 import { SLSService } from "./secureLocalStorageService";
 
 @Injectable()
@@ -8,11 +9,16 @@ export class AppStateService {
   private userTokenDataSource = new BehaviorSubject<string>(this.getUserToken());
   public userTokenData$ = this.userTokenDataSource.asObservable();
 
-  private userInfoDataSource = new BehaviorSubject(this.getUserInfo());
-  public userInfoData$ = this.userInfoDataSource.asObservable();
+  private currentUserDataSource = new BehaviorSubject<IUser | undefined>(undefined);
+  public currentUserData$ = this.currentUserDataSource.asObservable();
 
   static getUserTokenStatic() {
     return SLSService.getValueByKey(AppConstants.AUTH_TOKEN_KEY);
+  }
+
+  static getCurrentUserStatic() {
+    const userInfo = SLSService.getValueByKey(AppConstants.USER_INFO_KEY);
+    return JSON.parse(userInfo);
   }
 
   public setUserToken(token: string) {
@@ -23,19 +29,21 @@ export class AppStateService {
   public resetUser() {
     SLSService.removeKey(AppConstants.AUTH_TOKEN_KEY);
     SLSService.removeKey(AppConstants.USER_INFO_KEY);
+    this.userTokenDataSource.next('');
+    this.currentUserDataSource.next(undefined);
   }
 
   public getUserToken() {
     return SLSService.getValueByKey(AppConstants.AUTH_TOKEN_KEY);
   }
 
-
-  public setUserInfo(userInfo: string) {
-    SLSService.setKeyValue(AppConstants.USER_INFO_KEY, userInfo);
-    this.userInfoDataSource.next(this.getUserInfo());
+  public getCurrentUser() {
+    const userInfo = SLSService.getValueByKey(AppConstants.USER_INFO_KEY);
+    this.currentUserDataSource.next(userInfo && JSON.parse(userInfo));
   }
 
-  public getUserInfo() {
-    return SLSService.getValueByKey(AppConstants.USER_INFO_KEY);
+  public setCurrentUser(user: IUser) {
+    SLSService.setKeyValue(AppConstants.USER_INFO_KEY, JSON.stringify(user));
+    this.currentUserDataSource.next(AppStateService.getCurrentUserStatic());
   }
 }

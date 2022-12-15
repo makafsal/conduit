@@ -3,7 +3,6 @@
     <a class="navbar-brand" href="#/">conduit</a>
     <ul class="nav navbar-nav pull-xs-right">
       <li class="nav-item">
-        <!-- Add "active" class when you're on that page" -->
         <a class="nav-link" routerLink="/">Home</a>
       </li>
       <li class="nav-item">
@@ -12,7 +11,7 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="">
+        <a class="nav-link" routerLink="/settings" routerLinkActive="active">
           <i class="ion-gear-a"></i>&nbsp;Settings
         </a>
       </li>
@@ -24,7 +23,7 @@
       </li>
       <li class="nav-item" *ngIf="userInfo">
         <a class="nav-link ng-binding" href="#/">
-          <img src="{{userImage}}" class="user-pic">
+          <img src="{{userInfo.image}}" class="user-pic">
           {{userInfo && userInfo.username}}
         </a>
       </li>

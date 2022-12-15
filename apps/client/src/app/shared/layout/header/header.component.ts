@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AppStateService } from '../../../services/common/appStateService';
+import { IUser } from '../../model/IUser';
 
 @Component({
   selector: 'conduit-header',
@@ -9,29 +10,21 @@ import { AppStateService } from '../../../services/common/appStateService';
 })
 
 export class HeaderComponent implements OnInit, OnDestroy {
-  public userInfo: IUserInfo | undefined;
-  public userImage = '';
-  private userInfoSubscription: Subscription = new Subscription();
+  public userInfo: IUser | undefined;
+  private currentUserSubscription: Subscription = new Subscription();
 
   constructor(
     private appStateService: AppStateService
   ) { }
 
   ngOnInit(): void {
-    this.userInfoSubscription = this.appStateService.userInfoData$.subscribe((user) => {
-      this.userInfo = JSON.parse(user);
-      this.userImage = this.userInfo?.image || 'https://api.realworld.io/images/smiley-cyrus.jpeg';
+    this.appStateService.getCurrentUser();
+    this.currentUserSubscription = this.appStateService.currentUserData$.subscribe((user) => {
+      this.userInfo = user;
     });
   }
 
   ngOnDestroy(): void {
-    this.userInfoSubscription.unsubscribe();
+    this.currentUserSubscription.unsubscribe();
   }
-}
-
-export interface IUserInfo {
-  username: string;
-  email: string;
-  bio?: string;
-  image?: string;
 }
