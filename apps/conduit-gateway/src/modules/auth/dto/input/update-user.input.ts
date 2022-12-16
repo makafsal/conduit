@@ -5,16 +5,16 @@ export class UpdateUserInput {
   @Field()
   email: string;
 
-  // @Field()
-  // password: string;
-
-  // @Field()
-  // username: string;
+  @Field()
+  password: string;
 
   @Field()
+  username: string;
+
+  @Field({ nullable: true })
   bio: string;
 
-  @Field()
+  @Field({ nullable: true })
   image: string;
 
   @Field()

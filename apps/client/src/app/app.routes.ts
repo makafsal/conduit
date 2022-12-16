@@ -1,8 +1,9 @@
 import { Route } from '@angular/router';
+import { HomeComponent } from './modules/home/home.component';
 
 export const appRoutes: Route[] = [
-  // {
-  //   path: '',
-  //   loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
-  // }
+  {
+    path: '',
+    component: HomeComponent
+  }
 ];

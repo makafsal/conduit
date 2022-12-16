@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { User } from './models/user.model';
 import { UserRepository } from './user.repository';
 import * as bcrypt from 'bcrypt';
@@ -13,9 +13,10 @@ export class UserService {
   ) { }
 
   async handleGetUsers() {
-    logger.log('AUTH-SERVICE - HandleGetUsers');
+    logger.log('AUTH-SERVICE - Getting Users');
     const users = await this.userRepository.getUsers();
     logger.log('Users: ', JSON.stringify(users));
+
     return users;
   }
 
@@ -35,7 +36,13 @@ export class UserService {
   }
 
   async handleUserCreated(user: User) {
-    logger.log('AUTH-SERVICE - handleUserCreated');
+    logger.log('AUTH-SERVICE - Create User triggered');
+
+    const found_user = await (await this.userRepository.getUser(user)).first();
+    if (found_user) {
+      logger.log('AUTH-SERVICE - Email already taken');
+      return;
+    }
 
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(user.password, salt);
@@ -43,15 +50,12 @@ export class UserService {
     await this.userRepository.createUser(user);
     delete user.password;
 
-    return {
-      ...user,
-      bio: '',
-      image: ''
-    }
+    return user;
   }
 
   async handleUserUpdate(user: User) {
-    logger.log('AUTH-SERVICE - handleUserUpdate');
+    // TODO: Encrypt password while updating user
+    logger.log('AUTH-SERVICE - Updating User');
     const currentUser = await this.handleGetUser(user);
 
     if (currentUser) {
@@ -65,15 +69,19 @@ export class UserService {
   }
 
   async handleValidateUser(user: User) {
-    logger.log('AUTH-SERVICE - handleValidateUser');
+    logger.log('AUTH-SERVICE - Validating User');
 
     const found_user = await (await this.userRepository.getUser(user)).first();
-    const isPasswordOk = await bcrypt.compare(user.password, found_user.password);
+    if (found_user) {
+      const isPasswordOk = await bcrypt.compare(user.password, found_user.password);
 
-    if (isPasswordOk) {
-      return found_user;
+      if (isPasswordOk) {
+        logger.log('AUTH-SERVICE - Login Successful');
+        return found_user;
+      }
     }
 
+    logger.log('AUTH-SERVICE - Login Failed');
     return;
   }
 }

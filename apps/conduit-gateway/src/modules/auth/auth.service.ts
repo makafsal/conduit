@@ -1,4 +1,4 @@
-import { Injectable, Inject, Logger, OnModuleInit, NotFoundException } from '@nestjs/common';
+import { Injectable, Inject, Logger, OnModuleInit, NotFoundException, UnprocessableEntityException, BadRequestException } from '@nestjs/common';
 import { ExceptionsHandler } from '@nestjs/core/exceptions/exceptions-handler';
 import { JwtService } from '@nestjs/jwt';
 import { ClientKafka, RpcException } from '@nestjs/microservices';
@@ -46,6 +46,12 @@ export class AuthService implements OnModuleInit {
 
     return this.authClient.send('user_creation', user).pipe(
       map(newUser => {
+        if (!newUser) {
+          logger.log('GATEWAY - User creation failed');
+          throw new BadRequestException('Email already taken');
+        }
+
+
         logger.log('GATEWAY - User created successfully');
 
         const token = this.jwtService.sign(newUser);
@@ -55,7 +61,6 @@ export class AuthService implements OnModuleInit {
     );
   }
 
-  // TODO: Protect with AuthGuard
   updateUser(user: UpdateUserInput) {
     logger.log('GATEWAY - Update user service');
 
@@ -88,7 +93,7 @@ export class AuthService implements OnModuleInit {
           }
         }
 
-        throw new NotFoundException('User not found.');
+        throw new NotFoundException('Incorrect Username or Password');
       })
     );
   }
