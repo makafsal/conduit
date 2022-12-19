@@ -54,7 +54,6 @@ export class UserService {
   }
 
   async handleUserUpdate(user: User) {
-    // TODO: Encrypt password while updating user
     logger.log('AUTH-SERVICE - Updating User');
     const currentUser = await this.handleGetUser(user);
 

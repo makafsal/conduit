@@ -43,18 +43,19 @@ export class SettingsComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    console.log(this.settingsForm.value)
+    // TODO: Disable register/login button after click
+    // TODO: Show loader while loging-in or registering
     this.userService
       .updateUser(this.settingsForm.value, AppStateService.getUserTokenStatic())
       .subscribe((response) => {
-        // TODO: Update latest data in local storage also
         if (response.errors) {
           this.userUpdateErr = response.errors[0].message;
         }
-
+        
         if (response.data) {
           this.userUpdateErr = '';
           this.appStateService.setCurrentUser(this.settingsForm.value);
+          // TODO: Notify the update succeeded
         }
       });
   }
