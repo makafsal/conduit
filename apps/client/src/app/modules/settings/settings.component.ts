@@ -16,6 +16,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   private currentUserSubscription: Subscription = new Subscription();
 
   public settingsForm: FormGroup;
+  public userUpdateErr = '';
 
   constructor(
     private appStateService: AppStateService,
@@ -47,8 +48,15 @@ export class SettingsComponent implements OnInit, OnDestroy {
       .updateUser(this.settingsForm.value, AppStateService.getUserTokenStatic())
       .subscribe((response) => {
         // TODO: Update latest data in local storage also
-        console.log(response)
-      })
+        if (response.errors) {
+          this.userUpdateErr = response.errors[0].message;
+        }
+
+        if (response.data) {
+          this.userUpdateErr = '';
+          this.appStateService.setCurrentUser(this.settingsForm.value);
+        }
+      });
   }
 
   logout() {

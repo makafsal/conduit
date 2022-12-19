@@ -11,4 +11,10 @@ export class LoginUserOutput {
 
   @Field()
   username: string;
+
+  @Field({ nullable: true })
+  image: string;
+
+  @Field({ nullable: true })
+  bio: string;
 }

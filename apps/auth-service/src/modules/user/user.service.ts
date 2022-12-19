@@ -59,6 +59,9 @@ export class UserService {
     const currentUser = await this.handleGetUser(user);
 
     if (currentUser) {
+      const salt = await bcrypt.genSalt();
+      const hashedPassword = await bcrypt.hash(user.password, salt);
+      user.password = hashedPassword;
       await this.userRepository.updateUser(user);
 
       const updatedUser = await this.handleGetUser(user);
@@ -81,7 +84,7 @@ export class UserService {
       }
     }
 
-    logger.log('AUTH-SERVICE - Login Failed');
+    logger.log('AUTH-SERVICE - Invalid Failed');
     return;
   }
 }

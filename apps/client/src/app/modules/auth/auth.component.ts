@@ -86,8 +86,8 @@ export class AuthComponent implements OnInit, OnDestroy {
               email: dataObj.loginUser.email,
               username: dataObj.loginUser.username,
               password: this.userPassword,
-              bio: dataObj.loginUser.username,
-              image: dataObj.loginUser.username
+              bio: dataObj.loginUser.bio,
+              image: dataObj.loginUser.image
             };
             this.appStateService.setCurrentUser(userInfo);
             this.router.navigate(['/']);
