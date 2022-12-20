@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AppStateService } from '../../services/common/appStateService';
 import { UserService } from '../../services/user.service';
+import { BUTTON, ERR, SUCCESS, TEXTS } from '../../shared/constants/common';
 import { IUser } from '../../shared/model/IUser';
 
 @Component({
@@ -17,6 +18,9 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   public settingsForm: FormGroup;
   public userUpdateErr = '';
+  public updateSuccessText = '';
+  public updateBtnText: string = BUTTON.UPDATE_SETTINGS;
+  public disableForm = false;
 
   constructor(
     private appStateService: AppStateService,
@@ -43,19 +47,33 @@ export class SettingsComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    // TODO: Disable register/login button after click
-    // TODO: Show loader while loging-in or registering
+    this.updateSuccessText = '';
+    this.disableForm = true;
+    this.updateBtnText = TEXTS.LOADING;
     this.userService
       .updateUser(this.settingsForm.value, AppStateService.getUserTokenStatic())
-      .subscribe((response) => {
-        if (response.errors) {
-          this.userUpdateErr = response.errors[0].message;
-        }
-        
-        if (response.data) {
-          this.userUpdateErr = '';
-          this.appStateService.setCurrentUser(this.settingsForm.value);
-          // TODO: Notify the update succeeded
+      .subscribe({
+        next: (response) => {
+          this.disableForm = false;
+          this.updateBtnText = BUTTON.UPDATE_SETTINGS;
+          if (response.data) {
+            this.userUpdateErr = '';
+            this.appStateService.setCurrentUser(this.settingsForm.value);
+            this.updateSuccessText = SUCCESS.UPDATE;
+          }
+        },
+        error: (err) => {
+          this.disableForm = false;
+          this.updateBtnText = BUTTON.UPDATE_SETTINGS;
+          this.updateSuccessText = '';
+          this.userUpdateErr = err['message'] || ERR.UNEXPECTED;
+
+          if (err['message'] && err['message'] === ERR.UNAUTHORIZED) {
+            this.appStateService.resetUser();
+            setTimeout(() => {
+              this.router.navigate(['/login']);
+            }, 1000);
+          }
         }
       });
   }

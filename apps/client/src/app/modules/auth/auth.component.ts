@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 import { AppStateService } from '../../services/common/appStateService';
-import { TEXTS } from '../../shared/constants/common';
+import { ERR, TEXTS } from '../../shared/constants/common';
 import { IUser } from '../../shared/model/IUser';
 
 @Component({
@@ -22,6 +22,7 @@ export class AuthComponent implements OnInit, OnDestroy {
   public username = '';
   public authErr = '';
   public authSuccessText = '';
+  public disableForm = false;
 
   private routeSubscription: Subscription = new Subscription();
   // private getUserSubscription: Subscription | undefined;
@@ -42,6 +43,9 @@ export class AuthComponent implements OnInit, OnDestroy {
   }
 
   public onSubmit() {
+    this.submitText = TEXTS.LOADING;
+    this.disableForm = true;
+
     if (this.pageType === 'login') {
       this.login();
     } else if (this.pageType === 'register') {
@@ -53,15 +57,23 @@ export class AuthComponent implements OnInit, OnDestroy {
     if (this.username?.trim() && this.userEmail?.trim().length && this.userPassword?.trim().length) {
       this.authService
         .register(this.username, this.userEmail, this.userPassword)
-        .subscribe((response) => {
-          if (response.errors) {
-            this.authErr = response.errors[0].message;
-          }
+        .subscribe({
+          next: (response) => {
+            this.disableForm = false;
+            this.submitText = this.pageType;
 
-          this.authSuccessText = TEXTS.AuthSuccessText;
-          setTimeout(() => {
-            this.router.navigate(['/login']);
-          }, 3000);
+            if (response.errors) {
+              this.authErr = response.errors[0].message;
+            }
+
+            this.authSuccessText = TEXTS.AuthSuccessText;
+            setTimeout(() => {
+              this.router.navigate(['/login']);
+            }, 3000);
+          },
+          error: (err) => {
+            this.onErr(err);
+          }
         });
     }
   }
@@ -71,29 +83,43 @@ export class AuthComponent implements OnInit, OnDestroy {
       this.appStateService.resetUser();
       this.authService
         .login(this.userEmail, this.userPassword)
-        .subscribe((response) => {
-          if (response.errors) {
-            this.authErr = response.errors[0].message;
-          }
+        .subscribe({
+          next: (response) => {
+            this.disableForm = false;
+            this.submitText = this.pageType;
 
-          if (response.data) {
-            this.authErr = '';
-            const data = response.data;
-            const dataObj = Object(data);
-            const access_token = dataObj.loginUser.token;
-            this.appStateService.setUserToken(access_token);
-            const userInfo: IUser = {
-              email: dataObj.loginUser.email,
-              username: dataObj.loginUser.username,
-              password: this.userPassword,
-              bio: dataObj.loginUser.bio,
-              image: dataObj.loginUser.image
-            };
-            this.appStateService.setCurrentUser(userInfo);
-            this.router.navigate(['/']);
+            if (response.errors) {
+              this.authErr = response.errors[0].message;
+            }
+
+            if (response.data) {
+              this.authErr = '';
+              const data = response.data;
+              const dataObj = Object(data);
+              const access_token = dataObj.loginUser.token;
+              this.appStateService.setUserToken(access_token);
+              const userInfo: IUser = {
+                email: dataObj.loginUser.email,
+                username: dataObj.loginUser.username,
+                password: this.userPassword,
+                bio: dataObj.loginUser.bio,
+                image: dataObj.loginUser.image
+              };
+              this.appStateService.setCurrentUser(userInfo);
+              this.router.navigate(['/']);
+            }
+          },
+          error: (err) => {
+            this.onErr(err);
           }
         });
     }
+  }
+
+  private onErr(err: any) {
+    this.disableForm = false;
+    this.submitText = this.pageType;
+    this.authErr = err['message'] || ERR.UNEXPECTED;
   }
 
   ngOnDestroy(): void {

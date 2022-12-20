@@ -12,6 +12,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { HttpClientModule } from '@angular/common/http';
 import { createApollo } from './shared/apollo/createApollo';
 import { SettingsModule } from './modules/settings/settings.module';
+import { ProfileModule } from './modules/profile/profile.module';
 
 @NgModule({
   declarations: [
@@ -20,9 +21,10 @@ import { SettingsModule } from './modules/settings/settings.module';
     FooterComponent
   ],
   imports: [
-    BrowserModule,
     AuthModule,
     SettingsModule,
+    ProfileModule,
+    BrowserModule,
     ApolloModule,
     HttpClientModule,
     RouterModule.forRoot(appRoutes, {

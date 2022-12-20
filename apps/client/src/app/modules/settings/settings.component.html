@@ -2,16 +2,20 @@
   <div class="container page">
     <div class="row">
       <div class="col-md-6 offset-md-3 col-xs-12">
+        <h1 class="text-xs-center">Your Settings</h1>
+
         <ul class="error-messages">
           <li *ngIf="userUpdateErr">{{userUpdateErr}}</li>
         </ul>
-        <h1 class="text-xs-center">Your Settings</h1>
+        <div class="alert alert-success" *ngIf="updateSuccessText">
+          {{updateSuccessText}}
+        </div>
 
-        <form [formGroup]="settingsForm" (ngSubmit)="onSubmit()">
-          <fieldset>
+        <form [formGroup]="settingsForm" (ngSubmit)="onSubmit()" rea>
+          <fieldset [disabled]="disableForm">
             <fieldset class="form-group">
-              <input class="form-control" type="text" placeholder="URL of profile picture" id="image"
-                formControlName="image" />
+              <input class="form-control" type="text" placeholder="URL of profile picture"
+                id="image" formControlName="image" />
             </fieldset>
             <fieldset class="form-group">
               <input class="form-control form-control-lg" type="text" placeholder="Your Name"
@@ -28,7 +32,9 @@
               <input class="form-control form-control-lg" type="password" placeholder="Password"
                 formControlName="password" />
             </fieldset>
-            <button class="btn btn-lg btn-primary pull-xs-right">Update Settings</button>
+            <button class="btn btn-lg btn-primary pull-xs-right">
+              {{updateBtnText}}
+            </button>
           </fieldset>
         </form>
         <hr />
