@@ -5,7 +5,7 @@
       <div class="col-md-6 offset-md-3 col-xs-12">
         <h1 class="text-xs-center text-capitalize">{{title}}</h1>
         <p class="text-xs-center">
-          <a href="">{{switchQuestion }}</a>
+          <a href="">{{switchQuestion}}</a>
         </p>
 
         <ul class="error-messages">
@@ -16,18 +16,23 @@
         </div>
 
         <form>
-          <fieldset class="form-group" *ngIf="pageType === 'register'">
-            <input class="form-control form-control-lg" type="text" name="username" [(ngModel)]="username" placeholder="Your Name">
+          <fieldset [disabled]="disableForm">
+            <fieldset class="form-group" *ngIf="pageType === 'register'">
+              <input class="form-control form-control-lg" type="text" name="username" [(ngModel)]="username"
+                placeholder="Your Name">
+            </fieldset>
+            <fieldset class="form-group">
+              <input class="form-control form-control-lg" type="text" placeholder="Email" name="email"
+                [(ngModel)]="userEmail">
+            </fieldset>
+            <fieldset class="form-group">
+              <input class="form-control form-control-lg" type="password" placeholder="Password" name="password"
+                [(ngModel)]="userPassword">
+            </fieldset>
+            <button class="btn btn-lg btn-primary pull-xs-right text-capitalize" (click)="onSubmit()">
+              {{submitText}}
+            </button>
           </fieldset>
-          <fieldset class="form-group">
-            <input class="form-control form-control-lg" type="text" placeholder="Email" name="email" [(ngModel)]="userEmail">
-          </fieldset>
-          <fieldset class="form-group">
-            <input class="form-control form-control-lg" type="password" placeholder="Password" name="password" [(ngModel)]="userPassword">
-          </fieldset>
-          <button class="btn btn-lg btn-primary pull-xs-right text-capitalize" (click)="onSubmit()">
-            {{submitText}}
-          </button>
         </form>
       </div>
 

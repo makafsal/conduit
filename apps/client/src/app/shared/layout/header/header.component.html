@@ -22,7 +22,7 @@
         <a class="nav-link" routerLink="/register" routerLinkActive="active">Sign up</a>
       </li>
       <li class="nav-item" *ngIf="userInfo">
-        <a class="nav-link ng-binding" href="#/">
+        <a class="nav-link ng-binding" routerLink="/profile/{{userInfo.username}}" routerLinkActive="active">
           <img src="{{userInfo.image}}" class="user-pic">
           {{userInfo && userInfo.username}}
         </a>

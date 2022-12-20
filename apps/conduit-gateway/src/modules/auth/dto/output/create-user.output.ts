@@ -11,4 +11,10 @@ export class CreateUserOutput {
 
   @Field()
   token: string;
+
+  @Field({ nullable: true })
+  bio: string;
+
+  @Field({ nullable: true })
+  image: string;
 }

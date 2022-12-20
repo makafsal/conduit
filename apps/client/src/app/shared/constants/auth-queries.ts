@@ -11,6 +11,8 @@ export const LOGIN = gql`
       email
       token
       username
+      image
+      bio
     }
   }
 `;
