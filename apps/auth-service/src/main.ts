@@ -25,4 +25,5 @@ async function bootstrap() {
   logger.log("Auth-service is listening");
   await app.listen();
 }
+
 bootstrap();
