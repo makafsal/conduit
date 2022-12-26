@@ -53,7 +53,7 @@ export class AuthService implements OnModuleInit {
       map(newUser => {
         if (!newUser) {
           logger.log('GATEWAY - User creation failed');
-          throw new BadRequestException('Email already taken');
+          throw new BadRequestException('Email or Username already taken');
         }
 
 
