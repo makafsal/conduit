@@ -1,7 +1,8 @@
 import { UseGuards } from '@nestjs/common';
-import { Query, Resolver } from '@nestjs/graphql';
+import { Args, Query, Resolver } from '@nestjs/graphql';
 import { GraphQLAuthGuard } from '../../shared/jwt/jwt-auth.guard';
 import { Profile } from '../../shared/types/profile/profile';
+import { GetProfileInput } from '../../shared/types/user/input/get-profile.input';
 import { ProfileService } from './profile.service';
 
 @Resolver()
@@ -10,11 +11,10 @@ export class ProfileResolver {
     private profileService: ProfileService
   ) { }
 
-  // @Query(() => Profile)
-  @Query(() => String)
+  @Query(() => Profile)
   @UseGuards(GraphQLAuthGuard)
-  getProfile() {
-    return this.profileService.getProfile();
+  getProfile(@Args('profileArgs') profileArgs: GetProfileInput) {
+    return this.profileService.getProfile(profileArgs);
   }
 
 }

@@ -10,8 +10,7 @@ export class ProfileController {
   ) { }
 
   @MessagePattern('profile_get')
-  handleGetProfile() {
-    return this.profileService.getProfile();
+  handleGetProfile(profileArgs) {
+    return this.profileService.getProfile(profileArgs.username, profileArgs.currentUserEmail);
   }
-
 }

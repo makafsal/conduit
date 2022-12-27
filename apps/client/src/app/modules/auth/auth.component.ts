@@ -38,7 +38,7 @@ export class AuthComponent implements OnInit, OnDestroy {
     this.routeSubscription = this.route.url.subscribe(urlSegment => {
       this.pageType = urlSegment[urlSegment.length - 1].path;
       this.title, this.submitText = this.pageType;
-      if(this.pageType === 'login') {
+      if (this.pageType === 'login') {
         this.switchQuestion = TEXTS.NEED_ACC;
         this.switchRoute = '/register';
       } else {
@@ -90,6 +90,7 @@ export class AuthComponent implements OnInit, OnDestroy {
         .login(this.userEmail, this.userPassword)
         .subscribe({
           next: (response) => {
+            this.disableForm = false;
             this.submitText = this.pageType;
 
             if (response.errors) {

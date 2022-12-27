@@ -4,10 +4,10 @@ import { ArgsType, Field, ObjectType } from "@nestjs/graphql";
 @ObjectType()
 export class Profile {
   @Field()
-  email: string;
+  username: string;
 
   @Field()
-  username: string;
+  email: string;
 
   @Field({ nullable: true })
   image: string;
@@ -15,6 +15,6 @@ export class Profile {
   @Field({ nullable: true })
   bio: string;
 
-  @Field()
+  @Field({ nullable: true })
   following: boolean;
 }

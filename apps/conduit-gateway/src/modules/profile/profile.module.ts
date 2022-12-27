@@ -19,14 +19,7 @@ import { ProfileService } from './profile.service';
           }
         }
       },
-    ]),
-    // PassportModule,
-    // JwtModule.register({
-    //   secret: jwtConstants.secret,
-    //   signOptions: {
-    //     expiresIn: '3600s'
-    //   },
-    // })
+    ])
   ],
   providers: [
     ProfileResolver,
