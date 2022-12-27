@@ -15,18 +15,10 @@ export class ProfileService implements OnModuleInit {
   }
 
   getProfile(profileArgs) {
+    logger.log('GATEWAY - Calling Profile Service');
+    
     return this.profileClient.send('profile_get', profileArgs).pipe(
-      map(profile => {
-        if (!profile) {
-          logger.log('GATEWAY - Profile not updated');
-          return new RpcException('Profile not found');
-        }
-
-        logger.log('GATEWAY - Profile retrieved');
-
-        console.log(profile)
-        return profile;
-      })
+      map(profile => profile)
     );
   }
 }

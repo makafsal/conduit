@@ -16,7 +16,8 @@ export class ProfileService {
         username: profileName,
         currentUserEmail,
         token
-      }
+      },
+      fetchPolicy: 'network-only'
     }).valueChanges;
   }
 
