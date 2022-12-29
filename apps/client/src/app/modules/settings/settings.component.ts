@@ -13,7 +13,7 @@ import { IUser } from '../../shared/model/IUser';
   styleUrls: ['./settings.component.scss'],
 })
 export class SettingsComponent implements OnInit, OnDestroy {
-  public userInfo: IUser | undefined;
+  public userInfo!: IUser;
   private currentUserSubscription: Subscription = new Subscription();
 
   public settingsForm: FormGroup;
@@ -21,6 +21,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   public updateSuccessText = '';
   public updateBtnText: string = BUTTON.UPDATE_SETTINGS;
   public disableForm = false;
+  public settingsFormDirty = false;
 
   constructor(
     private appStateService: AppStateService,
@@ -41,9 +42,29 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.currentUserSubscription = this.appStateService
       .currentUserData$
       .subscribe((user) => {
-        this.userInfo = user;
+        this.userInfo = {
+          username: user?.username || '',
+          email: user?.email || '',
+          bio: user?.bio || '',
+          image: user?.image || '',
+          password: user?.password || ''
+        };
         this.settingsForm.patchValue({ ...this.userInfo });
       });
+
+    this.settingsForm.valueChanges.subscribe(newValues => {
+      if (
+        newValues.username !== this.userInfo.username ||
+        newValues.email !== this.userInfo.email ||
+        newValues.bio !== this.userInfo.bio ||
+        newValues.image !== this.userInfo.image ||
+        newValues.password !== this.userInfo.password
+      ) {
+        this.settingsFormDirty = true;
+      } else {
+        this.settingsFormDirty = false;
+      }
+    })
   }
 
   onSubmit() {
