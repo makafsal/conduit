@@ -1,10 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { map, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { AppStateService } from '../../services/common/appStateService';
 import { ProfileService } from '../../services/profile.service';
 import { ERR } from '../../shared/constants/common';
 import { IProfile } from '../../shared/model/IProfile';
+import { IUser } from '../../shared/model/IUser';
 
 @Component({
   selector: 'conduit-profile',
@@ -14,6 +15,8 @@ import { IProfile } from '../../shared/model/IProfile';
 export class ProfileComponent implements OnInit, OnDestroy {
   public profile!: IProfile;
   private profileUsername = '';
+  public currentUser!: IUser;
+  private token = '';
   private routeSubscription: Subscription = new Subscription();
   private profileServiceSubscription: Subscription = new Subscription();
 
@@ -25,34 +28,66 @@ export class ProfileComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.init();
+    this.routeSubscription = this.route.url.subscribe(urlSegment => {
+      this.profileUsername = urlSegment[urlSegment.length - 1].path;
+      this.init();
+    });
   }
 
   init() {
-    this.routeSubscription = this.route.url.subscribe(urlSegment => {
-      this.profileUsername = urlSegment[urlSegment.length - 1].path;
-    });
-
+    this.currentUser = AppStateService.getCurrentUserStatic();
+    this.token = AppStateService.getUserTokenStatic();
     this.getProfile();
   }
 
   getProfile() {
-    const currentUser = AppStateService.getCurrentUserStatic();
     this.profileServiceSubscription = this.profileService
-      .getProfile(this.profileUsername, currentUser?.email, AppStateService.getUserTokenStatic())
+      .getProfile(this.profileUsername, this.currentUser?.email, this.token)
       .subscribe({
         next: (response) => {
-          const dataObj = Object(response.data);
-          this.profile = {
-            ...dataObj.getProfile
-          } as IProfile;
+          if (response?.errors) {
+            this.onErr(response?.errors[0]);
+          }
 
-          console.log(this.profile)
+          if (response.data) {
+            const dataObj = Object(response.data);
+            this.profile = dataObj?.getProfile as IProfile;
+          }
         },
         error: (err) => {
           this.onErr(err);
         },
       });
+  }
+
+  profileButtonClick() {
+    if (this.profile.following) {
+      this.unfollow();
+    } else {
+      this.follow();
+    }
+  }
+
+  follow() {
+    this.profileService.follow(
+      this.profile.email,
+      this.currentUser.email,
+      this.token
+    ).subscribe({
+      next: (response) => {
+        if (response && response.data) {
+          this.getProfile();
+        }
+      },
+      error: (err) => {
+        console.error(err);
+        this.getProfile();
+      }
+    })
+  }
+
+  unfollow() {
+    console.log('unfollow')
   }
 
   onErr(err: any) {

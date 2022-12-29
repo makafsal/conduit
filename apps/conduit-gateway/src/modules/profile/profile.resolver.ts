@@ -1,7 +1,8 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { GraphQLAuthGuard } from '../../shared/jwt/jwt-auth.guard';
 import { Profile } from '../../shared/types/profile/profile';
+import { FollowInput } from '../../shared/types/user/input/follow-input';
 import { GetProfileInput } from '../../shared/types/user/input/get-profile.input';
 import { ProfileService } from './profile.service';
 
@@ -15,6 +16,12 @@ export class ProfileResolver {
   @UseGuards(GraphQLAuthGuard)
   getProfile(@Args('profileArgs') profileArgs: GetProfileInput) {
     return this.profileService.getProfile(profileArgs);
+  }
+
+  @Mutation(() => String)
+  @UseGuards(GraphQLAuthGuard)
+  follow(@Args('followArgs') followArgs: FollowInput) {
+    return this.profileService.follow(followArgs);
   }
 
 }

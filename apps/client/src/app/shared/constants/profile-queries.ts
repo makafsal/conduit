@@ -17,3 +17,15 @@ export const PROFILE_GET = gql`
     }
   }
 `;
+
+export const FOLLOW = gql`
+  mutation follow($follow: String!, $follower: String!, $token: String!) {
+    follow (
+      followArgs: {
+        follow: $follow,
+        follower: $follower,
+        token: $token
+      }
+    )
+  }
+`;

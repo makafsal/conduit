@@ -3,4 +3,5 @@ export interface IProfile {
   email: string;
   bio?: string;
   image?: string;
+  following?: boolean;
 }

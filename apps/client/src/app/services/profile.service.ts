@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Apollo } from "apollo-angular";
-import { PROFILE_GET } from "../shared/constants/profile-queries";
+import { FOLLOW, PROFILE_GET } from "../shared/constants/profile-queries";
 
 @Injectable()
 export class ProfileService {
@@ -19,6 +19,17 @@ export class ProfileService {
       },
       fetchPolicy: 'network-only'
     }).valueChanges;
+  }
+
+  follow(follow: string, follower: string, token: string) {
+    return this.apollo.mutate({
+      mutation: FOLLOW,
+      variables: {
+        follow,
+        follower,
+        token
+      }
+    });
   }
 
 }

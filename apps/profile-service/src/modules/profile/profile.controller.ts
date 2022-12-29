@@ -13,4 +13,9 @@ export class ProfileController {
   handleGetProfile(profileArgs) {
     return this.profileService.getProfile(profileArgs.username, profileArgs.currentUserEmail);
   }
+
+  @MessagePattern('follow')
+  handleFollow(payload) {
+    return this.profileService.follow(payload)
+  }
 }

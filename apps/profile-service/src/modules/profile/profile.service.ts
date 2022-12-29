@@ -34,4 +34,10 @@ export class ProfileService {
     logger.log('PROFILE-SERVICE: Profile not found');
     return;
   }
+
+  async follow(payload) {
+    await this.followerRepository.follow(payload.follow, payload.follower);
+
+    return true;
+  }
 }

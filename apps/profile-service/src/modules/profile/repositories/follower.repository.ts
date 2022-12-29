@@ -29,4 +29,11 @@ export class FollowerRepository implements OnModuleInit {
     return res?.rows;
   }
 
+  follow(followed_profile, followed_by) {
+    return this.followerMapper.insert({
+      followed_profile,
+      followed_by
+    });
+  }
+
 }
