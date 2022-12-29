@@ -6,6 +6,8 @@ export const enum URLs {
 export const enum TEXTS {
   AuthSuccessText = 'Created user successfully, redirecting to login screen',
   LOADING = 'Loading...',
+  HAVE_ACC = 'Have an account?',
+  NEED_ACC = 'Need an account?'
 }
 
 export const enum ERR {

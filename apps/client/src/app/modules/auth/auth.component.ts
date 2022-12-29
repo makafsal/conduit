@@ -23,9 +23,9 @@ export class AuthComponent implements OnInit, OnDestroy {
   public authErr = '';
   public authSuccessText = '';
   public disableForm = false;
+  public switchRoute = '';
 
   private routeSubscription: Subscription = new Subscription();
-  // private getUserSubscription: Subscription | undefined;
 
   constructor(
     private route: ActivatedRoute,
@@ -38,7 +38,13 @@ export class AuthComponent implements OnInit, OnDestroy {
     this.routeSubscription = this.route.url.subscribe(urlSegment => {
       this.pageType = urlSegment[urlSegment.length - 1].path;
       this.title, this.submitText = this.pageType;
-      this.switchQuestion = this.pageType === 'login' ? 'Need an account?' : 'Have an account?';
+      if (this.pageType === 'login') {
+        this.switchQuestion = TEXTS.NEED_ACC;
+        this.switchRoute = '/register';
+      } else {
+        this.switchQuestion = TEXTS.HAVE_ACC;
+        this.switchRoute = '/login';
+      }
     });
   }
 
@@ -59,7 +65,6 @@ export class AuthComponent implements OnInit, OnDestroy {
         .register(this.username, this.userEmail, this.userPassword)
         .subscribe({
           next: (response) => {
-            this.disableForm = false;
             this.submitText = this.pageType;
 
             if (response.errors) {

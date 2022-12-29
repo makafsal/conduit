@@ -10,8 +10,7 @@ import { AppService } from './app.service';
   ],
   controllers: [AppController],
   providers: [
-    AppService,
-
+    AppService
   ],
   exports: []
 })

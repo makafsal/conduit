@@ -5,8 +5,6 @@ import { AuthResolver } from './auth.resolver';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from '../../shared/jwt/jwt.strategy';
-import { APP_GUARD } from '@nestjs/core';
-import { GraphQLAuthGuard } from '../../shared/jwt/jwt-auth.guard';
 import { jwtConstants } from '../../shared/constants';
 
 @Module({

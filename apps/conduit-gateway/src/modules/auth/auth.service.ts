@@ -1,15 +1,20 @@
-import { Injectable, Inject, Logger, OnModuleInit, NotFoundException, UnprocessableEntityException, BadRequestException } from '@nestjs/common';
-import { ExceptionsHandler } from '@nestjs/core/exceptions/exceptions-handler';
+import {
+  Injectable,
+  Inject,
+  Logger,
+  OnModuleInit,
+  NotFoundException,
+  BadRequestException
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ClientKafka, RpcException } from '@nestjs/microservices';
 import { map } from 'rxjs';
-import { jwtConstants } from '../../shared/constants';
-import { CreateUserInput } from './dto/input/create-user.input';
-import { GetUserInput } from './dto/input/get-user.input';
-import { LoginUserInput } from './dto/input/login-user.input';
-import { UpdateUserInput } from './dto/input/update-user.input';
-import { ValidateUserInput } from './dto/input/validate-user.input';
-import { User } from './dto/output/user.dto';
+import { CreateUserInput } from '../../shared/types/user/input/create-user.input';
+import { GetUserInput } from '../../shared/types/user/input/get-user.input';
+import { LoginUserInput } from '../../shared/types/user/input/login-user.input';
+import { UpdateUserInput } from '../../shared/types/user/input/update-user.input';
+import { ValidateUserInput } from '../../shared/types/user/input/validate-user.input';
+import { User } from '../../shared/types/user/user.dto';
 
 const logger = new Logger();
 
@@ -48,7 +53,7 @@ export class AuthService implements OnModuleInit {
       map(newUser => {
         if (!newUser) {
           logger.log('GATEWAY - User creation failed');
-          throw new BadRequestException('Email already taken');
+          throw new BadRequestException('Email or Username already taken');
         }
 
 

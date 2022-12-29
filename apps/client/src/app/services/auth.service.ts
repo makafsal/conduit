@@ -26,8 +26,8 @@ export class AuthService {
     return this.apollo.watchQuery({
       query: LOGIN,
       variables: {
-        email: email,
-        password: password
+        email,
+        password
       }
     }).valueChanges;
   }

@@ -5,5 +5,6 @@ export const profileRoutes: Route[] = [
   {
     path: 'profile/:username',
     component: ProfileComponent
+    // loadChildren: () => import('./profile.module').then(m => m.ProfileModule)
   }
 ];

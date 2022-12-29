@@ -1,8 +1,7 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { mapping } from 'cassandra-driver';
 import { User } from './models/user.model';
-import { CassandraService } from '../cassandra/cassandra.service';
-
+import { CassandraService } from '@conduit/cassandra-service';
 @Injectable()
 export class UserRepository implements OnModuleInit {
 
@@ -15,7 +14,7 @@ export class UserRepository implements OnModuleInit {
       models: {
         'User': {
           tables: ['users'],
-          mappings: new mapping.UnderscoreCqlToCamelCaseMappings,
+          mappings: new mapping.UnderscoreCqlToCamelCaseMappings
         }
       }
     }
@@ -27,8 +26,17 @@ export class UserRepository implements OnModuleInit {
     return (await this.userMapper.findAll()).toArray();
   }
 
-  getUser(user: User) {
-    return this.userMapper.find({ email: user.email });
+  getUserByEmail(email: string) {
+    return this.userMapper.find({ email });
+  }
+
+  async getUserByUsername(username: string) {
+    const res = await this.cassandraService.client.execute(`SELECT * FROM users WHERE username = '${username}' ALLOW FILTERING`);
+    if (res?.rows?.length) {
+      return true;
+    }
+
+    return false;
   }
 
   createUser(user: User) {

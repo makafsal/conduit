@@ -1,15 +1,15 @@
 import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { AuthService } from "./auth.service";
-import { User } from "./dto/output/user.dto";
-import { CreateUserInput } from "./dto/input/create-user.input";
-import { UpdateUserInput } from "./dto/input/update-user.input";
-import { UpdatedUserOutput } from "./dto/output/update-user.output";
-import { GetUserInput } from "./dto/input/get-user.input";
+import { User } from "../../shared/types/user/user.dto";
+import { CreateUserInput } from "../../shared/types/user/input/create-user.input";
+import { UpdateUserInput } from "../../shared/types/user/input/update-user.input";
+import { UpdatedUserOutput } from "../../shared/types/user/output/update-user.output";
+import { GetUserInput } from "../../shared/types/user/input/get-user.input";
 import { UseGuards } from "@nestjs/common";
-import { LoginUserOutput } from "./dto/output/login-user.output";
-import { LoginUserInput } from "./dto/input/login-user.input";
+import { LoginUserOutput } from "../../shared/types/user/output/login-user.output";
+import { LoginUserInput } from "../../shared/types/user/input/login-user.input";
 import { GraphQLAuthGuard } from "../../shared/jwt/jwt-auth.guard";
-import { CreateUserOutput } from "./dto/output/create-user.output";
+import { CreateUserOutput } from "../../shared/types/user/output/create-user.output";
 
 @Resolver()
 export class AuthResolver {

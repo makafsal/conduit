@@ -1,15 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CassandraService } from './cassandra.service';
+import { ProfileService } from './profile.service';
 
-describe('CassandraService', () => {
-  let service: CassandraService;
+describe('ProfileService', () => {
+  let service: ProfileService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [CassandraService],
+      providers: [ProfileService],
     }).compile();
 
-    service = module.get<CassandraService>(CassandraService);
+    service = module.get<ProfileService>(ProfileService);
   });
 
   it('should be defined', () => {
