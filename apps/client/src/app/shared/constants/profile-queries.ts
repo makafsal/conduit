@@ -29,3 +29,15 @@ export const FOLLOW = gql`
     )
   }
 `;
+
+export const UNFOLLOW = gql`
+  mutation unfollow($follow: String!, $follower: String!, $token: String!) {
+    unfollow (
+      unfollowArgs: {
+        follow: $follow,
+        follower: $follower,
+        token: $token
+      }
+    )
+  }
+`;

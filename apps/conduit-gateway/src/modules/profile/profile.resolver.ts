@@ -24,4 +24,9 @@ export class ProfileResolver {
     return this.profileService.follow(followArgs);
   }
 
+  @Mutation(() => String)
+  @UseGuards(GraphQLAuthGuard)
+  unfollow(@Args('unfollowArgs') unfollowArgs: FollowInput) {
+    return this.profileService.unFollow(unfollowArgs);
+  }
 }

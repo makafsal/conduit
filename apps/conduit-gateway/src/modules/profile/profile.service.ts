@@ -13,6 +13,7 @@ export class ProfileService implements OnModuleInit {
   onModuleInit() {
     this.profileClient.subscribeToResponseOf('profile_get');
     this.profileClient.subscribeToResponseOf('follow');
+    this.profileClient.subscribeToResponseOf('unfollow');
   }
 
   getProfile(profileArgs) {
@@ -27,5 +28,11 @@ export class ProfileService implements OnModuleInit {
     logger.log('GATEWAY - Calling Profile Service Follow Method')
 
     return this.profileClient.send('follow', followArgs);
+  }
+
+  unFollow(unFollowArgs) {
+    logger.log('GATEWAY - Calling Profile Service Unfollow Method')
+
+    return this.profileClient.send('unfollow', unFollowArgs);
   }
 }

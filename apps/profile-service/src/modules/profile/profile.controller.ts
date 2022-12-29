@@ -18,4 +18,9 @@ export class ProfileController {
   handleFollow(payload) {
     return this.profileService.follow(payload)
   }
+
+  @MessagePattern('unfollow')
+  handleUnFollow(payload) {
+    return this.profileService.unfollow(payload)
+  }
 }

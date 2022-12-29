@@ -36,4 +36,12 @@ export class FollowerRepository implements OnModuleInit {
     });
   }
 
+  unfollow(followed_profile, followed_by) {
+    return this.cassandraService
+      .client
+      .execute(
+        `DELETE FROM followers WHERE followed_profile = '${followed_profile}' AND followed_by = '${followed_by}'`
+      );
+  }
+
 }

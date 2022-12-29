@@ -40,4 +40,10 @@ export class ProfileService {
 
     return true;
   }
+
+  async unfollow(payload) {
+    await this.followerRepository.unfollow(payload.follow, payload.follower);
+
+    return true;
+  }
 }

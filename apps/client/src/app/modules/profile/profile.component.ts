@@ -87,7 +87,21 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   unfollow() {
-    console.log('unfollow')
+    this.profileService.unfollow(
+      this.profile.email,
+      this.currentUser.email,
+      this.token
+    ).subscribe({
+      next: (response) => {
+        if (response && response.data) {
+          this.getProfile();
+        }
+      },
+      error: (err) => {
+        console.error(err);
+        this.getProfile();
+      }
+    })
   }
 
   onErr(err: any) {
