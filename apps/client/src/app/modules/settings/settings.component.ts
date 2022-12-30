@@ -55,7 +55,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.settingsForm.valueChanges.subscribe(newValues => {
       if (
         newValues.username !== this.userInfo.username ||
-        newValues.email !== this.userInfo.email ||
         newValues.bio !== this.userInfo.bio ||
         newValues.image !== this.userInfo.image ||
         newValues.password !== this.userInfo.password
