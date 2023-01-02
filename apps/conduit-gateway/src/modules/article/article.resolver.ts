@@ -26,4 +26,8 @@ export class ArticleResolver {
     return this.articleService.update(article);
   }
 
+  // TODO: get all articles (aka global feeds)
+  // TODO: get articles by author
+  // TODO: delete article
+  // TODO: Favorite feature
 }
