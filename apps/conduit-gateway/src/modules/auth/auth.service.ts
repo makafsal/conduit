@@ -61,7 +61,7 @@ export class AuthService implements OnModuleInit {
 
         const token = this.jwtService.sign(newUser);
         newUser['token'] = token;
-        return newUser
+        return newUser;
       })
     );
   }
