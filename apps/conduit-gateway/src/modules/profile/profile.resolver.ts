@@ -3,7 +3,7 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { GraphQLAuthGuard } from '../../shared/jwt/jwt-auth.guard';
 import { Profile } from '../../shared/types/profile/profile';
 import { FollowInput } from '../../shared/types/user/input/follow-input';
-import { GetProfileInput } from '../../shared/types/user/input/get-profile.input';
+import { GetProfileInput } from '../../shared/types/profile/input/get-profile.input';
 import { ProfileService } from './profile.service';
 
 @Resolver()

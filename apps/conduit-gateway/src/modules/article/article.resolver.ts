@@ -1,8 +1,10 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { GraphQLAuthGuard } from '../../shared/jwt/jwt-auth.guard';
-import { CreateArticleInput } from '../../shared/types/user/input/create-article.input';
-import { CreateArticleOutput } from '../../shared/types/user/output/create-article.output';
+import { CreateArticleInput } from '../../shared/types/article/input/create-article.input';
+import { UpdateArticleInput } from '../../shared/types/article/input/update-article.input';
+import { CreateArticleOutput } from '../../shared/types/article/output/create-article.output';
+import { UpdateArticleOutput } from '../../shared/types/article/output/update-article.output';
 import { ArticleService } from './article.service';
 
 @Resolver()
@@ -16,6 +18,12 @@ export class ArticleResolver {
   @UseGuards(GraphQLAuthGuard)
   createArticle(@Args('article') article: CreateArticleInput) {
     return this.articleService.create(article);
+  }
+
+  @Mutation(() => UpdateArticleOutput)
+  @UseGuards(GraphQLAuthGuard)
+  updateArticle(@Args('article') article: UpdateArticleInput) {
+    return this.articleService.update(article);
   }
 
 }

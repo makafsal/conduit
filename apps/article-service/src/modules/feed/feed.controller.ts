@@ -1,8 +1,6 @@
 import { Controller, Logger } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 import { FeedService } from './feed.service';
-
-const logger = new Logger();
 @Controller()
 export class FeedController {
 
@@ -12,8 +10,11 @@ export class FeedController {
 
   @MessagePattern('create_article')
   handleCreateArticle(article) {
-    logger.log('ARTICLE-SERVICE: Create article');
-
     return this.feedService.createArticle(article);
+  }
+
+  @MessagePattern('update_article')
+  handleUpdateArticle(article) {
+    return this.feedService.updateArticle(article);
   }
 }

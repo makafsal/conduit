@@ -20,7 +20,9 @@ export class FeedRepository implements OnModuleInit {
       }
     }
 
-    this.feedMapper = this.cassandraService.createMapper(mappingOptions).forModel('Articles');
+    this.feedMapper = this.cassandraService
+      .createMapper(mappingOptions)
+      .forModel('Articles');
   }
 
   create(article) {
@@ -29,6 +31,10 @@ export class FeedRepository implements OnModuleInit {
 
   getByTitle(title: string) {
     return this.feedMapper.find({ title });
+  }
+
+  updateArticle(article) {
+    return this.feedMapper.update(article);
   }
 
 }

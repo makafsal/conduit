@@ -13,16 +13,29 @@ export class FeedService {
     logger.log('ARTICLE-SERVICE: Create article triggered');
 
     const article_exist = await (await this.feedRepository.getByTitle(article.title)).first();
-    
-    if(article_exist) {
+
+    if (article_exist) {
       logger.log('ARTICLE-SERVICE: Article title already exists');
 
       return;
     }
-    
+
     await this.feedRepository.create(article);
 
     logger.log('ARTICLE-SERVICE: Article created');
     return article;
+  }
+
+  async updateArticle(article) {
+    logger.log('ARTICLE-SERVICE: Update article triggered');
+
+    const article_exists = await (await this.feedRepository.getByTitle(article.title)).first();
+
+    if (article_exists) {
+      await this.feedRepository.updateArticle(article);
+      return article;
+    }
+
+    return;
   }
 }
