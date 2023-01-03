@@ -27,8 +27,6 @@ export class ArticleResolver {
     return this.articleService.update(article);
   }
 
-  // TODO: get all articles (aka global feeds)
-
   @Query(() => [Article])
   @UseGuards(GraphQLAuthGuard)
   getAllArticles() {
@@ -36,6 +34,12 @@ export class ArticleResolver {
   }
 
   // TODO: get articles by author
+  @Query(() => [Article])
+  @UseGuards(GraphQLAuthGuard)
+  getArticlesByAuthor(@Args('author_email') author_email: string) {
+    return this.articleService.getByAuthor(author_email);
+  }
+
   // TODO: delete article
   // TODO: Favorite feature
 }

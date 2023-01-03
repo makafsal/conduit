@@ -16,6 +16,7 @@ export class ArticleService implements OnModuleInit {
     this.articleClient.subscribeToResponseOf('create_article');
     this.articleClient.subscribeToResponseOf('update_article');
     this.articleClient.subscribeToResponseOf('get_all_articles');
+    this.articleClient.subscribeToResponseOf('get_articles_by_author');
   }
 
   create(article: CreateArticleInput) {
@@ -53,7 +54,17 @@ export class ArticleService implements OnModuleInit {
   }
 
   getAll() {
+    logger.log('GATEWAY - Calling Article Service');
+
     return this.articleClient.send('get_all_articles', {}).pipe(
+      map(articles => articles)
+    );
+  }
+
+  getByAuthor(email: string) {
+    logger.log('GATEWAY - Calling Article Service');
+
+    return this.articleClient.send('get_articles_by_author', { email }).pipe(
       map(articles => articles)
     );
   }

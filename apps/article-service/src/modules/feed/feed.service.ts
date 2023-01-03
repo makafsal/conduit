@@ -44,4 +44,10 @@ export class FeedService {
 
     return this.feedRepository.getAll();
   }
+
+  getByAuthor(email: string) {
+    logger.log('ARTICLE-SERVICE: Get articles by author triggered');
+
+    return this.feedRepository.getByAuthor(email);
+  }
 }

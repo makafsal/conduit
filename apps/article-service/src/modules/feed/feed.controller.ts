@@ -22,4 +22,9 @@ export class FeedController {
   handleGetAllArticles() {
     return this.feedService.getAll();
   }
+
+  @MessagePattern('get_articles_by_author')
+  handleGetArticlesByAuthor(email: string) {
+    return this.feedService.getByAuthor(email);
+  }
 }
