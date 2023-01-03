@@ -1,6 +1,7 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { GraphQLAuthGuard } from '../../shared/jwt/jwt-auth.guard';
+import { Article } from '../../shared/types/article/article.dto';
 import { CreateArticleInput } from '../../shared/types/article/input/create-article.input';
 import { UpdateArticleInput } from '../../shared/types/article/input/update-article.input';
 import { CreateArticleOutput } from '../../shared/types/article/output/create-article.output';
@@ -27,6 +28,13 @@ export class ArticleResolver {
   }
 
   // TODO: get all articles (aka global feeds)
+
+  @Query(() => [Article])
+  @UseGuards(GraphQLAuthGuard)
+  getAllArticles() {
+    return this.articleService.getAll();
+  }
+
   // TODO: get articles by author
   // TODO: delete article
   // TODO: Favorite feature

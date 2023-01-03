@@ -38,4 +38,10 @@ export class FeedService {
 
     return;
   }
+
+  getAll() {
+    logger.log('ARTICLE-SERVICE: Get all article triggered');
+
+    return this.feedRepository.getAll();
+  }
 }

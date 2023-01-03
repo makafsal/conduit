@@ -37,4 +37,8 @@ export class FeedRepository implements OnModuleInit {
     return this.feedMapper.update(article);
   }
 
+  async getAll() {
+    return await (await this.feedMapper.findAll()).toArray();
+  }
+
 }

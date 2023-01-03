@@ -15,6 +15,7 @@ export class ArticleService implements OnModuleInit {
   onModuleInit() {
     this.articleClient.subscribeToResponseOf('create_article');
     this.articleClient.subscribeToResponseOf('update_article');
+    this.articleClient.subscribeToResponseOf('get_all_articles');
   }
 
   create(article: CreateArticleInput) {
@@ -39,7 +40,7 @@ export class ArticleService implements OnModuleInit {
 
     return this.articleClient.send('update_article', article).pipe(
       map(updatedArticle => {
-        if(!updatedArticle) {
+        if (!updatedArticle) {
           logger.log('GATEWAY - Article not found');
 
           return new RpcException('Article not found');
@@ -49,5 +50,11 @@ export class ArticleService implements OnModuleInit {
         return updatedArticle;
       })
     )
+  }
+
+  getAll() {
+    return this.articleClient.send('get_all_articles', {}).pipe(
+      map(articles => articles)
+    );
   }
 }
