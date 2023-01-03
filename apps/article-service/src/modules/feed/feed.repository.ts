@@ -42,12 +42,9 @@ export class FeedRepository implements OnModuleInit {
   }
 
   async getByAuthor(email: string) {
-    console.log(email)
-    // TODO: Fix the email payload object
     const res = await this.cassandraService.client
-      .execute(`SELECT * FROM articles WHERE author = '${email['email']}' ALLOW FILTERING`);
+      .execute(`SELECT * FROM articles WHERE author = '${email}' ALLOW FILTERING`);
 
-    console.log(res.rows)
     return res?.rows;
   }
 

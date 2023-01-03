@@ -41,13 +41,17 @@ export class FeedService {
 
   getAll() {
     logger.log('ARTICLE-SERVICE: Get all article triggered');
+    // TODO: Include author details from users table in the response
+    // Call auth-service to fetch user by email and attach it to the response
 
     return this.feedRepository.getAll();
   }
 
-  getByAuthor(email: string) {
+  getByAuthor(payload) {
     logger.log('ARTICLE-SERVICE: Get articles by author triggered');
+    // TODO: Include author details from users table in the response
+    // Call auth-service to fetch user by email and attach it to the response
 
-    return this.feedRepository.getByAuthor(email);
+    return this.feedRepository.getByAuthor(payload.email);
   }
 }
