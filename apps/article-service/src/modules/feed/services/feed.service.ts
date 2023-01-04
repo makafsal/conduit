@@ -1,12 +1,14 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { FeedRepository } from './feed.repository';
+import { FeedRepository } from '../repositories/feed.repository';
+import { TagService } from './tag.service';
 
 const logger = new Logger();
 @Injectable()
 export class FeedService {
 
   constructor(
-    private readonly feedRepository: FeedRepository
+    private readonly feedRepository: FeedRepository,
+    private readonly tagService: TagService
   ) { }
 
   async createArticle(article) {
@@ -21,6 +23,10 @@ export class FeedService {
     }
 
     await this.feedRepository.create(article);
+
+    if(article?.tags) {
+      this.tagService.insertTags(article.tags)
+    }
 
     logger.log('ARTICLE-SERVICE: Article created');
     return article;

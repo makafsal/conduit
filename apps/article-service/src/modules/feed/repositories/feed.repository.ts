@@ -1,7 +1,7 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { mapping } from 'cassandra-driver';
 import { CassandraService } from '@conduit/cassandra-service';
-import { Feed } from './feed.model';
+import { Feed } from '../models/feed.model';
 
 @Injectable()
 export class FeedRepository implements OnModuleInit {

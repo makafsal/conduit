@@ -1,6 +1,6 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
-import { FeedService } from './feed.service';
+import { FeedService } from './services/feed.service';
 @Controller()
 export class FeedController {
 
