@@ -41,4 +41,8 @@ export class TagRepository implements OnModuleInit {
     return await (await this.tagMapper.find({ name })).first();
   }
 
+  remove(name: string) {
+    return this.tagMapper.remove({ name });
+  }
+
 }

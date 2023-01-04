@@ -24,7 +24,7 @@ export class FeedService {
 
     await this.feedRepository.create(article);
 
-    if(article?.tags) {
+    if (article?.tags) {
       this.tagService.insertTags(article.tags)
     }
 
@@ -39,6 +39,9 @@ export class FeedService {
 
     if (article_exists) {
       await this.feedRepository.updateArticle(article);
+
+      this.tagService.compareAndActOnTags(article.tags, article_exists?.tags);
+
       return article;
     }
 
