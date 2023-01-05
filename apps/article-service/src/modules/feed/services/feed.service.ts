@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { FeedRepository } from '../repositories/feed.repository';
+import { FavoriteService } from './favorite.service';
 import { TagService } from './tag.service';
 import { UserService } from './user.service';
 
@@ -10,7 +11,8 @@ export class FeedService {
   constructor(
     private readonly feedRepository: FeedRepository,
     private readonly tagService: TagService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    private readonly favoriteService: FavoriteService
   ) { }
 
   async createArticle(article) {
@@ -90,5 +92,19 @@ export class FeedService {
     }));
 
     return updated_articles;
+  }
+
+  favoriteArticle(payload) {
+    return this.favoriteService.create(payload);
+  }
+
+  unfavoriteArticle(payload) {
+    return this.favoriteService.remove(payload);
+  }
+
+  async deleteArticle(title) {
+    await this.feedRepository.delete({ title });
+
+    return true;
   }
 }

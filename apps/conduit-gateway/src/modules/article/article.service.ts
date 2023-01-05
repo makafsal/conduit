@@ -17,6 +17,9 @@ export class ArticleService implements OnModuleInit {
     this.articleClient.subscribeToResponseOf('update_article');
     this.articleClient.subscribeToResponseOf('get_all_articles');
     this.articleClient.subscribeToResponseOf('get_articles_by_author');
+    this.articleClient.subscribeToResponseOf('favorite_article');
+    this.articleClient.subscribeToResponseOf('unfavorite_article');
+    this.articleClient.subscribeToResponseOf('delete_article');
   }
 
   create(article: CreateArticleInput) {
@@ -71,4 +74,23 @@ export class ArticleService implements OnModuleInit {
       map(articles => articles)
     );
   }
+
+  favoriteArticle(favoriteArgs) {
+    logger.log('GATEWAY - Calling Article Service Favorite Method');
+
+    return this.articleClient.send('favorite_article', favoriteArgs);
+  }
+
+  unfavoriteArticle(unfavoriteArgs) {
+    logger.log('GATEWAY - Calling Article Service Unfavorite Method');
+
+    return this.articleClient.send('unfavorite_article', unfavoriteArgs);
+  }
+
+  deleteArticle(title) {
+    logger.log('GATEWAY - Calling Article Service Delete Method');
+
+    return this.articleClient.send('delete_article', title);
+  }
+
 }

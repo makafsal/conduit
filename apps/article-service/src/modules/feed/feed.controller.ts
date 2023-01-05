@@ -27,4 +27,19 @@ export class FeedController {
   handleGetArticlesByAuthor(email: string) {
     return this.feedService.getByAuthor(email);
   }
+
+  @MessagePattern('favorite_article')
+  handleFavoriteArticle(payload) {
+    return this.feedService.favoriteArticle(payload);
+  }
+
+  @MessagePattern('unfavorite_article')
+  handleUnfavoriteArticle(payload) {
+    return this.feedService.unfavoriteArticle(payload);
+  }
+
+  @MessagePattern('delete_article')
+  handleDeleteArticle(title) {
+    return this.feedService.deleteArticle(title);
+  }
 }

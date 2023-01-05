@@ -22,13 +22,13 @@ export class ProfileService implements OnModuleInit {
   }
 
   follow(followArgs) {
-    logger.log('GATEWAY - Calling Profile Service Follow Method')
+    logger.log('GATEWAY - Calling Profile Service Follow Method');
 
     return this.profileClient.send('follow', followArgs);
   }
 
   unFollow(unFollowArgs) {
-    logger.log('GATEWAY - Calling Profile Service Unfollow Method')
+    logger.log('GATEWAY - Calling Profile Service Unfollow Method');
 
     return this.profileClient.send('unfollow', unFollowArgs);
   }

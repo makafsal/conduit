@@ -3,6 +3,7 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { GraphQLAuthGuard } from '../../shared/jwt/jwt-auth.guard';
 import { Article } from '../../shared/types/article/article.dto';
 import { CreateArticleInput } from '../../shared/types/article/input/create-article.input';
+import { FavoriteArticleInput } from '../../shared/types/article/input/favorite-article.input';
 import { UpdateArticleInput } from '../../shared/types/article/input/update-article.input';
 import { CreateArticleOutput } from '../../shared/types/article/output/create-article.output';
 import { UpdateArticleOutput } from '../../shared/types/article/output/update-article.output';
@@ -33,13 +34,29 @@ export class ArticleResolver {
     return this.articleService.getAll();
   }
 
-  // TODO: get articles by author
   @Query(() => [Article])
   @UseGuards(GraphQLAuthGuard)
   getArticlesByAuthor(@Args('author_email') author_email: string) {
     return this.articleService.getByAuthor(author_email);
   }
 
-  // TODO: delete article
   // TODO: Favorite feature
+  @Mutation(() => String)
+  @UseGuards(GraphQLAuthGuard)
+  favoriteArticle(@Args('favoriteArgs') favoriteArgs: FavoriteArticleInput) {
+    return this.articleService.favoriteArticle(favoriteArgs);
+  }
+
+  @Mutation(() => String)
+  @UseGuards(GraphQLAuthGuard)
+  unfavoriteArticle(@Args('unfavoriteArgs') unfavoriteArgs: FavoriteArticleInput) {
+    return this.articleService.unfavoriteArticle(unfavoriteArgs);
+  }
+
+  // TODO: delete article
+  @Mutation(() => String)
+  @UseGuards(GraphQLAuthGuard)
+  deleteArticle(@Args('title') title: string) {
+    return this.articleService.deleteArticle(title);
+  }
 }

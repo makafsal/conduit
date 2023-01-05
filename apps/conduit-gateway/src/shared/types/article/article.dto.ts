@@ -27,4 +27,10 @@ export class Article {
 
   @Field()
   updated_at: string;
+
+  // @Field({ nullable: true })
+  // favorited: boolean;
+
+  // @Field()
+  // favoriteCount: number;
 }
