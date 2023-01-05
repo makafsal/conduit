@@ -31,6 +31,6 @@ export class Article {
   // @Field({ nullable: true })
   // favorited: boolean;
 
-  // @Field()
-  // favoriteCount: number;
+  @Field()
+  favoriteCount: number;
 }

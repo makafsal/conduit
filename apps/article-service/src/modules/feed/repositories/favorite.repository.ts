@@ -25,6 +25,10 @@ export class FavoriteRepository implements OnModuleInit {
       .forModel('Favorites');
   }
 
+  async getAll() {
+    return await (await this.favoriteMapper.findAll()).toArray();
+  }
+
   create(favorite) {
     return this.favoriteMapper.insert(favorite);
   }

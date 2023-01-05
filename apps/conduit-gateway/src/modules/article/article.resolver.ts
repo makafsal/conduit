@@ -40,7 +40,6 @@ export class ArticleResolver {
     return this.articleService.getByAuthor(author_email);
   }
 
-  // TODO: Favorite feature
   @Mutation(() => String)
   @UseGuards(GraphQLAuthGuard)
   favoriteArticle(@Args('favoriteArgs') favoriteArgs: FavoriteArticleInput) {
@@ -53,7 +52,6 @@ export class ArticleResolver {
     return this.articleService.unfavoriteArticle(unfavoriteArgs);
   }
 
-  // TODO: delete article
   @Mutation(() => String)
   @UseGuards(GraphQLAuthGuard)
   deleteArticle(@Args('title') title: string) {

@@ -7,6 +7,10 @@ export class FavoriteService {
     private readonly favoriteRepository: FavoriteRepository
   ) { }
 
+  getAll() {
+    return this.favoriteRepository.getAll();
+  }
+
   async create(payload) {
     await this.favoriteRepository.create(payload);
 

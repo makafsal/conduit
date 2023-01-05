@@ -57,12 +57,17 @@ export class FeedService {
 
     const articles = await this.feedRepository.getAll();
     const users = await this.userService.getAllUsers();
+    const favorites = await this.favoriteService.getAll();
+
+    // TODO: Include current user favorited or not boolean
 
     const updated_articles = articles.map((article) => {
       const user = users.find(_user => _user.email === article.author);
+      const articleFavorites = favorites.filter(favorite => favorite.article === article.title);
 
       return {
         ...article,
+        favoriteCount: articleFavorites?.length || 0,
         author: {
           username: user.username,
           email: user.email,
@@ -80,16 +85,24 @@ export class FeedService {
 
     const user = await this.userService.getUserByEmail(email);
     const articles = await this.feedRepository.getByAuthor(email);
+    const favorites = await this.favoriteService.getAll();
+    
+    // TODO: Include current user favorited or not boolean
 
-    const updated_articles = articles.map(article => ({
-      ...article,
-      author: {
-        username: user.username,
-        email: user.email,
-        bio: user.bio,
-        image: user.image
+    const updated_articles = articles.map(article => {
+      const articleFavorites = favorites.filter(favorite => favorite.article === article.title);
+      
+      return {
+        ...article,
+        favoriteCount: articleFavorites?.length || 0,
+        author: {
+          username: user.username,
+          email: user.email,
+          bio: user.bio,
+          image: user.image
+        }
       }
-    }));
+    });
 
     return updated_articles;
   }
