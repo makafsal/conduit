@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { FeedRepository } from '../repositories/feed.repository';
 import { TagService } from './tag.service';
+import { UserService } from './user.service';
 
 const logger = new Logger();
 @Injectable()
@@ -8,7 +9,8 @@ export class FeedService {
 
   constructor(
     private readonly feedRepository: FeedRepository,
-    private readonly tagService: TagService
+    private readonly tagService: TagService,
+    private readonly userService: UserService
   ) { }
 
   async createArticle(article) {
@@ -48,19 +50,45 @@ export class FeedService {
     return;
   }
 
-  getAll() {
+  async getAll() {
     logger.log('ARTICLE-SERVICE: Get all article triggered');
-    // TODO: Include author details from users table in the response
-    // Call auth-service to fetch user by email and attach it to the response
 
-    return this.feedRepository.getAll();
+    const articles = await this.feedRepository.getAll();
+    const users = await this.userService.getAllUsers();
+
+    const updated_articles = articles.map((article) => {
+      const user = users.find(_user => _user.email === article.author);
+
+      return {
+        ...article,
+        author: {
+          username: user.username,
+          email: user.email,
+          bio: user.bio,
+          image: user.image
+        }
+      };
+    });
+
+    return updated_articles;
   }
 
-  getByAuthor(payload) {
+  async getByAuthor(email) {
     logger.log('ARTICLE-SERVICE: Get articles by author triggered');
-    // TODO: Include author details from users table in the response
-    // Call auth-service to fetch user by email and attach it to the response
 
-    return this.feedRepository.getByAuthor(payload.email);
+    const user = await this.userService.getUserByEmail(email);
+    const articles = await this.feedRepository.getByAuthor(email);
+
+    const updated_articles = articles.map(article => ({
+      ...article,
+      author: {
+        username: user.username,
+        email: user.email,
+        bio: user.bio,
+        image: user.image
+      }
+    }));
+
+    return updated_articles;
   }
 }

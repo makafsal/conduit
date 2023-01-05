@@ -1,6 +1,5 @@
 import { Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { ClientKafka } from '@nestjs/microservices';
-import { map } from 'rxjs';
 
 const logger = new Logger();
 @Injectable()
@@ -19,9 +18,7 @@ export class ProfileService implements OnModuleInit {
   getProfile(profileArgs) {
     logger.log('GATEWAY - Calling Profile Service');
 
-    return this.profileClient.send('profile_get', profileArgs).pipe(
-      map(profile => profile)
-    );
+    return this.profileClient.send('profile_get', profileArgs);
   }
 
   follow(followArgs) {

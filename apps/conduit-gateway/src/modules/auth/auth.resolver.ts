@@ -25,8 +25,8 @@ export class AuthResolver {
 
   @Query(() => User)
   @UseGuards(GraphQLAuthGuard)
-  getUser(@Args('user') user: GetUserInput) {
-    return this.authService.getUser(user);
+  getUser(@Args('email') email: string) {
+    return this.authService.getUser(email);
   }
 
   @Mutation(() => CreateUserOutput)

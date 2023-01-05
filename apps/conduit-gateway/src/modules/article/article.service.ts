@@ -56,15 +56,18 @@ export class ArticleService implements OnModuleInit {
   getAll() {
     logger.log('GATEWAY - Calling Article Service');
 
-    return this.articleClient.send('get_all_articles', {}).pipe(
-      map(articles => articles)
-    );
+    return this.articleClient.send('get_all_articles', {})
+      .pipe(map(articles => {
+        logger.log('GATEWAY - Articles retrieved');
+
+        return articles;
+      }));
   }
 
   getByAuthor(email: string) {
     logger.log('GATEWAY - Calling Article Service');
 
-    return this.articleClient.send('get_articles_by_author', { email }).pipe(
+    return this.articleClient.send('get_articles_by_author', email).pipe(
       map(articles => articles)
     );
   }
