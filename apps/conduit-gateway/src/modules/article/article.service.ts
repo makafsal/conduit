@@ -56,10 +56,10 @@ export class ArticleService implements OnModuleInit {
     )
   }
 
-  getAll() {
+  getAll(currentUser: string) {
     logger.log('GATEWAY - Calling Article Service');
 
-    return this.articleClient.send('get_all_articles', {})
+    return this.articleClient.send('get_all_articles', currentUser)
       .pipe(map(articles => {
         logger.log('GATEWAY - Articles retrieved');
 
@@ -67,10 +67,10 @@ export class ArticleService implements OnModuleInit {
       }));
   }
 
-  getByAuthor(email: string) {
+  getByAuthor(author: string, currentUser: string) {
     logger.log('GATEWAY - Calling Article Service');
 
-    return this.articleClient.send('get_articles_by_author', email).pipe(
+    return this.articleClient.send('get_articles_by_author', { author, currentUser }).pipe(
       map(articles => articles)
     );
   }

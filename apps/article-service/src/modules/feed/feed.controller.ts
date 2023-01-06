@@ -19,13 +19,13 @@ export class FeedController {
   }
 
   @MessagePattern('get_all_articles')
-  handleGetAllArticles() {
-    return this.feedService.getAll();
+  handleGetAllArticles(currentUser) {
+    return this.feedService.getAll(currentUser);
   }
 
   @MessagePattern('get_articles_by_author')
-  handleGetArticlesByAuthor(email: string) {
-    return this.feedService.getByAuthor(email);
+  handleGetArticlesByAuthor(payload) {
+    return this.feedService.getByAuthor(payload.author, payload.currentUser);
   }
 
   @MessagePattern('favorite_article')

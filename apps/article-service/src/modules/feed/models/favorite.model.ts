@@ -1,5 +1,5 @@
 export class Favorite {
   article: string;
-  favorited_by: string;
+  favoritedBy: string;
   length: number;
 }
