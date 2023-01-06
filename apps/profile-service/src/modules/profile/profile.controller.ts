@@ -16,11 +16,11 @@ export class ProfileController {
 
   @MessagePattern('follow')
   handleFollow(payload) {
-    return this.profileService.follow(payload)
+    return this.profileService.follow(payload);
   }
 
   @MessagePattern('unfollow')
   handleUnFollow(payload) {
-    return this.profileService.unfollow(payload)
+    return this.profileService.unfollow(payload);
   }
 }

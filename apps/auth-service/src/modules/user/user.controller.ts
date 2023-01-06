@@ -11,26 +11,26 @@ export class UserController {
   // TODO: Remove below listing
   @MessagePattern('users_list')
   handleGetUsers() {
-    return this.userService.handleGetUsers();
+    return this.userService.getAll();
   }
 
-  @MessagePattern('get_user')
-  handleGetUser(user: User) {
-    return this.userService.handleGetUser(user);
+  @MessagePattern('get_user_by_email')
+  handleGetUser(email) {
+    return this.userService.getUserByEmail(email);
   }
 
   @MessagePattern('user_creation')
   handleUserCreation(user: User) {
-    return this.userService.handleUserCreated(user);
+    return this.userService.create(user);
   }
 
   @MessagePattern('user_update')
   handleUseUpdate(user: User) {
-    return this.userService.handleUserUpdate(user);
+    return this.userService.update(user);
   }
 
   @MessagePattern('validate_user')
   handleValidateUser(user: User) {
-    return this.userService.handleValidateUser(user);
+    return this.userService.validateUser(user);
   }
 }

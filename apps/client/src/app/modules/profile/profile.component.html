@@ -4,8 +4,8 @@
       <div class="row">
         <div class="col-xs-12 col-md-10 offset-md-1">
           <img src="{{profile && profile.image}}" class="user-img" />
-          <h4 *ngIf="profile" class="text-capitalize">{{profile.username}}</h4>
-          <p *ngIf="profile" class="text-capitalize">
+          <h4 *ngIf="profile">{{profile.username}}</h4>
+          <p *ngIf="profile">
             {{profile.bio}}
           </p>
           <button *ngIf="profile?.username !== currentUser?.username"

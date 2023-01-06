@@ -7,17 +7,20 @@ import { AppService } from './app.service';
 
 import { AuthModule } from '../modules/auth/auth.module';
 import { ProfileModule } from '../modules/profile/profile.module';
+import { ArticleModule } from '../modules/article/article.module';
 
 @Module({
   imports: [
     AuthModule,
     ProfileModule,
+    ArticleModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: true,
       include: [
         AuthModule,
-        ProfileModule
+        ProfileModule,
+        ArticleModule
       ],
       cors: {
         origin: '*',

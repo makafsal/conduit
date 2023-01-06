@@ -30,7 +30,7 @@ export class AuthService implements OnModuleInit {
     this.authClient.subscribeToResponseOf('users_list');
     this.authClient.subscribeToResponseOf('user_creation');
     this.authClient.subscribeToResponseOf('user_update');
-    this.authClient.subscribeToResponseOf('get_user');
+    this.authClient.subscribeToResponseOf('get_user_by_email');
     this.authClient.subscribeToResponseOf('validate_user');
   }
 
@@ -40,8 +40,8 @@ export class AuthService implements OnModuleInit {
     )
   }
 
-  getUser(user: GetUserInput) {
-    return this.authClient.send('get_user', user).pipe(
+  getUser(email: string) {
+    return this.authClient.send('get_user_by_email', email).pipe(
       map(r_user => r_user)
     )
   }
@@ -61,7 +61,7 @@ export class AuthService implements OnModuleInit {
 
         const token = this.jwtService.sign(newUser);
         newUser['token'] = token;
-        return newUser
+        return newUser;
       })
     );
   }

@@ -12,7 +12,7 @@ export class UserService {
     private userRepository: UserRepository,
   ) { }
 
-  async handleGetUsers() {
+  async getAll() {
     logger.log('AUTH-SERVICE - Getting Users');
     const users = await this.userRepository.getUsers();
     logger.log('Users: ', JSON.stringify(users));
@@ -20,9 +20,9 @@ export class UserService {
     return users;
   }
 
-  async handleGetUser(user: User) {
+  async getUserByEmail(email: string) {
     logger.log('AUTH-SERVICE: FindUser triggered')
-    const found_user = await (await this.userRepository.getUserByEmail(user.email)).first();
+    const found_user = await (await this.userRepository.getUserByEmail(email)).first();
 
     if (found_user) {
       logger.log('AUTH-SERVICE - User found');
@@ -35,7 +35,7 @@ export class UserService {
     return;
   }
 
-  async handleUserCreated(user: User) {
+  async create(user: User) {
     logger.log('AUTH-SERVICE - Create User triggered');
 
     const existing_email = await (await this.userRepository.getUserByEmail(user.email)).first();
@@ -55,9 +55,9 @@ export class UserService {
     return user;
   }
 
-  async handleUserUpdate(user: User) {
+  async update(user: User) {
     logger.log('AUTH-SERVICE - Updating User');
-    const currentUser = await this.handleGetUser(user);
+    const currentUser = await this.getUserByEmail(user.email);
 
     if (currentUser) {
       const salt = await bcrypt.genSalt();
@@ -65,14 +65,14 @@ export class UserService {
       user.password = hashedPassword;
       await this.userRepository.updateUser(user);
 
-      const updatedUser = await this.handleGetUser(user);
+      const updatedUser = await this.getUserByEmail(user.email);
       delete updatedUser.password;
 
       return updatedUser;
     }
   }
 
-  async handleValidateUser(user: User) {
+  async validateUser(user: User) {
     logger.log('AUTH-SERVICE - Validating User');
 
     const found_user = await (await this.userRepository.getUserByEmail(user.email)).first();
