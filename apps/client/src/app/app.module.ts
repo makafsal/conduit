@@ -13,6 +13,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { createApollo } from './shared/apollo/createApollo';
 import { SettingsModule } from './modules/settings/settings.module';
 import { ProfileModule } from './modules/profile/profile.module';
+import { ArticleModule } from './modules/article/article.module';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { ProfileModule } from './modules/profile/profile.module';
     AuthModule,
     SettingsModule,
     ProfileModule,
+    ArticleModule,
     BrowserModule,
     ApolloModule,
     HttpClientModule,
