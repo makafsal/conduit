@@ -4,6 +4,7 @@ import { GraphQLAuthGuard } from '../../shared/jwt/jwt-auth.guard';
 import { Article } from '../../shared/types/article/article.dto';
 import { CreateArticleInput } from '../../shared/types/article/input/create-article.input';
 import { FavoriteArticleInput } from '../../shared/types/article/input/favorite-article.input';
+import { GetAuthorArticleInput } from '../../shared/types/article/input/get-author-article.input';
 import { UpdateArticleInput } from '../../shared/types/article/input/update-article.input';
 import { CreateArticleOutput } from '../../shared/types/article/output/create-article.output';
 import { UpdateArticleOutput } from '../../shared/types/article/output/update-article.output';
@@ -30,14 +31,14 @@ export class ArticleResolver {
 
   @Query(() => [Article])
   @UseGuards(GraphQLAuthGuard)
-  getAllArticles() {
-    return this.articleService.getAll();
+  getAllArticles(@Args('currentUser') currentUser: string) {
+    return this.articleService.getAll(currentUser);
   }
 
   @Query(() => [Article])
   @UseGuards(GraphQLAuthGuard)
-  getArticlesByAuthor(@Args('author_email') author_email: string) {
-    return this.articleService.getByAuthor(author_email);
+  getArticlesByAuthor(@Args('authorAndUser') authorAndUser: GetAuthorArticleInput) {
+    return this.articleService.getByAuthor(authorAndUser.author, authorAndUser.currentUser);
   }
 
   @Mutation(() => String)

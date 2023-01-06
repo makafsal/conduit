@@ -52,22 +52,22 @@ export class FeedService {
     return;
   }
 
-  async getAll() {
+  async getAll(currentUser) {
     logger.log('ARTICLE-SERVICE: Get all article triggered');
 
     const articles = await this.feedRepository.getAll();
     const users = await this.userService.getAllUsers();
     const favorites = await this.favoriteService.getAll();
 
-    // TODO: Include current user favorited or not boolean
-
     const updated_articles = articles.map((article) => {
       const user = users.find(_user => _user.email === article.author);
       const articleFavorites = favorites.filter(favorite => favorite.article === article.title);
+      const favorited = favorites.find(favorite => favorite.article === article.title && favorite.favoritedBy === currentUser);
 
       return {
         ...article,
         favoriteCount: articleFavorites?.length || 0,
+        favorited: favorited ? true : false,
         author: {
           username: user.username,
           email: user.email,
@@ -80,21 +80,21 @@ export class FeedService {
     return updated_articles;
   }
 
-  async getByAuthor(email) {
+  async getByAuthor(author, currentUser) {
     logger.log('ARTICLE-SERVICE: Get articles by author triggered');
 
-    const user = await this.userService.getUserByEmail(email);
-    const articles = await this.feedRepository.getByAuthor(email);
+    const user = await this.userService.getUserByEmail(author);
+    const articles = await this.feedRepository.getByAuthor(author);
     const favorites = await this.favoriteService.getAll();
-    
-    // TODO: Include current user favorited or not boolean
 
     const updated_articles = articles.map(article => {
       const articleFavorites = favorites.filter(favorite => favorite.article === article.title);
-      
+      const favorited = favorites.find(favorite => favorite.article === article.title && favorite.favoritedBy === currentUser);
+
       return {
         ...article,
         favoriteCount: articleFavorites?.length || 0,
+        favorited: favorited ? true : false,
         author: {
           username: user.username,
           email: user.email,
