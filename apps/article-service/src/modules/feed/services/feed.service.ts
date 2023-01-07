@@ -16,6 +16,10 @@ export class FeedService {
   ) { }
 
   async createArticle(article) {
+    // TODO: Add ID field for article, because title is not case sensitive
+    // Also can use the ID in slug to fetch the article by id
+    // TODO: Change article title to ID in favorites as well
+
     logger.log('ARTICLE-SERVICE: Create article triggered');
 
     const article_exist = await (await this.feedRepository.getByTitle(article.title)).first();
@@ -51,6 +55,9 @@ export class FeedService {
 
     return;
   }
+
+  // TODO: Create getByID method
+  // TODO: Attach the following boolean as well, check the current user follows the current owner only the currentUser != author
 
   async getAll(currentUser) {
     logger.log('ARTICLE-SERVICE: Get all article triggered');
