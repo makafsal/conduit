@@ -3,6 +3,10 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { AppStateService } from '../../../../services/common/appStateService';
 import { Subscription } from 'rxjs';
 import { IUser } from '../../../../shared/model/IUser';
+import { ArticleService } from '../../../../services/article.service';
+import { IArticle } from '../../../../shared/model/IArticle';
+import { ERR } from '../../../../shared/constants/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'conduit-editor',
@@ -12,13 +16,16 @@ import { IUser } from '../../../../shared/model/IUser';
 export class EditorComponent implements OnInit, OnDestroy {
   public articleForm: FormGroup;
   public formDirty = false;
+  public articleSaveErr = '';
 
   private currentUserSubscription: Subscription = new Subscription();
   private userInfo!: IUser;
 
   constructor(
-    private appStateService: AppStateService,
-    private readonly formBuilder: FormBuilder
+    private router: Router,
+    private readonly appStateService: AppStateService,
+    private readonly formBuilder: FormBuilder,
+    private readonly articleService: ArticleService
   ) {
     this.articleForm = this.formBuilder.group({
       title: '',
@@ -55,9 +62,38 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
+    this.formDirty = true;
+
     const slug = this.articleForm.value.title.trim().replace(' ', '-');
-    console.log(slug)
-    console.log(this.userInfo.email)
+    const article: IArticle = {
+      ...this.articleForm.value,
+      slug,
+      author: this.userInfo.email,
+      created_at: new Date().toISOString(),
+      updated_at: '',
+      token: AppStateService.getUserTokenStatic()
+    }
+
+    this.articleService
+      .create(article)
+      .subscribe({
+        next: (response) => {
+          // TODO: Redirect to the article page
+          // TODO: Create article view page and get article by title 
+          console.log(response)
+        },
+        error: (err) => {
+          this.formDirty = false;
+          this.articleSaveErr = err['message'] || ERR.UNEXPECTED;
+
+          if (err['message'] && err['message'] === ERR.UNAUTHORIZED) {
+            this.appStateService.resetUser();
+            setTimeout(() => {
+              this.router.navigate(['/login']);
+            }, 1000);
+          }
+        }
+      });
   }
 
   ngOnDestroy(): void {

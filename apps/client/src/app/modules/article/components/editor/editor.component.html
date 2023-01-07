@@ -2,13 +2,19 @@
   <div class="container page">
     <div class="row">
       <div class="col-md-10 offset-md-1 col-xs-12">
+        <ul class="error-messages">
+          <li *ngIf="articleSaveErr">{{articleSaveErr}}</li>
+        </ul>
+
         <form [formGroup]="articleForm" (ngSubmit)="onSubmit()">
           <fieldset>
             <fieldset class="form-group">
-              <input formControlName="title" type="text" class="form-control form-control-lg" placeholder="Article Title" />
+              <input formControlName="title" type="text" class="form-control form-control-lg"
+                placeholder="Article Title" />
             </fieldset>
             <fieldset class="form-group">
-              <input formControlName="description" type="text" class="form-control" placeholder="What's this article about?" />
+              <input formControlName="description" type="text" class="form-control"
+                placeholder="What's this article about?" />
             </fieldset>
             <fieldset class="form-group">
               <textarea formControlName="body" class="form-control" rows="8"

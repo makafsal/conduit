@@ -25,4 +25,7 @@ export class CreateArticleInput {
 
   @Field()
   updated_at: string;
+
+  @Field()
+  token: string;
 }

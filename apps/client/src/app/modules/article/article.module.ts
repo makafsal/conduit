@@ -5,13 +5,20 @@ import { ArticleViewComponent } from './components/article-view/article-view.com
 import { RouterModule } from '@angular/router';
 import { articleRoutes } from './article.routes';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ArticleService } from '../../services/article.service';
 
 @NgModule({
-  declarations: [EditorComponent, ArticleViewComponent],
+  declarations: [
+    EditorComponent,
+    ArticleViewComponent
+  ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     RouterModule.forChild(articleRoutes)
   ],
+  providers: [
+    ArticleService
+  ]
 })
 export class ArticleModule { }
