@@ -15,12 +15,18 @@ export const CREATE_ARTICLE = gql`
         token: $token
       }
     ) {
+      id
       title
       description
       body
       tags
       slug
-      author
+      author {
+        email
+        username
+        bio
+        image
+      }
       created_at
       updated_at
     }

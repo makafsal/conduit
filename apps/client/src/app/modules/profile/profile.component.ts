@@ -98,7 +98,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
         }
       },
       error: (err) => {
-        console.error(err);
         this.getProfile();
       }
     })

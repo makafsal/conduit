@@ -64,10 +64,11 @@ export class EditorComponent implements OnInit, OnDestroy {
   onSubmit() {
     this.formDirty = true;
 
-    const slug = this.articleForm.value.title.trim().replace(' ', '-');
+    const slug = this.articleForm.value.title.trim().replaceAll(' ', '-');
     const article: IArticle = {
       ...this.articleForm.value,
       slug,
+      title: this.articleForm.value.title.trim(),
       author: this.userInfo.email,
       created_at: new Date().toISOString(),
       updated_at: '',
@@ -78,22 +79,34 @@ export class EditorComponent implements OnInit, OnDestroy {
       .create(article)
       .subscribe({
         next: (response) => {
-          // TODO: Redirect to the article page
-          // TODO: Create article view page and get article by title 
-          console.log(response)
+          if (response.errors) {
+            this.onErr(response.errors[0]);
+          }
+
+          if (response.data) {
+            const data = response.data;
+            const dataObj = Object(data);
+            const slug = dataObj.createArticle.slug;
+            
+            this.router.navigate([slug]);
+          }
         },
         error: (err) => {
-          this.formDirty = false;
-          this.articleSaveErr = err['message'] || ERR.UNEXPECTED;
-
-          if (err['message'] && err['message'] === ERR.UNAUTHORIZED) {
-            this.appStateService.resetUser();
-            setTimeout(() => {
-              this.router.navigate(['/login']);
-            }, 1000);
-          }
+          this.onErr(err)
         }
       });
+  }
+
+  onErr(err) {
+    this.formDirty = false;
+    this.articleSaveErr = err['message'] || ERR.UNEXPECTED;
+
+    if (err['message'] && err['message'] === ERR.UNAUTHORIZED) {
+      this.appStateService.resetUser();
+      setTimeout(() => {
+        this.router.navigate(['/login']);
+      }, 1000);
+    }
   }
 
   ngOnDestroy(): void {

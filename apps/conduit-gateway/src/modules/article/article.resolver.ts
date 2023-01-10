@@ -6,7 +6,6 @@ import { CreateArticleInput } from '../../shared/types/article/input/create-arti
 import { FavoriteArticleInput } from '../../shared/types/article/input/favorite-article.input';
 import { GetAuthorArticleInput } from '../../shared/types/article/input/get-author-article.input';
 import { UpdateArticleInput } from '../../shared/types/article/input/update-article.input';
-import { CreateArticleOutput } from '../../shared/types/article/output/create-article.output';
 import { UpdateArticleOutput } from '../../shared/types/article/output/update-article.output';
 import { ArticleService } from './article.service';
 
@@ -17,7 +16,7 @@ export class ArticleResolver {
     private readonly articleService: ArticleService
   ) { }
 
-  @Mutation(() => CreateArticleOutput)
+  @Mutation(() => Article)
   @UseGuards(GraphQLAuthGuard)
   createArticle(@Args('article') article: CreateArticleInput) {
     return this.articleService.create(article);

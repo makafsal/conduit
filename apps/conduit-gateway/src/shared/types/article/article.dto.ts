@@ -5,6 +5,9 @@ import { Author } from "./author.dto";
 @ObjectType()
 export class Article {
   @Field()
+  id: string;
+
+  @Field()
   title: string;
 
   @Field()

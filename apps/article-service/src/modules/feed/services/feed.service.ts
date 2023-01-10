@@ -1,4 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { randomUUID } from 'crypto';
 import { FeedRepository } from '../repositories/feed.repository';
 import { FavoriteService } from './favorite.service';
 import { TagService } from './tag.service';
@@ -22,7 +23,8 @@ export class FeedService {
 
     logger.log('ARTICLE-SERVICE: Create article triggered');
 
-    const article_exist = await (await this.feedRepository.getByTitle(article.title)).first();
+    const articles = await this.feedRepository.getAll();
+    const article_exist = articles.find(_article => _article?.title?.toLocaleLowerCase() === article?.title?.toLocaleLowerCase());
 
     if (article_exist) {
       logger.log('ARTICLE-SERVICE: Article title already exists');
@@ -30,20 +32,37 @@ export class FeedService {
       return;
     }
 
-    await this.feedRepository.create(article);
+    const uuid = randomUUID();
+    const slug = `${article.slug}_${uuid}`;
+    const newArticle = {
+      id: uuid,
+      ...article
+    };
+    newArticle.slug = slug;
+
+    await this.feedRepository.create(newArticle);
 
     if (article?.tags) {
       this.tagService.insertTags(article.tags)
     }
 
     logger.log('ARTICLE-SERVICE: Article created');
-    return article;
+
+    const user = await this.userService.getUserByEmail(article.author);
+    newArticle.author = {
+      username: user.username,
+      email: user.email,
+      bio: user.bio,
+      image: user.image
+    };
+
+    return newArticle;
   }
 
   async updateArticle(article) {
     logger.log('ARTICLE-SERVICE: Update article triggered');
 
-    const article_exists = await (await this.feedRepository.getByTitle(article.title)).first();
+    const article_exists = await (await this.feedRepository.getByID(article.id)).first();
 
     if (article_exists) {
       await this.feedRepository.updateArticle(article);
@@ -122,8 +141,8 @@ export class FeedService {
     return this.favoriteService.remove(payload);
   }
 
-  async deleteArticle(title) {
-    await this.feedRepository.delete({ title });
+  async deleteArticle(id) {
+    await this.feedRepository.delete({ id });
 
     return true;
   }

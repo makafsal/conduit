@@ -29,8 +29,8 @@ export class FeedRepository implements OnModuleInit {
     return this.feedMapper.insert(article);
   }
 
-  getByTitle(title: string) {
-    return this.feedMapper.find({ title });
+  getByID(id: string) {
+    return this.feedMapper.find({ id });
   }
 
   updateArticle(article) {
@@ -48,8 +48,8 @@ export class FeedRepository implements OnModuleInit {
     return res?.rows;
   }
 
-  delete(title) {
-    return this.feedMapper.remove(title);
+  delete(id) {
+    return this.feedMapper.remove(id);
   }
 
 }
