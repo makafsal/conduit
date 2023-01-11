@@ -28,6 +28,11 @@ export class FeedController {
     return this.feedService.getByAuthor(payload.author, payload.currentUser);
   }
 
+  @MessagePattern('get_article_by_id')
+  handleGetArticleByID(payload) {
+    return this.feedService.getByID(payload.articleID, payload.currentUser);
+  }
+
   @MessagePattern('favorite_article')
   handleFavoriteArticle(payload) {
     return this.feedService.favoriteArticle(payload);

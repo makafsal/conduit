@@ -87,17 +87,17 @@ export class EditorComponent implements OnInit, OnDestroy {
             const data = response.data;
             const dataObj = Object(data);
             const slug = dataObj.createArticle.slug;
-            
-            this.router.navigate([slug]);
+
+            this.router.navigate([`/article/${slug}`]);
           }
         },
         error: (err) => {
-          this.onErr(err)
+          this.onErr(err);
         }
       });
   }
 
-  onErr(err) {
+  onErr(err: any) {
     this.formDirty = false;
     this.articleSaveErr = err['message'] || ERR.UNEXPECTED;
 

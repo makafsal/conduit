@@ -20,6 +20,7 @@ export class ArticleService implements OnModuleInit {
     this.articleClient.subscribeToResponseOf('favorite_article');
     this.articleClient.subscribeToResponseOf('unfavorite_article');
     this.articleClient.subscribeToResponseOf('delete_article');
+    this.articleClient.subscribeToResponseOf('get_article_by_id');
   }
 
   create(article: CreateArticleInput) {
@@ -73,6 +74,20 @@ export class ArticleService implements OnModuleInit {
     return this.articleClient.send('get_articles_by_author', { author, currentUser }).pipe(
       map(articles => articles)
     );
+  }
+
+  /**
+   * 
+   * @param payload : {
+   *  articleID
+   *  currentUser
+   *  token
+   * }
+   */
+  getByID(payload) {
+    logger.log('GATEWAY - Calling Article Service');
+
+    return this.articleClient.send('get_article_by_id', payload);
   }
 
   favoriteArticle(favoriteArgs) {

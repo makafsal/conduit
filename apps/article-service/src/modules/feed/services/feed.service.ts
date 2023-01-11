@@ -17,10 +17,6 @@ export class FeedService {
   ) { }
 
   async createArticle(article) {
-    // TODO: Add ID field for article, because title is not case sensitive
-    // Also can use the ID in slug to fetch the article by id
-    // TODO: Change article title to ID in favorites as well
-
     logger.log('ARTICLE-SERVICE: Create article triggered');
 
     const articles = await this.feedRepository.getAll();
@@ -75,9 +71,6 @@ export class FeedService {
     return;
   }
 
-  // TODO: Create getByID method
-  // TODO: Attach the following boolean as well, check the current user follows the current owner only the currentUser != author
-
   async getAll(currentUser) {
     logger.log('ARTICLE-SERVICE: Get all article triggered');
 
@@ -131,6 +124,40 @@ export class FeedService {
     });
 
     return updated_articles;
+  }
+
+  // TODO: Create getByID method
+  // TODO: Attach the following boolean as well, check the current user follows the current owner only the currentUser != author
+
+  async getByID(id, currentUser) {
+    logger.log('ARTICLE-SERVICE: Get articles by ID triggered');
+
+    const article = await this.feedRepository.getByID(id);
+    const user = await this.userService.getUserByEmail(article.author);
+
+    const updated_article = {
+      ...article,
+      author: {
+        username: user.username,
+        email: user.email,
+        bio: user.bio,
+        image: user.image
+      }
+    }
+
+    if (article.author !== currentUser) {
+      const favorites = await this.favoriteService.getAll();
+      const articleFavorites = favorites.filter(favorite => favorite.article === article.title);
+      const favorited = favorites.find(favorite => favorite.article === article.title && favorite.favoritedBy === currentUser);
+
+      return {
+        ...updated_article,
+        favoriteCount: articleFavorites?.length || 0,
+        favorited: favorited ? true : false
+      }
+    }
+
+    return updated_article;
   }
 
   favoriteArticle(payload) {

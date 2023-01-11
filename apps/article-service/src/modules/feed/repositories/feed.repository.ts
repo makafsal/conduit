@@ -29,8 +29,8 @@ export class FeedRepository implements OnModuleInit {
     return this.feedMapper.insert(article);
   }
 
-  getByID(id: string) {
-    return this.feedMapper.find({ id });
+  async getByID(id: string) {
+    return await (await this.feedMapper.find({ id })).first();
   }
 
   updateArticle(article) {

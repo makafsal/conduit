@@ -32,3 +32,32 @@ export const CREATE_ARTICLE = gql`
     }
   }
 `;
+
+export const GET_ARTICLE_BY_ID = gql`
+  query getArticleByID($articleID: String!, $currentUser: String!, $token: String!) {
+    getArticleByID(
+      payload: {
+        articleID: $articleID,
+        currentUser: $currentUser
+        token: $token
+      }
+    ) {
+      id
+      title
+      description
+      body
+      tags
+      slug
+      author {
+        email
+        username
+        bio
+        image
+      }
+      created_at
+      updated_at
+      favorited
+      favoriteCount
+    }
+  }
+`;
