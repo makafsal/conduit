@@ -108,6 +108,8 @@ export class ArticleViewComponent implements OnInit, OnDestroy {
       });
   }
 
+  // TODO: Delete comment
+
   deleteArticle() {
     this.articleService
       .delete(this.articleID, this.article.title, this.token)
