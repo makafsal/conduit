@@ -21,6 +21,8 @@ export class ArticleService implements OnModuleInit {
     this.articleClient.subscribeToResponseOf('unfavorite_article');
     this.articleClient.subscribeToResponseOf('delete_article');
     this.articleClient.subscribeToResponseOf('get_article_by_id');
+    this.articleClient.subscribeToResponseOf('create_comment');
+    this.articleClient.subscribeToResponseOf('get_comments_by_article');
   }
 
   create(article: CreateArticleInput) {
@@ -28,7 +30,6 @@ export class ArticleService implements OnModuleInit {
 
     return this.articleClient.send('create_article', article).pipe(
       map(newArticle => {
-        console.log('newarticle', newArticle)
         if (!newArticle) {
           logger.log('GATEWAY - Article creation failed');
 
@@ -109,4 +110,19 @@ export class ArticleService implements OnModuleInit {
     return this.articleClient.send('delete_article', payload);
   }
 
+  // Comment Services
+
+  createComment(comment) {
+    logger.log('GATEWAY - Calling Article Service');
+
+    return this.articleClient.send('create_comment', comment);
+  }
+
+  getCommentsByArticle(payload) {
+    logger.log('GATEWAY - Calling Article Service');
+
+    return this.articleClient.send('get_comments_by_article', payload).pipe(
+      map(comments => comments)
+    );
+  }
 }

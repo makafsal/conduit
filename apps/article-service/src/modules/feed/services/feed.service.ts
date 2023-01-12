@@ -130,7 +130,7 @@ export class FeedService {
   // TODO: Attach the following boolean as well, check the current user follows the current owner only the currentUser != author
 
   async getByID(id, currentUser) {
-    logger.log('ARTICLE-SERVICE: Get articles by ID triggered');
+    logger.log('ARTICLE-SERVICE: Get article by ID triggered');
 
     const article = await this.feedRepository.getByID(id);
 
@@ -176,8 +176,6 @@ export class FeedService {
   }
 
   async deleteArticle(id, title) {
-    await this.feedRepository.delete(id, title);
-
-    return true;
+    return this.feedRepository.delete(id, title);
   }
 }

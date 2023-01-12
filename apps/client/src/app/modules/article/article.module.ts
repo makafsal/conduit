@@ -4,8 +4,9 @@ import { EditorComponent } from './components/editor/editor.component';
 import { ArticleViewComponent } from './components/article-view/article-view.component';
 import { RouterModule } from '@angular/router';
 import { articleRoutes } from './article.routes';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ArticleService } from '../../services/article.service';
+import { CommentService } from '../../services/comment.service';
 
 @NgModule({
   declarations: [
@@ -13,13 +14,15 @@ import { ArticleService } from '../../services/article.service';
     ArticleViewComponent
   ],
   imports: [
+    FormsModule,
     CommonModule,
     ReactiveFormsModule,
     RouterModule.forChild(articleRoutes)
   ],
   providers: [
     ArticleService,
-    DatePipe
+    DatePipe,
+    CommentService
   ]
 })
 export class ArticleModule { }

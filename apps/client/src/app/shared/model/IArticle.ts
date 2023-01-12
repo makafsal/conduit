@@ -1,3 +1,5 @@
+import { IAuthor } from "./IAuthor";
+
 export interface IArticle {
   id?: string;
   title: string;
@@ -5,12 +7,7 @@ export interface IArticle {
   body: string;
   tags: string;
   slug: string;
-  author: {
-    bio: string;
-    email: string;
-    image: string;
-    username: string;
-  };
+  author: IAuthor;
   createdAt: string;
   updatedAt: string;
 }
