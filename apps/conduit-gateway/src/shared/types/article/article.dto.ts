@@ -26,10 +26,10 @@ export class Article {
   author: Author;
 
   @Field()
-  created_at: string;
+  createdAt: string;
 
-  @Field()
-  updated_at: string;
+  @Field({ nullable: true })
+  updatedAt: string;
 
   @Field({ nullable: true })
   favorited: boolean;

@@ -58,7 +58,7 @@ export class FeedService {
   async updateArticle(article) {
     logger.log('ARTICLE-SERVICE: Update article triggered');
 
-    const article_exists = await (await this.feedRepository.getByID(article.id)).first();
+    const article_exists = await this.feedRepository.getByID(article.id);
 
     if (article_exists) {
       await this.feedRepository.updateArticle(article);

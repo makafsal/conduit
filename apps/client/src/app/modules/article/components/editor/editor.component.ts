@@ -85,10 +85,9 @@ export class EditorComponent implements OnInit, OnDestroy {
 
           if (response.data) {
             const data = response.data;
-            const dataObj = Object(data);
-            const slug = dataObj.createArticle.slug;
+            const newArticle: IArticle = Object(data).createArticle as IArticle;
 
-            this.router.navigate([`/article/${slug}`]);
+            this.router.navigate([`/article/${newArticle.slug}`]);
           }
         },
         error: (err) => {
@@ -97,11 +96,13 @@ export class EditorComponent implements OnInit, OnDestroy {
       });
   }
 
-  onErr(err: any) {
-    this.formDirty = false;
-    this.articleSaveErr = err['message'] || ERR.UNEXPECTED;
+  onErr(err: unknown) {
+    const error: Error = err as Error;
 
-    if (err['message'] && err['message'] === ERR.UNAUTHORIZED) {
+    this.formDirty = false;
+    this.articleSaveErr = error['message'] || ERR.UNEXPECTED;
+
+    if (error['message'] && error['message'] === ERR.UNAUTHORIZED) {
       this.appStateService.resetUser();
       setTimeout(() => {
         this.router.navigate(['/login']);

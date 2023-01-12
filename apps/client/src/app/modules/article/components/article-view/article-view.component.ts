@@ -1,16 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IUser } from '../../../../shared/model/IUser';
 import { Subscription } from 'rxjs';
 import { ArticleService } from '../../../../services/article.service';
-import { AppStateService } from 'apps/client/src/app/services/common/appStateService';
+import { AppStateService } from '../../../../services/common/appStateService';
 
 @Component({
   selector: 'conduit-article-view',
   templateUrl: './article-view.component.html',
   styleUrls: ['./article-view.component.scss'],
 })
-export class ArticleViewComponent implements OnInit {
+export class ArticleViewComponent implements OnInit, OnDestroy {
   private routeSubscription: Subscription = new Subscription();
   private articleID!: string;
   public currentUser!: IUser;
@@ -45,5 +45,9 @@ export class ArticleViewComponent implements OnInit {
           }
         })
     }
+  }
+
+  ngOnDestroy(): void {
+    this.routeSubscription.unsubscribe();
   }
 }

@@ -54,8 +54,8 @@ export const GET_ARTICLE_BY_ID = gql`
         bio
         image
       }
-      created_at
-      updated_at
+      createdAt
+      updatedAt
       favorited
       favoriteCount
     }

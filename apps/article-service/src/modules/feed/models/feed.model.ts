@@ -5,6 +5,6 @@ export class Feed {
   description: string;
   tags: string;
   author: string;
-  created_at: string;
-  updated_at: string;
+  createdAt: string;
+  updatedAt: string;
 }
