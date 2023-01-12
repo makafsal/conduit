@@ -5,6 +5,9 @@ import { Author } from "./author.dto";
 @ObjectType()
 export class Article {
   @Field()
+  id: string;
+
+  @Field()
   title: string;
 
   @Field()
@@ -23,14 +26,14 @@ export class Article {
   author: Author;
 
   @Field()
-  created_at: string;
+  createdAt: string;
 
-  @Field()
-  updated_at: string;
+  @Field({ nullable: true })
+  updatedAt: string;
 
-  // @Field({ nullable: true })
-  // favorited: boolean;
+  @Field({ nullable: true })
+  favorited: boolean;
 
-  @Field()
+  @Field({ nullable: true })
   favoriteCount: number;
 }

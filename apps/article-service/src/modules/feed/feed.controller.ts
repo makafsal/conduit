@@ -19,13 +19,18 @@ export class FeedController {
   }
 
   @MessagePattern('get_all_articles')
-  handleGetAllArticles() {
-    return this.feedService.getAll();
+  handleGetAllArticles(currentUser) {
+    return this.feedService.getAll(currentUser);
   }
 
   @MessagePattern('get_articles_by_author')
-  handleGetArticlesByAuthor(email: string) {
-    return this.feedService.getByAuthor(email);
+  handleGetArticlesByAuthor(payload) {
+    return this.feedService.getByAuthor(payload.author, payload.currentUser);
+  }
+
+  @MessagePattern('get_article_by_id')
+  handleGetArticleByID(payload) {
+    return this.feedService.getByID(payload.articleID, payload.currentUser);
   }
 
   @MessagePattern('favorite_article')
@@ -39,7 +44,7 @@ export class FeedController {
   }
 
   @MessagePattern('delete_article')
-  handleDeleteArticle(title) {
-    return this.feedService.deleteArticle(title);
+  handleDeleteArticle(payload) {
+    return this.feedService.deleteArticle(payload.id, payload.title);
   }
 }

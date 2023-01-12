@@ -20,6 +20,7 @@ export class ArticleService implements OnModuleInit {
     this.articleClient.subscribeToResponseOf('favorite_article');
     this.articleClient.subscribeToResponseOf('unfavorite_article');
     this.articleClient.subscribeToResponseOf('delete_article');
+    this.articleClient.subscribeToResponseOf('get_article_by_id');
   }
 
   create(article: CreateArticleInput) {
@@ -27,6 +28,7 @@ export class ArticleService implements OnModuleInit {
 
     return this.articleClient.send('create_article', article).pipe(
       map(newArticle => {
+        console.log('newarticle', newArticle)
         if (!newArticle) {
           logger.log('GATEWAY - Article creation failed');
 
@@ -56,10 +58,10 @@ export class ArticleService implements OnModuleInit {
     )
   }
 
-  getAll() {
+  getAll(currentUser: string) {
     logger.log('GATEWAY - Calling Article Service');
 
-    return this.articleClient.send('get_all_articles', {})
+    return this.articleClient.send('get_all_articles', currentUser)
       .pipe(map(articles => {
         logger.log('GATEWAY - Articles retrieved');
 
@@ -67,12 +69,26 @@ export class ArticleService implements OnModuleInit {
       }));
   }
 
-  getByAuthor(email: string) {
+  getByAuthor(author: string, currentUser: string) {
     logger.log('GATEWAY - Calling Article Service');
 
-    return this.articleClient.send('get_articles_by_author', email).pipe(
+    return this.articleClient.send('get_articles_by_author', { author, currentUser }).pipe(
       map(articles => articles)
     );
+  }
+
+  /**
+   * 
+   * @param payload : {
+   *  articleID
+   *  currentUser
+   *  token
+   * }
+   */
+  getByID(payload) {
+    logger.log('GATEWAY - Calling Article Service');
+
+    return this.articleClient.send('get_article_by_id', payload);
   }
 
   favoriteArticle(favoriteArgs) {
@@ -87,10 +103,10 @@ export class ArticleService implements OnModuleInit {
     return this.articleClient.send('unfavorite_article', unfavoriteArgs);
   }
 
-  deleteArticle(title) {
+  deleteArticle(payload) {
     logger.log('GATEWAY - Calling Article Service Delete Method');
 
-    return this.articleClient.send('delete_article', title);
+    return this.articleClient.send('delete_article', payload);
   }
 
 }

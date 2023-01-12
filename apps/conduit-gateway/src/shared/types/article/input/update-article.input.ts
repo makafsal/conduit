@@ -18,5 +18,5 @@ export class UpdateArticleInput {
   slug: string;
 
   @Field()
-  updated_at: string;
+  updatedAt: string;
 }

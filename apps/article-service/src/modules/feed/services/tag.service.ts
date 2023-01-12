@@ -11,18 +11,22 @@ export class TagService {
     const _tags = tags.split(',');
 
     _tags.forEach(async (tag) => {
-      const existingEntry = await this.tagRepository.get(tag);
+      const _tag = tag.trim().toLowerCase();
 
-      if (existingEntry) {
-        this.tagRepository.update({
-          name: tag,
-          count: existingEntry.count + 1
-        })
-      } else {
-        this.tagRepository.create({
-          name: tag,
-          count: 1
-        });
+      if (_tag && _tag.length) {
+        const existingEntry = await this.tagRepository.get(_tag);
+
+        if (existingEntry) {
+          this.tagRepository.update({
+            name: _tag,
+            count: existingEntry.count + 1
+          })
+        } else {
+          this.tagRepository.create({
+            name: _tag,
+            count: 1
+          });
+        }
       }
     });
   }
