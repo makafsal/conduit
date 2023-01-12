@@ -52,11 +52,10 @@ export class ArticleViewComponent implements OnInit, OnDestroy {
             if (response.data) {
               const data = response.data;
               this.article = Object(data).getArticleByID as IArticle;
-              console.log(this.article)
             }
           },
           error: err => {
-            console.log(err)
+            throw new Error(err['message']);
           }
         })
     }
@@ -68,9 +67,6 @@ export class ArticleViewComponent implements OnInit, OnDestroy {
       .subscribe({
         next: () => {
           this.router.navigate(['/']);
-        },
-        error: err => {
-          console.log(err)
         }
       })
   }
@@ -83,6 +79,8 @@ export class ArticleViewComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         this.router.navigate(['/login']);
       }, 1000);
+    } else {
+      throw new Error('Article not found.');
     }
   }
 

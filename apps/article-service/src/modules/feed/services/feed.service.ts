@@ -133,31 +133,38 @@ export class FeedService {
     logger.log('ARTICLE-SERVICE: Get articles by ID triggered');
 
     const article = await this.feedRepository.getByID(id);
-    const user = await this.userService.getUserByEmail(article?.author);
 
-    const updated_article = {
-      ...article,
-      author: {
-        username: user.username,
-        email: user.email,
-        bio: user.bio,
-        image: user.image
+    if (article) {
+      const user = await this.userService.getUserByEmail(article?.author);
+
+      const updated_article = {
+        ...article,
+        author: {
+          username: user.username,
+          email: user.email,
+          bio: user.bio,
+          image: user.image
+        }
       }
+
+      if (article.author !== currentUser) {
+        const favorites = await this.favoriteService.getAll();
+        const articleFavorites = favorites.filter(favorite => favorite.article === article.title);
+        const favorited = favorites.find(favorite => favorite.article === article.title && favorite.favoritedBy === currentUser);
+
+        return {
+          ...updated_article,
+          favoriteCount: articleFavorites?.length || 0,
+          favorited: favorited ? true : false
+        }
+      }
+
+      return updated_article;
     }
 
-    if (article.author !== currentUser) {
-      const favorites = await this.favoriteService.getAll();
-      const articleFavorites = favorites.filter(favorite => favorite.article === article.title);
-      const favorited = favorites.find(favorite => favorite.article === article.title && favorite.favoritedBy === currentUser);
+    logger.log('ARTICLE-SERVICE: Article not found');
 
-      return {
-        ...updated_article,
-        favoriteCount: articleFavorites?.length || 0,
-        favorited: favorited ? true : false
-      }
-    }
-
-    return updated_article;
+    return;
   }
 
   favoriteArticle(payload) {
