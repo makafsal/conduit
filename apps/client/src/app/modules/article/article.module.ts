@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { EditorComponent } from './components/editor/editor.component';
 import { ArticleViewComponent } from './components/article-view/article-view.component';
 import { RouterModule } from '@angular/router';
@@ -18,7 +18,8 @@ import { ArticleService } from '../../services/article.service';
     RouterModule.forChild(articleRoutes)
   ],
   providers: [
-    ArticleService
+    ArticleService,
+    DatePipe
   ]
 })
 export class ArticleModule { }

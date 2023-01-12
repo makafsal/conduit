@@ -48,8 +48,8 @@ export class FeedRepository implements OnModuleInit {
     return res?.rows;
   }
 
-  delete(id) {
-    return this.feedMapper.remove(id);
+  delete(id, title) {
+    return this.feedMapper.remove({ id, title });
   }
 
 }

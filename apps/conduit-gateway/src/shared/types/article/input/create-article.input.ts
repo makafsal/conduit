@@ -10,7 +10,7 @@ export class CreateArticleInput {
 
   @Field()
   body: string;
-  
+
   @Field()
   tags: string;
 
@@ -21,10 +21,10 @@ export class CreateArticleInput {
   author: string;
 
   @Field()
-  created_at: string;
+  createdAt: string;
 
-  @Field()
-  updated_at: string;
+  @Field({ nullable: true })
+  updatedAt: string;
 
   @Field()
   token: string;

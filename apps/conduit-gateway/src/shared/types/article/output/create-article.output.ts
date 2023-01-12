@@ -1,4 +1,5 @@
 import { ArgsType, Field, ObjectType } from "@nestjs/graphql";
+import { Author } from "../author.dto";
 
 @ArgsType()
 @ObjectType()
@@ -19,11 +20,11 @@ export class CreateArticleOutput {
   slug: string;
 
   @Field()
-  author: string;
+  author: Author;
 
   @Field()
-  created_at: string;
+  createdAt: string;
 
-  @Field()
-  updated_at: string;
+  @Field({ nullable: true })
+  updatedAt: string;
 }

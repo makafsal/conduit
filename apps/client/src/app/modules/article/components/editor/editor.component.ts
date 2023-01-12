@@ -6,7 +6,7 @@ import { IUser } from '../../../../shared/model/IUser';
 import { ArticleService } from '../../../../services/article.service';
 import { IArticle } from '../../../../shared/model/IArticle';
 import { ERR } from '../../../../shared/constants/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'conduit-editor',
@@ -17,15 +17,17 @@ export class EditorComponent implements OnInit, OnDestroy {
   public articleForm: FormGroup;
   public formDirty = false;
   public articleSaveErr = '';
-
+  private routeSubscription: Subscription = new Subscription();
+  private articleID!: string;
   private currentUserSubscription: Subscription = new Subscription();
-  private userInfo!: IUser;
+  private currentUser!: IUser;
 
   constructor(
     private router: Router,
     private readonly appStateService: AppStateService,
     private readonly formBuilder: FormBuilder,
-    private readonly articleService: ArticleService
+    private readonly articleService: ArticleService,
+    private route: ActivatedRoute
   ) {
     this.articleForm = this.formBuilder.group({
       title: '',
@@ -39,13 +41,21 @@ export class EditorComponent implements OnInit, OnDestroy {
     this.currentUserSubscription = this.appStateService
       .currentUserData$
       .subscribe(user => {
-        this.userInfo = {
+        this.currentUser = {
           username: user?.username || '',
           email: user?.email || '',
           bio: user?.bio || '',
           image: user?.image || '',
         }
       });
+
+    this.routeSubscription = this.route.url.subscribe(urlSegment => {
+      this.articleID = urlSegment[1]?.path;
+
+      if (this.articleID?.length) {
+        this.patchForm();
+      }
+    });
 
     this.articleForm.valueChanges.subscribe(newValues => {
       if (
@@ -61,6 +71,29 @@ export class EditorComponent implements OnInit, OnDestroy {
     })
   }
 
+  patchForm() {
+    this.articleService
+      .getByID(this.articleID, this.currentUser.email, AppStateService.getUserTokenStatic())
+      .subscribe({
+        next: (response) => {
+          if (response.errors) {
+            this.onErr(response.errors[0]);
+          }
+
+          if (response.data) {
+            const data = response.data;
+            const article = Object(data).getArticleByID as IArticle;
+            this.articleForm.patchValue({
+              ...article
+            });
+          }
+        },
+        error: (err) => {
+          this.onErr(err);
+        }
+      });
+  }
+
   onSubmit() {
     this.formDirty = true;
 
@@ -69,11 +102,11 @@ export class EditorComponent implements OnInit, OnDestroy {
       ...this.articleForm.value,
       slug,
       title: this.articleForm.value.title.trim(),
-      author: this.userInfo.email,
-      created_at: new Date().toISOString(),
-      updated_at: '',
+      author: this.currentUser.email,
+      createdAt: new Date().toISOString(),
+      updatedAt: '',
       token: AppStateService.getUserTokenStatic()
-    }
+    };
 
     this.articleService
       .create(article)

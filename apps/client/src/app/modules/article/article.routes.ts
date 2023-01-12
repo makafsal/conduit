@@ -8,6 +8,10 @@ export const articleRoutes: Route[] = [
     component: EditorComponent
   },
   {
+    path: 'editor/:articleID',
+    component: EditorComponent
+  },
+  {
     path: 'article/:title',
     component: ArticleViewComponent
   }

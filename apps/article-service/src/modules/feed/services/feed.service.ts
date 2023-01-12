@@ -44,7 +44,8 @@ export class FeedService {
 
     logger.log('ARTICLE-SERVICE: Article created');
 
-    const user = await this.userService.getUserByEmail(article.author);
+    const user = await this.userService.getUserByEmail(article?.author);
+
     newArticle.author = {
       username: user.username,
       email: user.email,
@@ -126,14 +127,13 @@ export class FeedService {
     return updated_articles;
   }
 
-  // TODO: Create getByID method
   // TODO: Attach the following boolean as well, check the current user follows the current owner only the currentUser != author
 
   async getByID(id, currentUser) {
     logger.log('ARTICLE-SERVICE: Get articles by ID triggered');
 
     const article = await this.feedRepository.getByID(id);
-    const user = await this.userService.getUserByEmail(article.author);
+    const user = await this.userService.getUserByEmail(article?.author);
 
     const updated_article = {
       ...article,
@@ -168,8 +168,8 @@ export class FeedService {
     return this.favoriteService.remove(payload);
   }
 
-  async deleteArticle(id) {
-    await this.feedRepository.delete({ id });
+  async deleteArticle(id, title) {
+    await this.feedRepository.delete(id, title);
 
     return true;
   }

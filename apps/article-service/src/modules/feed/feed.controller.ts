@@ -44,7 +44,7 @@ export class FeedController {
   }
 
   @MessagePattern('delete_article')
-  handleDeleteArticle(title) {
-    return this.feedService.deleteArticle(title);
+  handleDeleteArticle(payload) {
+    return this.feedService.deleteArticle(payload.id, payload.title);
   }
 }

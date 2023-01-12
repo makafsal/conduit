@@ -79,8 +79,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
           this.getProfile();
         }
       },
-      error: (err) => {
-        console.error(err);
+      error: () => {
         this.getProfile();
       }
     })
@@ -97,14 +96,16 @@ export class ProfileComponent implements OnInit, OnDestroy {
           this.getProfile();
         }
       },
-      error: (err) => {
+      error: () => {
         this.getProfile();
       }
     })
   }
 
-  onErr(err: any) {
-    if (err['message'] && err['message'] === ERR.UNAUTHORIZED) {
+  onErr(err: unknown) {
+    const error: Error = err as Error;
+
+    if (error['message'] && error['message'] === ERR.UNAUTHORIZED) {
       this.appStateService.resetUser();
       setTimeout(() => {
         this.router.navigate(['/login']);

@@ -28,6 +28,7 @@ export class ArticleService implements OnModuleInit {
 
     return this.articleClient.send('create_article', article).pipe(
       map(newArticle => {
+        console.log('newarticle', newArticle)
         if (!newArticle) {
           logger.log('GATEWAY - Article creation failed');
 
@@ -102,10 +103,10 @@ export class ArticleService implements OnModuleInit {
     return this.articleClient.send('unfavorite_article', unfavoriteArgs);
   }
 
-  deleteArticle(title) {
+  deleteArticle(payload) {
     logger.log('GATEWAY - Calling Article Service Delete Method');
 
-    return this.articleClient.send('delete_article', title);
+    return this.articleClient.send('delete_article', payload);
   }
 
 }
