@@ -2,11 +2,14 @@ import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { GraphQLAuthGuard } from '../../shared/jwt/jwt-auth.guard';
 import { Article } from '../../shared/types/article/article.dto';
+import { Comment } from '../../shared/types/article/comment.dto';
 import { CreateArticleInput } from '../../shared/types/article/input/create-article.input';
+import { CreateCommentInput } from '../../shared/types/article/input/create-comment.input';
 import { DeleteArticleInput } from '../../shared/types/article/input/delete-article.input';
 import { FavoriteArticleInput } from '../../shared/types/article/input/favorite-article.input';
 import { GetArticleByIdInput } from '../../shared/types/article/input/get-article-by-id.input';
 import { GetAuthorArticleInput } from '../../shared/types/article/input/get-author-article.input';
+import { GetCommentByArticleInput } from '../../shared/types/article/input/get-comment-by-article.input';
 import { UpdateArticleInput } from '../../shared/types/article/input/update-article.input';
 import { UpdateArticleOutput } from '../../shared/types/article/output/update-article.output';
 import { ArticleService } from './article.service';
@@ -64,5 +67,19 @@ export class ArticleResolver {
   @UseGuards(GraphQLAuthGuard)
   deleteArticle(@Args('payload') payload: DeleteArticleInput) {
     return this.articleService.deleteArticle(payload);
+  }
+
+  // Comment APIs
+
+  @Mutation(() => String)
+  @UseGuards(GraphQLAuthGuard)
+  createComment(@Args('comment') comment: CreateCommentInput) {
+    return this.articleService.createComment(comment);
+  }
+
+  @Query(() => [Comment])
+  @UseGuards(GraphQLAuthGuard)
+  getCommentsByArticle(@Args('payload') payload: GetCommentByArticleInput) {
+    return this.articleService.getCommentsByArticle(payload);
   }
 }

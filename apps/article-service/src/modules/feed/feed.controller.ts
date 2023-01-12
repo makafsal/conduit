@@ -1,11 +1,13 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
+import { CommentService } from './services/comment.service';
 import { FeedService } from './services/feed.service';
 @Controller()
 export class FeedController {
 
   constructor(
-    private feedService: FeedService
+    private readonly feedService: FeedService,
+    private readonly commentService: CommentService
   ) { }
 
   @MessagePattern('create_article')
@@ -46,5 +48,15 @@ export class FeedController {
   @MessagePattern('delete_article')
   handleDeleteArticle(payload) {
     return this.feedService.deleteArticle(payload.id, payload.title);
+  }
+
+  @MessagePattern('create_comment')
+  handleCreateComment(comment) {
+    return this.commentService.createComment(comment);
+  }
+
+  @MessagePattern('get_comments_by_article')
+  handleGetCommentsByArticle(payload) {
+    return this.commentService.getCommentsByArticle(payload);
   }
 }

@@ -7,6 +7,9 @@ import { AppStateService } from '../../../../services/common/appStateService';
 import { ERR } from '../../../../shared/constants/common';
 import { IArticle } from '../../../../shared/model/IArticle';
 import { DatePipe } from '@angular/common';
+import { IComment } from '../../../../shared/model/IComment';
+import { CommentService } from '../../../../services/comment.service';
+import { IAuthor } from 'apps/client/src/app/shared/model/IAuthor';
 
 @Component({
   selector: 'conduit-article-view',
@@ -19,13 +22,16 @@ export class ArticleViewComponent implements OnInit, OnDestroy {
   public currentUser!: IUser;
   private token!: string;
   public article!: IArticle;
+  public comment!: string;
+  public comments: IComment[] = [];
 
   constructor(
     private router: Router,
     public datePipe: DatePipe,
     private route: ActivatedRoute,
     private readonly articleService: ArticleService,
-    private readonly appStateService: AppStateService
+    private readonly appStateService: AppStateService,
+    private readonly commentService: CommentService
   ) { }
 
   ngOnInit(): void {
@@ -33,6 +39,7 @@ export class ArticleViewComponent implements OnInit, OnDestroy {
       const slug = urlSegment[urlSegment.length - 1].path;
       this.articleID = slug.split('_').pop() || '';
       this.init();
+      this.getComments();
     });
   }
 
@@ -59,6 +66,46 @@ export class ArticleViewComponent implements OnInit, OnDestroy {
           }
         })
     }
+  }
+
+  getComments() {
+    this.commentService
+      .getByArticle(this.articleID, AppStateService.getUserTokenStatic())
+      .subscribe({
+        next: response => {
+          if (response.errors) {
+            this.comments = [];
+          }
+
+          if (response.data) {
+            const data = response.data;
+            this.comments = Object(data).getCommentsByArticle as IComment[];
+            this.comments = this.comments.slice().sort((prev, next) => new Date(next.created_at).getTime() - new Date(prev.created_at).getTime());
+          }
+        }
+      });
+  }
+
+  postComment() {
+    const comment = {
+      body: this.comment,
+      author: this.currentUser.email,
+      article: this.articleID,
+      created_at: new Date().toISOString(),
+    }
+
+    this.commentService
+      .create(comment, this.token)
+      .subscribe({
+        next: () => {
+          this.comment = '';
+          this.getComments();
+        },
+        error: () => {
+          this.comment = '';
+          this.getComments();
+        }
+      });
   }
 
   deleteArticle() {
