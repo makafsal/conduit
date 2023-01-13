@@ -98,4 +98,12 @@ export class TagService {
   remove(tag: string) {
     return this.tagRepository.remove(tag);
   }
+
+  async getPopularTags() {
+    let tags = await this.tagRepository.getAll();
+    tags = tags.map(tag => ({ name: tag.name, count: tag.count }));
+    const popularTags = tags.slice().sort((prev, next) => next.count - prev.count);
+
+    return popularTags.slice(0, 10);
+  }
 }

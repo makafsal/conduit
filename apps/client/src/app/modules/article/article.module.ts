@@ -7,6 +7,7 @@ import { articleRoutes } from './article.routes';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ArticleService } from '../../services/article.service';
 import { CommentService } from '../../services/comment.service';
+import { Utilities } from '../../shared/utilities/utilities';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { CommentService } from '../../services/comment.service';
   providers: [
     ArticleService,
     DatePipe,
-    CommentService
+    CommentService,
+    Utilities
   ]
 })
 export class ArticleModule { }

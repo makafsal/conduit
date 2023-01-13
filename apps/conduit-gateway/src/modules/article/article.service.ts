@@ -24,6 +24,7 @@ export class ArticleService implements OnModuleInit {
     this.articleClient.subscribeToResponseOf('create_comment');
     this.articleClient.subscribeToResponseOf('get_comments_by_article');
     this.articleClient.subscribeToResponseOf('delete_comment');
+    this.articleClient.subscribeToResponseOf('get_popular_tags');
   }
 
   create(article: CreateArticleInput) {
@@ -131,5 +132,15 @@ export class ArticleService implements OnModuleInit {
     logger.log('GATEWAY - Calling Article Service');
 
     return this.articleClient.send('delete_comment', payload.id);
+  }
+
+  // Tag Services
+
+  getPopularTags(token) {
+    logger.log('GATEWAY - Calling Article Service');
+
+    return this.articleClient.send('get_popular_tags', token).pipe(
+      map(tags => tags)
+    );
   }
 }

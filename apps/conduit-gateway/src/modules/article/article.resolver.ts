@@ -11,8 +11,10 @@ import { FavoriteArticleInput } from '../../shared/types/article/input/favorite-
 import { GetArticleByIdInput } from '../../shared/types/article/input/get-article-by-id.input';
 import { GetAuthorArticleInput } from '../../shared/types/article/input/get-author-article.input';
 import { GetCommentByArticleInput } from '../../shared/types/article/input/get-comment-by-article.input';
+import { GetPopularTagsInput } from '../../shared/types/article/input/get-popular-tags.input';
 import { UpdateArticleInput } from '../../shared/types/article/input/update-article.input';
 import { UpdateArticleOutput } from '../../shared/types/article/output/update-article.output';
+import { Tag } from '../../shared/types/article/tag.dto';
 import { ArticleService } from './article.service';
 
 @Resolver()
@@ -88,5 +90,13 @@ export class ArticleResolver {
   @UseGuards(GraphQLAuthGuard)
   deleteComment(@Args('payload') payload: DeleteCommentInput) {
     return this.articleService.deleteComment(payload);
+  }
+
+  // Tag APIs
+
+  @Query(() => [Tag])
+  @UseGuards(GraphQLAuthGuard)
+  getPopularTags(@Args('payload') payload: GetPopularTagsInput) {
+    return this.articleService.getPopularTags(payload.token);
   }
 }

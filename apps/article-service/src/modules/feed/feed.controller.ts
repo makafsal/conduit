@@ -2,10 +2,12 @@ import { Controller } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 import { CommentService } from './services/comment.service';
 import { FeedService } from './services/feed.service';
+import { TagService } from './services/tag.service';
 @Controller()
 export class FeedController {
 
   constructor(
+    private readonly tagService: TagService,
     private readonly feedService: FeedService,
     private readonly commentService: CommentService
   ) { }
@@ -63,5 +65,10 @@ export class FeedController {
   @MessagePattern('delete_comment')
   handleDeleteComments(id) {
     return this.commentService.deleteComment(id);
+  }
+
+  @MessagePattern('get_popular_tags')
+  handleGetPopularTags() {
+    return this.tagService.getPopularTags();
   }
 }
