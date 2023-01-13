@@ -28,7 +28,6 @@ export class PopularTagsComponent implements OnInit {
           if (response.data) {
             const data = response.data;
             this.tags = Object(data).getPopularTags as ITag[];
-            console.log(this.tags)
           }
         },
         error: (err) => {
