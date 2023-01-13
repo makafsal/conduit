@@ -6,6 +6,7 @@ import { Comment } from '../../shared/types/article/comment.dto';
 import { CreateArticleInput } from '../../shared/types/article/input/create-article.input';
 import { CreateCommentInput } from '../../shared/types/article/input/create-comment.input';
 import { DeleteArticleInput } from '../../shared/types/article/input/delete-article.input';
+import { DeleteCommentInput } from '../../shared/types/article/input/delete-comment.input';
 import { FavoriteArticleInput } from '../../shared/types/article/input/favorite-article.input';
 import { GetArticleByIdInput } from '../../shared/types/article/input/get-article-by-id.input';
 import { GetAuthorArticleInput } from '../../shared/types/article/input/get-author-article.input';
@@ -71,7 +72,7 @@ export class ArticleResolver {
 
   // Comment APIs
 
-  @Mutation(() => String)
+  @Mutation(() => Comment)
   @UseGuards(GraphQLAuthGuard)
   createComment(@Args('comment') comment: CreateCommentInput) {
     return this.articleService.createComment(comment);
@@ -81,5 +82,11 @@ export class ArticleResolver {
   @UseGuards(GraphQLAuthGuard)
   getCommentsByArticle(@Args('payload') payload: GetCommentByArticleInput) {
     return this.articleService.getCommentsByArticle(payload);
+  }
+
+  @Mutation(() => String)
+  @UseGuards(GraphQLAuthGuard)
+  deleteComment(@Args('payload') payload: DeleteCommentInput) {
+    return this.articleService.deleteComment(payload);
   }
 }

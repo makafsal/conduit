@@ -26,7 +26,19 @@ export const createApollo = (httpLink: HttpLink) => {
   });
 
   const link = ApolloLink.from([basic, auth, httpLink.create({ uri: URLs.serverUrl })]);
-  const cache = new InMemoryCache();
+  const cache = new InMemoryCache({
+    typePolicies: {
+      Query: {
+        fields: {
+          getCommentsByArticle: {
+            merge(existing, incoming) {
+              return incoming;
+            }
+          }
+        },
+      },
+    },
+  });
   const defaultOptions = {
     watchQuery: {
       errorPolicy: 'all'

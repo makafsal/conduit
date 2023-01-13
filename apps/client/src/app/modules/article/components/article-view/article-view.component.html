@@ -28,7 +28,7 @@
           <a class="btn btn-outline-secondary btn-sm" routerLink="/editor/{{article && article.id}}">
             <i class="ion-edit"></i> Edit Article
           </a>
-          <button class="btn btn-outline-danger btn-sm m-l-1" (click)="deleteArticle()">
+          <button class="btn btn-outline-danger btn-sm m-l-1" (click)="deleteArticle()" [disabled]="disableDeleteArticle">
             <i class="ion-trash-a"></i> Delete Article
           </button>
         </span>
@@ -75,7 +75,7 @@
             <i class="ion-edit"></i> Edit Article
           </a>
       
-          <button class="btn btn-outline-danger btn-sm m-l-1" (click)="deleteArticle()">
+          <button class="btn btn-outline-danger btn-sm m-l-1" (click)="deleteArticle()" [disabled]="disableDeleteArticle">
             <i class="ion-trash-a"></i> Delete Article
           </button>
         </span>
@@ -107,29 +107,11 @@
             &nbsp;
             <a href="" class="comment-author">{{comment.author.username}}</a>
             <span class="date-posted">{{datePipe.transform(comment.created_at, 'longDate')}}</span>
-          </div>
-        </div>
-
-        <!-- <div class="card">
-          <div class="card-block">
-            <p class="card-text">
-              With supporting text below as a natural lead-in to additional content.
-            </p>
-          </div>
-          <div class="card-footer">
-            <a href="" class="comment-author">
-              <img src="http://i.imgur.com/Qr71crq.jpg" class="comment-author-img" />
-            </a>
-            &nbsp;
-            <a href="" class="comment-author">Jacob Schmidt</a>
-            <span class="date-posted">Dec 29th</span>
-            <span class="mod-options">
-              <i class="ion-edit"></i>
+            <span class="mod-options" (click)="deleteComment(comment)">
               <i class="ion-trash-a"></i>
             </span>
           </div>
-        </div> -->
-
+        </div>
       </div>
     </div>
   </div>

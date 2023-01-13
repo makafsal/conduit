@@ -9,7 +9,6 @@ import { IArticle } from '../../../../shared/model/IArticle';
 import { DatePipe } from '@angular/common';
 import { IComment } from '../../../../shared/model/IComment';
 import { CommentService } from '../../../../services/comment.service';
-import { IAuthor } from 'apps/client/src/app/shared/model/IAuthor';
 
 @Component({
   selector: 'conduit-article-view',
@@ -24,6 +23,8 @@ export class ArticleViewComponent implements OnInit, OnDestroy {
   public article!: IArticle;
   public comment!: string;
   public comments: IComment[] = [];
+  public disableCommentDelete = false;
+  public disableDeleteArticle = false;
 
   constructor(
     private router: Router,
@@ -62,7 +63,7 @@ export class ArticleViewComponent implements OnInit, OnDestroy {
             }
           },
           error: err => {
-            throw new Error(err['message']);
+            this.onErr(err);
           }
         })
     }
@@ -75,6 +76,7 @@ export class ArticleViewComponent implements OnInit, OnDestroy {
         next: response => {
           if (response.errors) {
             this.comments = [];
+            this.onErr(response.errors[0]);
           }
 
           if (response.data) {
@@ -82,6 +84,9 @@ export class ArticleViewComponent implements OnInit, OnDestroy {
             this.comments = Object(data).getCommentsByArticle as IComment[];
             this.comments = this.comments.slice().sort((prev, next) => new Date(next.created_at).getTime() - new Date(prev.created_at).getTime());
           }
+        },
+        error: (err) => {
+          this.onErr(err);
         }
       });
   }
@@ -97,27 +102,62 @@ export class ArticleViewComponent implements OnInit, OnDestroy {
     this.commentService
       .create(comment, this.token)
       .subscribe({
-        next: () => {
+        next: (response) => {
+          if (response.errors) {
+            this.onErr(response.errors[0]);
+          }
+
           this.comment = '';
           this.getComments();
         },
-        error: () => {
+        error: (err) => {
           this.comment = '';
           this.getComments();
+          this.onErr(err);
         }
       });
   }
 
-  // TODO: Delete comment
-
   deleteArticle() {
+    this.disableDeleteArticle = true;
+
     this.articleService
       .delete(this.articleID, this.article.title, this.token)
       .subscribe({
-        next: () => {
+        next: (response) => {
+          this.disableDeleteArticle = true;
+          if (response.errors) {
+            this.onErr(response.errors[0]);
+          }
           this.router.navigate(['/']);
+        },
+        error: (err) => {
+          this.disableDeleteArticle = true;
+          this.onErr(err);
         }
       })
+  }
+
+  deleteComment(comment: IComment) {
+    if (comment?.id && !this.disableCommentDelete) {
+      this.disableCommentDelete = true;
+
+      this.commentService
+        .delete(comment.id, this.token)
+        .subscribe({
+          next: (response) => {
+            this.disableCommentDelete = false;
+            if (response.errors) {
+              this.onErr(response.errors[0]);
+            }
+            this.getComments();
+          },
+          error: (err) => {
+            this.disableCommentDelete = false;
+            this.onErr(err);
+          }
+        })
+    }
   }
 
   onErr(err: unknown) {
@@ -129,7 +169,7 @@ export class ArticleViewComponent implements OnInit, OnDestroy {
         this.router.navigate(['/login']);
       }, 1000);
     } else {
-      throw new Error('Article not found.');
+      throw new Error(error['message']);
     }
   }
 

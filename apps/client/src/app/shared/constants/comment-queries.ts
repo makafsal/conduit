@@ -10,7 +10,9 @@ export const CREATE_COMMENT = gql`
         created_at: $created_at,
         token: $token
       }
-    )
+    ) {
+      id
+    }
   }
 `;
 
@@ -33,5 +35,16 @@ export const GET_COMMENTS_BY_ARTICLE = gql`
       }
       created_at
     }
+  }
+`;
+
+export const DELETE_COMMENT = gql`
+  mutation deleteComment($commentID: String!, $token: String!) {
+    deleteComment (
+      payload: {
+        id: $commentID,
+        token: $token
+      }
+    )
   }
 `;

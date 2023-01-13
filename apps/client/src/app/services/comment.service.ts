@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Apollo } from "apollo-angular";
-import { CREATE_COMMENT, GET_COMMENTS_BY_ARTICLE } from "../shared/constants/comment-queries";
+import { CREATE_COMMENT, DELETE_COMMENT, GET_COMMENTS_BY_ARTICLE } from "../shared/constants/comment-queries";
 import { IComment } from "../shared/model/IComment";
 
 @Injectable()
@@ -31,6 +31,16 @@ export class CommentService {
         token
       },
       fetchPolicy: 'network-only'
+    });
+  }
+
+  delete(commentID: string, token: string) {
+    return this.apollo.mutate({
+      mutation: DELETE_COMMENT,
+      variables: {
+        commentID,
+        token
+      }
     });
   }
 } 
