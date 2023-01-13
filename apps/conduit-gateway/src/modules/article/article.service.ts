@@ -23,6 +23,7 @@ export class ArticleService implements OnModuleInit {
     this.articleClient.subscribeToResponseOf('get_article_by_id');
     this.articleClient.subscribeToResponseOf('create_comment');
     this.articleClient.subscribeToResponseOf('get_comments_by_article');
+    this.articleClient.subscribeToResponseOf('delete_comment');
   }
 
   create(article: CreateArticleInput) {
@@ -124,5 +125,11 @@ export class ArticleService implements OnModuleInit {
     return this.articleClient.send('get_comments_by_article', payload).pipe(
       map(comments => comments)
     );
+  }
+
+  deleteComment(payload) {
+    logger.log('GATEWAY - Calling Article Service');
+
+    return this.articleClient.send('delete_comment', payload.id);
   }
 }

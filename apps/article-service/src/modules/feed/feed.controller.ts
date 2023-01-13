@@ -59,4 +59,9 @@ export class FeedController {
   handleGetCommentsByArticle(payload) {
     return this.commentService.getCommentsByArticle(payload);
   }
+
+  @MessagePattern('delete_comment')
+  handleDeleteComments(id) {
+    return this.commentService.deleteComment(id);
+  }
 }

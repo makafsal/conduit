@@ -21,8 +21,7 @@ export class CommentService {
     comment.id = uuid;
 
     await this.commentRepository.create(comment);
-
-    return true;
+    return comment;
   }
 
   async getCommentsByArticle(payload) {
@@ -46,5 +45,13 @@ export class CommentService {
     });
 
     return mutatedComments;
+  }
+
+  deleteComment(id) {
+    logger.log('ARTICLE-SERVICE: Delete comment method triggered');
+
+    this.commentRepository.remove(id);
+    
+    return id;
   }
 }

@@ -39,6 +39,6 @@ export class CommentRepository implements OnModuleInit {
   }
 
   remove(id) {
-    return this.commentMapper.remove(id);
+    return this.commentMapper.remove({ id });
   }
 }
