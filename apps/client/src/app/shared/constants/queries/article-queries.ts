@@ -62,6 +62,34 @@ export const GET_ARTICLE_BY_ID = gql`
   }
 `;
 
+export const GET_ARTICLES = gql`
+  query getAllArticles($currentUser: String!, $token: String!) {
+    getAllArticles(
+      payload: {
+        currentUser: $currentUser, 
+        token: $token
+      }
+    ) {
+      id
+      title
+      description
+      body
+      tags
+      slug
+      author {
+        email
+        username
+        bio
+        image
+      }
+      createdAt
+      updatedAt
+      favorited
+      favoriteCount
+    }
+  }
+`;
+
 export const DELETE_ARTICLE = gql`
   mutation deleteArticle($articleID: String!, $articleTitle: String!, $token: String!) {
     deleteArticle (

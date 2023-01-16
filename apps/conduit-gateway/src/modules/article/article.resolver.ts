@@ -8,6 +8,7 @@ import { CreateCommentInput } from '../../shared/types/article/input/create-comm
 import { DeleteArticleInput } from '../../shared/types/article/input/delete-article.input';
 import { DeleteCommentInput } from '../../shared/types/article/input/delete-comment.input';
 import { FavoriteArticleInput } from '../../shared/types/article/input/favorite-article.input';
+import { GetAllArticlesInput } from '../../shared/types/article/input/get-all-articles.input';
 import { GetArticleByIdInput } from '../../shared/types/article/input/get-article-by-id.input';
 import { GetAuthorArticleInput } from '../../shared/types/article/input/get-author-article.input';
 import { GetCommentByArticleInput } from '../../shared/types/article/input/get-comment-by-article.input';
@@ -38,8 +39,8 @@ export class ArticleResolver {
 
   @Query(() => [Article])
   @UseGuards(GraphQLAuthGuard)
-  getAllArticles(@Args('currentUser') currentUser: string) {
-    return this.articleService.getAll(currentUser);
+  getAllArticles(@Args('payload') payload: GetAllArticlesInput) {
+    return this.articleService.getAll(payload.currentUser);
   }
 
   @Query(() => [Article])

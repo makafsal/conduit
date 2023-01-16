@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Apollo } from "apollo-angular";
-import { GET_POPULAR_TAGS } from "../shared/constants/tag-queries";
+import { GET_POPULAR_TAGS } from "../shared/constants/queries/tag-queries";
 import { AppStateService } from "./common/appStateService";
 
 @Injectable()

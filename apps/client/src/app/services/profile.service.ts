@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Apollo } from "apollo-angular";
-import { FOLLOW, PROFILE_GET, UNFOLLOW } from "../shared/constants/profile-queries";
+import { FOLLOW, PROFILE_GET, UNFOLLOW } from "../shared/constants/queries/profile-queries";
 
 @Injectable()
 export class ProfileService {

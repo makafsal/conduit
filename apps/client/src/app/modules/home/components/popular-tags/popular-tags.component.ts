@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { TagService } from 'apps/client/src/app/services/tag.service';
-import { ITag } from 'apps/client/src/app/shared/model/ITag';
-import { Utilities } from 'apps/client/src/app/shared/utilities/utilities';
+import { TagService } from '../../../../services/tag.service';
+import { ITag } from '../../../../shared/model/ITag';
+import { Utilities } from '../../../../shared/utilities/utilities';
 
 @Component({
   selector: 'conduit-popular-tags',

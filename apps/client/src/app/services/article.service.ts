@@ -3,8 +3,9 @@ import { Apollo } from "apollo-angular";
 import {
   CREATE_ARTICLE,
   DELETE_ARTICLE,
+  GET_ARTICLES,
   GET_ARTICLE_BY_ID
-} from "../shared/constants/article-queries";
+} from "../shared/constants/queries/article-queries";
 import { IArticle } from "../shared/model/IArticle";
 
 @Injectable()
@@ -26,6 +27,16 @@ export class ArticleService {
       query: GET_ARTICLE_BY_ID,
       variables: {
         articleID,
+        currentUser,
+        token
+      }
+    });
+  }
+
+  getAll(currentUser: string, token: string) {
+    return this.apollo.query({
+      query: GET_ARTICLES,
+      variables: {
         currentUser,
         token
       }

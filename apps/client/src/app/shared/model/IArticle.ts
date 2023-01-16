@@ -10,4 +10,5 @@ export interface IArticle {
   author: IAuthor;
   createdAt: string;
   updatedAt: string;
+  favoriteCount: number;
 }

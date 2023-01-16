@@ -5,8 +5,8 @@ import { Subscription } from 'rxjs';
 import { IUser } from '../../../../shared/model/IUser';
 import { ArticleService } from '../../../../services/article.service';
 import { IArticle } from '../../../../shared/model/IArticle';
-import { ERR } from '../../../../shared/constants/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Utilities } from '../../../../shared/utilities/utilities';
 
 @Component({
   selector: 'conduit-editor',
@@ -27,7 +27,8 @@ export class EditorComponent implements OnInit, OnDestroy {
     private readonly appStateService: AppStateService,
     private readonly formBuilder: FormBuilder,
     private readonly articleService: ArticleService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private readonly utilities: Utilities
   ) {
     this.articleForm = this.formBuilder.group({
       title: '',
@@ -77,7 +78,7 @@ export class EditorComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response) => {
           if (response.errors) {
-            this.onErr(response.errors[0]);
+            this.utilities.onErr(response.errors[0]);
           }
 
           if (response.data) {
@@ -89,7 +90,7 @@ export class EditorComponent implements OnInit, OnDestroy {
           }
         },
         error: (err) => {
-          this.onErr(err);
+          this.utilities.onErr(err);
         }
       });
   }
@@ -112,8 +113,10 @@ export class EditorComponent implements OnInit, OnDestroy {
       .create(article)
       .subscribe({
         next: (response) => {
+          this.formDirty = false;
+
           if (response.errors) {
-            this.onErr(response.errors[0]);
+            this.utilities.onErr(response.errors[0]);
           }
 
           if (response.data) {
@@ -124,26 +127,14 @@ export class EditorComponent implements OnInit, OnDestroy {
           }
         },
         error: (err) => {
-          this.onErr(err);
+          this.formDirty = false;
+          this.utilities.onErr(err);
         }
       });
   }
 
-  onErr(err: unknown) {
-    const error: Error = err as Error;
-
-    this.formDirty = false;
-    this.articleSaveErr = error['message'] || ERR.UNEXPECTED;
-
-    if (error['message'] && error['message'] === ERR.UNAUTHORIZED) {
-      this.appStateService.resetUser();
-      setTimeout(() => {
-        this.router.navigate(['/login']);
-      }, 1000);
-    }
-  }
-
   ngOnDestroy(): void {
     this.currentUserSubscription.unsubscribe();
+    this.routeSubscription.unsubscribe();
   }
 }

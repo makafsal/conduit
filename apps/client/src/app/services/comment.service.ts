@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Apollo } from "apollo-angular";
-import { CREATE_COMMENT, DELETE_COMMENT, GET_COMMENTS_BY_ARTICLE } from "../shared/constants/comment-queries";
+import { CREATE_COMMENT, DELETE_COMMENT, GET_COMMENTS_BY_ARTICLE } from "../shared/constants/queries/comment-queries";
 import { IComment } from "../shared/model/IComment";
 
 @Injectable()
