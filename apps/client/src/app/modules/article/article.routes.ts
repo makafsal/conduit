@@ -12,7 +12,7 @@ export const articleRoutes: Route[] = [
     component: EditorComponent
   },
   {
-    path: 'article/:title',
+    path: 'articles/:title',
     component: ArticleViewComponent
   }
 ];

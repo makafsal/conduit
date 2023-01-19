@@ -4,6 +4,7 @@ import {
   CREATE_ARTICLE,
   DELETE_ARTICLE,
   GET_ARTICLES,
+  GET_ARTICLES_BY_AUTHOR,
   GET_ARTICLE_BY_ID
 } from "../shared/constants/queries/article-queries";
 import { IArticle } from "../shared/model/IArticle";
@@ -37,6 +38,17 @@ export class ArticleService {
     return this.apollo.query({
       query: GET_ARTICLES,
       variables: {
+        currentUser,
+        token
+      }
+    });
+  }
+
+  getByAuthor(author: string, currentUser: string, token: string) {
+    return this.apollo.query({
+      query: GET_ARTICLES_BY_AUTHOR,
+      variables: {
+        author,
         currentUser,
         token
       }

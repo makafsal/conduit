@@ -65,7 +65,7 @@ export class ArticleViewComponent implements OnInit, OnDestroy {
           error: err => {
             this.utilities.onErr(err);
           }
-        })
+        });
     }
   }
 

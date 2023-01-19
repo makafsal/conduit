@@ -113,6 +113,8 @@ export class FeedService {
 
       return {
         ...article,
+        createdAt: article.created_at,
+        updatedAt: article.updated_at,
         favoriteCount: articleFavorites?.length || 0,
         favorited: favorited ? true : false,
         author: {

@@ -33,11 +33,28 @@ export class FeedTabComponent implements OnInit {
 
   tabChange(tab: string) {
     this.currentTab = tab;
+    this.getFeed();
   }
 
   getFeed() {
     if (this.currentTab === TAB.YOUR) {
-      // TODO: get current user articles
+      this.articleService
+        .getByAuthor(this.currentUser.email, this.currentUser.email, this.token)
+        .subscribe({
+          next: (response) => {
+            if (response.errors) {
+              this.utilities.onErr(response.errors[0]);
+            }
+
+            if (response.data) {
+              const data = response.data;
+              this.articles = Object(data).getArticlesByAuthor as IArticle[];
+            }
+          },
+          error: (err) => {
+            this.utilities.onErr(err);
+          }
+        })
     } else {
       this.articleService
         .getAll(this.currentUser.email, this.token)
@@ -49,7 +66,7 @@ export class FeedTabComponent implements OnInit {
 
             if (response.data) {
               const data = response.data;
-              this.articles = [...Object(data).getAllArticles as IArticle[]];
+              this.articles = Object(data).getAllArticles as IArticle[];
             }
           },
           error: (err) => {

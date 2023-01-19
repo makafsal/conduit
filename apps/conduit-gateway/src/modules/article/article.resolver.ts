@@ -45,8 +45,8 @@ export class ArticleResolver {
 
   @Query(() => [Article])
   @UseGuards(GraphQLAuthGuard)
-  getArticlesByAuthor(@Args('authorAndUser') authorAndUser: GetAuthorArticleInput) {
-    return this.articleService.getByAuthor(authorAndUser.author, authorAndUser.currentUser);
+  getArticlesByAuthor(@Args('payload') payload: GetAuthorArticleInput) {
+    return this.articleService.getByAuthor(payload.author, payload.currentUser);
   }
 
   @Query(() => Article)

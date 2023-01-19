@@ -11,7 +11,7 @@
           <a routerLink="/profile/{{article && article.author.username}}" class="author">
             {{article && article.author.username}}
           </a>
-          <span class="date">{{article && datePipe.transform(article.createdAt, 'longDate')}}</span>
+          <span class="date">{{article && datePipe.transform(article.updatedAt || article.createdAt, 'longDate')}}</span>
         </div>
         <span *ngIf="article && article.author.email !== currentUser.email">
           <button class="btn btn-sm btn-outline-secondary">
@@ -56,7 +56,7 @@
           <a routerLink="/profile/{{article && article.author.username}}" class="author">{{article &&
             article.author.username}}
           </a>
-          <span class="date">{{article && datePipe.transform(article.createdAt, 'longDate')}}</span>
+          <span class="date">{{article && datePipe.transform(article.updatedAt || article.createdAt, 'longDate')}}</span>
         </div>
 
         <span *ngIf="article && article.author.email !== currentUser.email">
