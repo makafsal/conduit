@@ -61,14 +61,33 @@ export class FeedService {
   async updateArticle(article) {
     logger.log('ARTICLE-SERVICE: Update article triggered');
 
-    const article_exists = await this.feedRepository.getByID(article.id);
+    const article_exists: any = await this.feedRepository.getByID(article.id);
+    console.log(article_exists)
 
     if (article_exists) {
+      article.created_at = article_exists.createdAt;
+      article.author = article_exists.author;
+      article.slug = `${article.slug}_${article.id}`
+
       await this.feedRepository.updateArticle(article);
 
       this.tagService.compareAndActOnTags(article.tags, article_exists?.tags);
 
-      return article;
+      const updated = await this.feedRepository.getByID(article.id);
+      const user = await this.userService.getUserByEmail(article.author);
+
+      const updatedArticle = {
+        ...updated,
+        author: {
+          username: user.username,
+          email: user.email,
+          bio: user.bio,
+          image: user.image,
+          following: false
+        }
+      }
+
+      return updatedArticle;
     }
 
     return;
@@ -142,9 +161,9 @@ export class FeedService {
     logger.log('ARTICLE-SERVICE: Get article by ID triggered');
 
     const article = await this.feedRepository.getByID(id);
-    const followers = await this.followerService.getFollowers(article.author);
 
     if (article) {
+      const followers = await this.followerService.getFollowers(article.author);
       const user = await this.userService.getUserByEmail(article?.author);
       const following = followers.find(follower => follower.followed_by === currentUser);
 

@@ -8,7 +8,7 @@ export interface IArticle {
   tags: string;
   slug: string;
   author: IAuthor;
-  createdAt: string;
+  createdAt?: string;
   updatedAt: string;
   favoriteCount: number;
   favorited: boolean;

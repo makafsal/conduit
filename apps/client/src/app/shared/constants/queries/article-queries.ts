@@ -33,6 +33,39 @@ export const CREATE_ARTICLE = gql`
   }
 `;
 
+export const UPDATE_ARTICLE = gql`
+  mutation update($id: String!, $title: String!, $description: String!, $body: String!, $tags: String!, $slug: String!, $author: String!, $updatedAt: String!, $token: String!) {
+    updateArticle (
+      article: {
+        id: $id,
+        title: $title,
+        description: $description,
+        body: $body,
+        tags: $tags,
+        slug: $slug,
+        author: $author,
+        updatedAt: $updatedAt,
+        token: $token
+      }
+    ) {
+      id
+      title
+      description
+      body
+      tags
+      slug
+      author {
+        email
+        username
+        bio
+        image
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
 export const GET_ARTICLE_BY_ID = gql`
   query getArticleByID($articleID: String!, $currentUser: String!, $token: String!) {
     getArticleByID(

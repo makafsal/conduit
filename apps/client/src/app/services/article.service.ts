@@ -7,7 +7,8 @@ import {
   GET_ARTICLES,
   GET_ARTICLES_BY_AUTHOR,
   GET_ARTICLE_BY_ID,
-  UNFAVORITE_ARTICLE
+  UNFAVORITE_ARTICLE,
+  UPDATE_ARTICLE
 } from "../shared/constants/queries/article-queries";
 import { IArticle } from "../shared/model/IArticle";
 
@@ -21,6 +22,13 @@ export class ArticleService {
   create(article: IArticle) {
     return this.apollo.mutate({
       mutation: CREATE_ARTICLE,
+      variables: article
+    });
+  }
+
+  update(article: IArticle) {
+    return this.apollo.mutate({
+      mutation: UPDATE_ARTICLE,
       variables: article
     });
   }

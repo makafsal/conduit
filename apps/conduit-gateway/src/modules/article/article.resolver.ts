@@ -31,7 +31,7 @@ export class ArticleResolver {
     return this.articleService.create(article);
   }
 
-  @Mutation(() => UpdateArticleOutput)
+  @Mutation(() => Article)
   @UseGuards(GraphQLAuthGuard)
   updateArticle(@Args('article') article: UpdateArticleInput) {
     return this.articleService.update(article);

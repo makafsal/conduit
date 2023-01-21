@@ -1,7 +1,11 @@
 import { Field, InputType } from "@nestjs/graphql";
+import { Author } from "../author.dto";
 
 @InputType()
 export class UpdateArticleInput {
+  @Field()
+  id: string;
+
   @Field()
   title: string;
 
@@ -9,8 +13,11 @@ export class UpdateArticleInput {
   description: string;
 
   @Field()
+  author: string;
+
+  @Field()
   body: string;
-  
+
   @Field()
   tags: string;
 
@@ -19,4 +26,7 @@ export class UpdateArticleInput {
 
   @Field()
   updatedAt: string;
+
+  @Field()
+  token: string;
 }
