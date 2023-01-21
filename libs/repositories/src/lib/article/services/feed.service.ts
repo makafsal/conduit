@@ -1,9 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { randomUUID } from 'crypto';
-import { FeedRepository } from '../repositories/feed.repository';
+import { UserService } from '../../auth/services/user.service';
+import { FollowerService } from '../../profile/services/follower.service';
+import { FeedRepository } from '../feed.repository';
 import { FavoriteService } from './favorite.service';
 import { TagService } from './tag.service';
-import { UserService } from './user.service';
 
 const logger = new Logger();
 @Injectable()
@@ -13,7 +14,8 @@ export class FeedService {
     private readonly feedRepository: FeedRepository,
     private readonly tagService: TagService,
     private readonly userService: UserService,
-    private readonly favoriteService: FavoriteService
+    private readonly favoriteService: FavoriteService,
+    private readonly followerService: FollowerService
   ) { }
 
   async createArticle(article) {
@@ -76,13 +78,16 @@ export class FeedService {
     logger.log('ARTICLE-SERVICE: Get all article triggered');
 
     const articles = await this.feedRepository.getAll();
-    const users = await this.userService.getAllUsers();
+    const users = await this.userService.getAll();
     const favorites = await this.favoriteService.getAll();
+    const followers = await this.followerService.getAll();
 
     const updated_articles = articles.map((article) => {
       const user = users.find(_user => _user.email === article.author);
       const articleFavorites = favorites.filter(favorite => favorite.article === article.title);
       const favorited = favorites.find(favorite => favorite.article === article.title && favorite.favoritedBy === currentUser);
+      const authorFollowers = followers.filter((entry: any) => entry.followedProfile === user.email);
+      const following = authorFollowers.find((follower: any) => follower.followedBy === currentUser);
 
       return {
         ...article,
@@ -92,7 +97,8 @@ export class FeedService {
           username: user.username,
           email: user.email,
           bio: user.bio,
-          image: user.image
+          image: user.image,
+          following: following ? true : false
         }
       };
     });
@@ -106,10 +112,12 @@ export class FeedService {
     const user = await this.userService.getUserByEmail(author);
     const articles = await this.feedRepository.getByAuthor(author);
     const favorites = await this.favoriteService.getAll();
+    const followers = await this.followerService.getFollowers(author);
 
     const updated_articles = articles.map(article => {
       const articleFavorites = favorites.filter(favorite => favorite.article === article.title);
       const favorited = favorites.find(favorite => favorite.article === article.title && favorite.favoritedBy === currentUser);
+      const following = followers.find(follower => follower.followed_by === currentUser);
 
       return {
         ...article,
@@ -121,7 +129,8 @@ export class FeedService {
           username: user.username,
           email: user.email,
           bio: user.bio,
-          image: user.image
+          image: user.image,
+          following: following ? true : false
         }
       }
     });
@@ -129,15 +138,15 @@ export class FeedService {
     return updated_articles;
   }
 
-  // TODO: Attach the following boolean as well, check the current user follows the current owner only the currentUser != author
-
   async getByID(id, currentUser) {
     logger.log('ARTICLE-SERVICE: Get article by ID triggered');
 
     const article = await this.feedRepository.getByID(id);
+    const followers = await this.followerService.getFollowers(article.author);
 
     if (article) {
       const user = await this.userService.getUserByEmail(article?.author);
+      const following = followers.find(follower => follower.followed_by === currentUser);
 
       const updated_article = {
         ...article,
@@ -145,7 +154,8 @@ export class FeedService {
           username: user.username,
           email: user.email,
           bio: user.bio,
-          image: user.image
+          image: user.image,
+          following: following ? true : false
         }
       }
 

@@ -9,6 +9,7 @@ import { DatePipe } from '@angular/common';
 import { IComment } from '../../../../shared/model/IComment';
 import { CommentService } from '../../../../services/comment.service';
 import { Utilities } from '../../../../shared/utilities/utilities';
+import { ProfileService } from '../../../../services/profile.service';
 
 @Component({
   selector: 'conduit-article-view',
@@ -25,6 +26,8 @@ export class ArticleViewComponent implements OnInit, OnDestroy {
   public comments: IComment[] = [];
   public disableCommentDelete = false;
   public disableDeleteArticle = false;
+  public disableFavBtn = false;
+  public disableFollowBtn = false;
 
   constructor(
     private router: Router,
@@ -32,19 +35,24 @@ export class ArticleViewComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private readonly articleService: ArticleService,
     private readonly commentService: CommentService,
-    private readonly utilities: Utilities
+    private readonly utilities: Utilities,
+    private readonly profileService: ProfileService,
   ) { }
 
   ngOnInit(): void {
+    this.init();
+  }
+
+  init() {
     this.routeSubscription = this.route.url.subscribe(urlSegment => {
       const slug = urlSegment[urlSegment.length - 1].path;
       this.articleID = slug.split('_').pop() || '';
-      this.init();
+      this.getFeed();
       this.getComments();
     });
   }
 
-  init() {
+  getFeed() {
     this.currentUser = AppStateService.getCurrentUserStatic();
     this.token = AppStateService.getUserTokenStatic();
 
@@ -116,6 +124,107 @@ export class ArticleViewComponent implements OnInit, OnDestroy {
           this.utilities.onErr(err);
         }
       });
+  }
+
+  onFavorite(article: IArticle) {
+    this.disableFavBtn = true;
+
+    if (article.favorited) {
+      this.articleService
+        .unfavoriteArticle(article.title, this.currentUser.email, this.token)
+        .subscribe({
+          next: (response) => {
+            this.disableFavBtn = false;
+
+            if (response.errors) {
+              this.utilities.onErr(response.errors[0]);
+            }
+            if (response.data) {
+              this.init();
+            }
+          },
+          error: (err) => {
+            this.disableFavBtn = false;
+
+            this.utilities.onErr(err);
+          }
+        });
+    } else {
+      this.articleService
+        .favoriteArticle(article.title, this.currentUser.email, this.token)
+        .subscribe({
+          next: (response) => {
+            this.disableFavBtn = false;
+
+            if (response.errors) {
+              this.utilities.onErr(response.errors[0]);
+            }
+            if (response.data) {
+              this.init();
+            }
+          },
+          error: (err) => {
+            this.disableFavBtn = false;
+
+            this.utilities.onErr(err);
+          }
+        });
+    }
+  }
+
+  onFollow() {
+    this.disableFollowBtn = true;
+    if (this.article.author.following) {
+      this.unfollow();
+    } else {
+      this.follow();
+    }
+  }
+
+  follow() {
+    this.profileService.follow(
+      this.article.author.email,
+      this.currentUser.email,
+      this.token
+    ).subscribe({
+      next: (response) => {
+        this.disableFollowBtn = false;
+        if (response.errors) {
+          this.utilities.onErr(response.errors[0]);
+        }
+
+        if (response && response.data) {
+          this.init();
+        }
+      },
+      error: (err) => {
+        this.disableFollowBtn = false;
+        this.utilities.onErr(err);
+      }
+    })
+  }
+
+  unfollow() {
+    this.profileService.unfollow(
+      this.article.author.email,
+      this.currentUser.email,
+      this.token
+    ).subscribe({
+      next: (response) => {
+        this.disableFollowBtn = false;
+        if (response.errors) {
+          this.utilities.onErr(response.errors[0]);
+        }
+
+        if (response && response.data) {
+          this.init();
+        }
+      },
+      error: (err) => {
+        this.disableFollowBtn = false;
+        this.utilities.onErr(err);
+      }
+    })
   }
 
   deleteArticle() {

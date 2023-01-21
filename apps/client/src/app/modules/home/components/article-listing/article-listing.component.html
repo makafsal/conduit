@@ -5,7 +5,7 @@
       <a routerLink="/profile/{{article.author.username}}" class="author">{{article.author.username}}</a>
       <span class="date">{{article && datePipe.transform(article.updatedAt || article.createdAt, 'longDate')}}</span>
     </div>
-    <button class="btn btn-outline-primary btn-sm pull-xs-right" (click)="onFavorite(article)">
+    <button class="btn btn-outline-primary btn-sm pull-xs-right" (click)="onFavorite(article)" [disabled]="disableFavBtn">
       <i class="ion-heart"></i> {{article.favoriteCount}}
     </button>
   </div>

@@ -11,4 +11,5 @@ export interface IArticle {
   createdAt: string;
   updatedAt: string;
   favoriteCount: number;
+  favorited: boolean;
 }

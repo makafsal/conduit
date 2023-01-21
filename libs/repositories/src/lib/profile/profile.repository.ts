@@ -1,7 +1,7 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { mapping } from 'cassandra-driver';
 import { CassandraService } from '@conduit/cassandra-service';
-import { Profile } from '../models/profile.model';
+import { Profile } from './models/profile.model';
 
 @Injectable()
 export class ProfileRepository implements OnModuleInit {

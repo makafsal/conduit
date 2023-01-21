@@ -3,9 +3,11 @@ import { Apollo } from "apollo-angular";
 import {
   CREATE_ARTICLE,
   DELETE_ARTICLE,
+  FAVORITE_ARTICLE,
   GET_ARTICLES,
   GET_ARTICLES_BY_AUTHOR,
-  GET_ARTICLE_BY_ID
+  GET_ARTICLE_BY_ID,
+  UNFAVORITE_ARTICLE
 } from "../shared/constants/queries/article-queries";
 import { IArticle } from "../shared/model/IArticle";
 
@@ -30,7 +32,8 @@ export class ArticleService {
         articleID,
         currentUser,
         token
-      }
+      },
+      fetchPolicy: 'network-only'
     });
   }
 
@@ -40,7 +43,8 @@ export class ArticleService {
       variables: {
         currentUser,
         token
-      }
+      },
+      fetchPolicy: 'network-only'
     });
   }
 
@@ -50,6 +54,29 @@ export class ArticleService {
       variables: {
         author,
         currentUser,
+        token
+      },
+      fetchPolicy: 'network-only'
+    });
+  }
+
+  favoriteArticle(article: string, favorited_by: string, token: string) {
+    return this.apollo.mutate({
+      mutation: FAVORITE_ARTICLE,
+      variables: {
+        article,
+        favorited_by,
+        token
+      }
+    });
+  }
+
+  unfavoriteArticle(article: string, favorited_by: string, token: string) {
+    return this.apollo.mutate({
+      mutation: UNFAVORITE_ARTICLE,
+      variables: {
+        article,
+        favorited_by,
         token
       }
     });

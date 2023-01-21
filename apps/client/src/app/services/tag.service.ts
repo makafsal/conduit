@@ -17,8 +17,7 @@ export class TagService {
       query: GET_POPULAR_TAGS,
       variables: {
         token
-      },
-      fetchPolicy: 'network-only'
+      }
     });
   }
 }

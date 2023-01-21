@@ -53,6 +53,7 @@ export const GET_ARTICLE_BY_ID = gql`
         username
         bio
         image
+        following
       }
       createdAt
       updatedAt
@@ -81,6 +82,7 @@ export const GET_ARTICLES = gql`
         username
         bio
         image
+        following
       }
       createdAt
       updatedAt
@@ -110,12 +112,37 @@ export const GET_ARTICLES_BY_AUTHOR = gql`
         username
         bio
         image
+        following
       }
       createdAt
       updatedAt
       favorited
       favoriteCount
     }
+  }
+`;
+
+export const FAVORITE_ARTICLE = gql`
+  mutation favoriteArticle($article: String!, $favorited_by: String!, $token: String!) {
+    favoriteArticle (
+      favoriteArgs: {
+        article: $article,
+        favorited_by: $favorited_by
+        token: $token
+      }
+    )
+  }
+`;
+
+export const UNFAVORITE_ARTICLE = gql`
+  mutation unfavoriteArticle($article: String!, $favorited_by: String!, $token: String!) {
+    unfavoriteArticle (
+      unfavoriteArgs: {
+        article: $article,
+        favorited_by: $favorited_by
+        token: $token
+      }
+    )
   }
 `;
 

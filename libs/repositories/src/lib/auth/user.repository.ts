@@ -26,8 +26,8 @@ export class UserRepository implements OnModuleInit {
     return (await this.userMapper.findAll()).toArray();
   }
 
-  getUserByEmail(email: string) {
-    return this.userMapper.find({ email });
+  async getUserByEmail(email: string) {
+    return await (await this.userMapper.find({ email })).first();
   }
 
   async getUserByUsername(username: string) {

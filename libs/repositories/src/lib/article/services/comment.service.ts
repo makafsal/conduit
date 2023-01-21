@@ -1,7 +1,7 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { randomUUID } from "crypto";
-import { CommentRepository } from "../repositories/comment.repository";
-import { UserService } from "./user.service";
+import { UserService } from "../../auth/services/user.service";
+import { CommentRepository } from "../comment.repository";
 
 const logger = new Logger();
 
@@ -28,7 +28,7 @@ export class CommentService {
     logger.log('ARTICLE-SERVICE: Comments by article method triggered');
 
     const comments = await this.commentRepository.getByArticle(payload.articleID);
-    const users = await this.userService.getAllUsers();
+    const users = await this.userService.getAll();
 
     const mutatedComments = comments.map((comment) => {
       const owner = users.find(user => user.email === comment.author);

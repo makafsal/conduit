@@ -1,7 +1,7 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { mapping } from 'cassandra-driver';
 import { CassandraService } from '@conduit/cassandra-service';
-import { Follower } from '../models/follower.model';
+import { Follower } from './models/follower.model';
 
 @Injectable()
 export class FollowerRepository implements OnModuleInit {
@@ -21,6 +21,10 @@ export class FollowerRepository implements OnModuleInit {
     }
 
     this.followerMapper = this.cassandraService.createMapper(mappingOptions).forModel('Follower');
+  }
+
+  async getAll() {
+    return await (await this.followerMapper.findAll()).toArray();
   }
 
   async getFollowers(email: string) {

@@ -16,11 +16,14 @@ import { ArticleService } from '../../services/article.service';
     FeedTabComponent,
     ArticleListingComponent,
   ],
-  imports: [CommonModule, RouterModule.forChild(homeRoutes)],
+  imports: [
+    CommonModule,
+    RouterModule.forChild(homeRoutes)
+  ],
   providers: [
     TagService,
     ArticleService,
     DatePipe
-  ],
+  ]
 })
 export class HomeModule { }

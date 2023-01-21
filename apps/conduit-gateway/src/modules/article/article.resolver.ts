@@ -98,6 +98,6 @@ export class ArticleResolver {
   @Query(() => [Tag])
   @UseGuards(GraphQLAuthGuard)
   getPopularTags(@Args('payload') payload: GetPopularTagsInput) {
-    return this.articleService.getPopularTags(payload.token);
+    return this.articleService.getPopularTags();
   }
 }

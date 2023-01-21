@@ -3,4 +3,5 @@ export interface IAuthor {
   email: string;
   image: string;
   username: string;
+  following: boolean;
 }

@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { FollowerRepository } from './repositories/follower.repository';
-import { ProfileRepository } from './repositories/profile.repository';
+import { ProfileRepository } from '../profile.repository';
+import { FollowerService } from './follower.service';
 
 const logger = new Logger();
 
@@ -9,7 +9,7 @@ export class ProfileService {
 
   constructor(
     private readonly profileRepository: ProfileRepository,
-    private readonly followerRepository: FollowerRepository
+    private readonly followerService: FollowerService
   ) { }
 
   async getProfile(username: string, currentUserEmail: string) {
@@ -22,7 +22,7 @@ export class ProfileService {
 
       delete profile?.password;
 
-      const followers = await this.followerRepository.getFollowers(profile?.email);
+      const followers = await this.followerService.getFollowers(profile?.email);
       const isFollowing = followers.find((follower) => follower.followed_by === currentUserEmail);
 
       return {
@@ -36,13 +36,13 @@ export class ProfileService {
   }
 
   async follow(payload) {
-    await this.followerRepository.follow(payload.follow, payload.follower);
+    await this.followerService.follow(payload.follow, payload.follower);
 
     return true;
   }
 
   async unfollow(payload) {
-    await this.followerRepository.unfollow(payload.follow, payload.follower);
+    await this.followerService.unfollow(payload.follow, payload.follower);
 
     return true;
   }

@@ -1,7 +1,7 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { mapping } from 'cassandra-driver';
 import { CassandraService } from '@conduit/cassandra-service';
-import { Tag } from '../models/tag.model';
+import { Tag } from './models/tag.model';
 
 @Injectable()
 export class TagRepository implements OnModuleInit {

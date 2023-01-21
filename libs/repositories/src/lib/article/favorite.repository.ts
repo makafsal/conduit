@@ -1,7 +1,7 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { mapping } from 'cassandra-driver';
 import { CassandraService } from '@conduit/cassandra-service';
-import { Favorite } from '../models/favorite.model';
+import { Favorite } from './models/favorite.model';
 
 @Injectable()
 export class FavoriteRepository implements OnModuleInit {
