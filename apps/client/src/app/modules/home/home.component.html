@@ -9,12 +9,12 @@
   <div class="container page">
     <div class="row">
       <div class="col-md-9">
-        <conduit-feed-tab></conduit-feed-tab>
+        <conduit-feed-tab [tabs]="tabs"></conduit-feed-tab>
       </div>
 
       <div class="col-md-3">
         <div class="sidebar">
-          <conduit-popular-tags></conduit-popular-tags>
+          <conduit-popular-tags (clickTag)="tagClick($event)"></conduit-popular-tags>
         </div>
       </div>
     </div>

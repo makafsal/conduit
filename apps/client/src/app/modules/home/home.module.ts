@@ -8,15 +8,17 @@ import { TagService } from '../../services/tag.service';
 import { FeedTabComponent } from './components/feed-tab/feed-tab.component';
 import { ArticleListingComponent } from './components/article-listing/article-listing.component';
 import { ArticleService } from '../../services/article.service';
+import { UiModule } from '@conduit/ui';
 
 @NgModule({
   declarations: [
     HomeComponent,
     PopularTagsComponent,
     FeedTabComponent,
-    ArticleListingComponent,
+    ArticleListingComponent
   ],
   imports: [
+    UiModule,
     CommonModule,
     RouterModule.forChild(homeRoutes)
   ],

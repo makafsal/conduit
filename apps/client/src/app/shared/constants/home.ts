@@ -1,4 +1,4 @@
 export const enum TAB {
-  YOUR = 'YOUR',
-  GLOBAL = 'GLOBAL'
+  YOUR = 'Your Feed',
+  GLOBAL = 'Global Feed'
 }

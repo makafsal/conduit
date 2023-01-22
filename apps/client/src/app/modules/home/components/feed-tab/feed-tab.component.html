@@ -1,14 +1,2 @@
-<div class="feed-toggle">
-  <ul class="nav nav-pills outline-active">
-    <li class="nav-item">
-      <a class="nav-link" [ngClass]="currentTab === yourTabName ? 'active' : ''" (click)="tabChange(yourTabName)">Your
-        Feed</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" [ngClass]="currentTab === globalTabName ? 'active' : ''"
-        (click)="tabChange(globalTabName)">Global Feed</a>
-    </li>
-  </ul>
-</div>
-
+<conduit-tab [tabs]="tabs" (tabClick)="tabChange($event)"></conduit-tab>
 <conduit-article-listing [articles]="articles" (refreshList)="getFeed()"></conduit-article-listing>

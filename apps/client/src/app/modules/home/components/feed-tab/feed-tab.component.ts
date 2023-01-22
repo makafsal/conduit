@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { IUser } from '../../../../shared/model/IUser';
-import { TAB } from '../../../../shared/constants/home';
 import { AppStateService } from '../../../../services/common/appStateService';
 import { ArticleService } from '../../../../services/article.service';
 import { Utilities } from '../../../../shared/utilities/utilities';
 import { IArticle } from '../../../../shared/model/IArticle';
+import { ITab } from '@conduit/ui';
+import { TAB } from '../../../../shared/constants/home';
 
 @Component({
   selector: 'conduit-feed-tab',
@@ -12,9 +13,10 @@ import { IArticle } from '../../../../shared/model/IArticle';
   styleUrls: ['./feed-tab.component.scss'],
 })
 
-export class FeedTabComponent implements OnInit {
+export class FeedTabComponent implements OnChanges {
 
-  public currentTab: string = TAB.GLOBAL;
+  @Input() tabs: ITab[] = [];
+  public currentTab = 'Your Feed';
   private currentUser!: IUser;
   private token!: string;
   public articles: IArticle[] = [];
@@ -24,15 +26,17 @@ export class FeedTabComponent implements OnInit {
     private readonly articleService: ArticleService
   ) { }
 
-  ngOnInit(): void {
+  ngOnChanges(): void {
     this.currentUser = AppStateService.getCurrentUserStatic();
     this.token = AppStateService.getUserTokenStatic();
 
-    this.getFeed();
+    this.tabChange();
   }
 
-  tabChange(tab: string) {
-    this.currentTab = tab;
+  tabChange(tab?: ITab) {
+    if (tab) {
+      this.currentTab = tab.title;
+    }
     this.getFeed();
   }
 
@@ -55,7 +59,7 @@ export class FeedTabComponent implements OnInit {
             this.utilities.onErr(err);
           }
         })
-    } else {
+    } else if (this.currentTab === TAB.GLOBAL) {
       this.articleService
         .getAll(this.currentUser.email, this.token)
         .subscribe({
@@ -73,14 +77,8 @@ export class FeedTabComponent implements OnInit {
             this.utilities.onErr(err);
           }
         })
+    } else {
+      // TODO: Get articles by tag
     }
-  }
-
-  get yourTabName(): string {
-    return TAB.YOUR;
-  }
-
-  get globalTabName(): string {
-    return TAB.GLOBAL;
   }
 }

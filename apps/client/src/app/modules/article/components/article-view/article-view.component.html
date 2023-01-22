@@ -45,7 +45,7 @@
         <p>
           {{article && article.body}}
         </p>
-        <ul class="tag-list" *ngFor="let tag of article.tags.split(',')">
+        <ul class="tag-list" *ngFor="let tag of article?.tags?.split(',')">
           <li class="tag-default tag-pill tag-outline">{{tag}}</li>
         </ul>
       </div>

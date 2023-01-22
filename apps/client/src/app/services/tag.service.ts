@@ -13,11 +13,11 @@ export class TagService {
   getPopularTags() {
     const token = AppStateService.getUserTokenStatic();
 
-    return this.apollo.query({
+    return this.apollo.watchQuery({
       query: GET_POPULAR_TAGS,
       variables: {
         token
       }
-    });
+    }).valueChanges;
   }
 }

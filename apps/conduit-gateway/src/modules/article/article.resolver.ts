@@ -55,6 +55,8 @@ export class ArticleResolver {
     return this.articleService.getByID(payload);
   }
 
+  // TODO: Get articles by tag (implement)
+
   @Mutation(() => String)
   @UseGuards(GraphQLAuthGuard)
   favoriteArticle(@Args('favoriteArgs') favoriteArgs: FavoriteArticleInput) {

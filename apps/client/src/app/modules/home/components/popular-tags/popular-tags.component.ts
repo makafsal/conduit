@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { TagService } from '../../../../services/tag.service';
 import { ITag } from '../../../../shared/model/ITag';
 import { Utilities } from '../../../../shared/utilities/utilities';
@@ -9,6 +9,8 @@ import { Utilities } from '../../../../shared/utilities/utilities';
   styleUrls: ['./popular-tags.component.scss'],
 })
 export class PopularTagsComponent implements OnInit {
+
+  @Output() clickTag = new EventEmitter<ITag>();
   public tags: ITag[] = [];
 
   constructor(
@@ -34,5 +36,9 @@ export class PopularTagsComponent implements OnInit {
           this.utilities.onErr(err);
         }
       });
+  }
+
+  tagClick(tag: ITag) {
+    this.clickTag.emit(tag);
   }
 }

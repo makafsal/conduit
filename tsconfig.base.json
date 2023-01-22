@@ -16,7 +16,8 @@
     "baseUrl": ".",
     "paths": {
       "@conduit/cassandra-service": ["libs/cassandra-service/src/index.ts"],
-      "@conduit/repositories": ["libs/repositories/src/index.ts"]
+      "@conduit/repositories": ["libs/repositories/src/index.ts"],
+      "@conduit/ui": ["libs/ui/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
