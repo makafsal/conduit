@@ -5,8 +5,8 @@ import { Subscription } from 'rxjs';
 import { IUser } from '../../../../shared/model/IUser';
 import { ArticleService } from '../../../../services/article.service';
 import { IArticle } from '../../../../shared/model/IArticle';
-import { ERR } from '../../../../shared/constants/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Utilities } from '../../../../shared/utilities/utilities';
 
 @Component({
   selector: 'conduit-editor',
@@ -21,13 +21,15 @@ export class EditorComponent implements OnInit, OnDestroy {
   private articleID!: string;
   private currentUserSubscription: Subscription = new Subscription();
   private currentUser!: IUser;
+  public disableTitle = false;
 
   constructor(
     private router: Router,
     private readonly appStateService: AppStateService,
     private readonly formBuilder: FormBuilder,
     private readonly articleService: ArticleService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private readonly utilities: Utilities
   ) {
     this.articleForm = this.formBuilder.group({
       title: '',
@@ -53,7 +55,10 @@ export class EditorComponent implements OnInit, OnDestroy {
       this.articleID = urlSegment[1]?.path;
 
       if (this.articleID?.length) {
+        this.disableTitle = true;
         this.patchForm();
+      } else {
+        this.disableTitle = false;
       }
     });
 
@@ -77,7 +82,7 @@ export class EditorComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response) => {
           if (response.errors) {
-            this.onErr(response.errors[0]);
+            this.utilities.onErr(response.errors[0]);
           }
 
           if (response.data) {
@@ -89,7 +94,7 @@ export class EditorComponent implements OnInit, OnDestroy {
           }
         },
         error: (err) => {
-          this.onErr(err);
+          this.utilities.onErr(err);
         }
       });
   }
@@ -103,47 +108,66 @@ export class EditorComponent implements OnInit, OnDestroy {
       slug,
       title: this.articleForm.value.title.trim(),
       author: this.currentUser.email,
-      createdAt: new Date().toISOString(),
       updatedAt: '',
       token: AppStateService.getUserTokenStatic()
     };
 
-    this.articleService
-      .create(article)
-      .subscribe({
-        next: (response) => {
-          if (response.errors) {
-            this.onErr(response.errors[0]);
+    if (this.articleID?.length) {
+      article.id = this.articleID;
+      article.updatedAt = new Date().toISOString();
+
+      this.articleService
+        .update(article)
+        .subscribe({
+          next: (response) => {
+            this.formDirty = false;
+
+            if (response.errors) {
+              this.utilities.onErr(response.errors[0]);
+            }
+
+            if (response.data) {
+              const data = response.data;
+              const newArticle: IArticle = Object(data).updateArticle as IArticle;
+
+              this.router.navigate([`/articles/${newArticle.slug}`]);
+            }
+          },
+          error: (err) => {
+            this.formDirty = false;
+            this.utilities.onErr(err);
           }
+        })
+    } else {
+      article.createdAt = new Date().toISOString();
 
-          if (response.data) {
-            const data = response.data;
-            const newArticle: IArticle = Object(data).createArticle as IArticle;
+      this.articleService
+        .create(article)
+        .subscribe({
+          next: (response) => {
+            this.formDirty = false;
 
-            this.router.navigate([`/article/${newArticle.slug}`]);
+            if (response.errors) {
+              this.utilities.onErr(response.errors[0]);
+            }
+
+            if (response.data) {
+              const data = response.data;
+              const newArticle: IArticle = Object(data).createArticle as IArticle;
+
+              this.router.navigate([`/articles/${newArticle.slug}`]);
+            }
+          },
+          error: (err) => {
+            this.formDirty = false;
+            this.utilities.onErr(err);
           }
-        },
-        error: (err) => {
-          this.onErr(err);
-        }
-      });
-  }
-
-  onErr(err: unknown) {
-    const error: Error = err as Error;
-
-    this.formDirty = false;
-    this.articleSaveErr = error['message'] || ERR.UNEXPECTED;
-
-    if (error['message'] && error['message'] === ERR.UNAUTHORIZED) {
-      this.appStateService.resetUser();
-      setTimeout(() => {
-        this.router.navigate(['/login']);
-      }, 1000);
+        });
     }
   }
 
   ngOnDestroy(): void {
     this.currentUserSubscription.unsubscribe();
+    this.routeSubscription.unsubscribe();
   }
 }

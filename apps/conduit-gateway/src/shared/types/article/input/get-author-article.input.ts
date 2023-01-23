@@ -7,4 +7,7 @@ export class GetAuthorArticleInput {
 
   @Field()
   currentUser: string;
+
+  @Field()
+  token: string;
 }

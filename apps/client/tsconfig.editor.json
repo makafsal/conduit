@@ -1,6 +1,6 @@
 {
   "extends": "./tsconfig.json",
-  "include": ["**/*.ts"],
+  "include": ["**/*.ts", "../../libs/ui/src/lib/tab/models/ITab.ts"],
   "compilerOptions": {
     "types": ["jest", "node"]
   }

@@ -22,3 +22,10 @@ export const enum SUCCESS {
 export const enum BUTTON {
   UPDATE_SETTINGS = 'Update Settings'
 }
+
+export const enum TAB {
+  YOUR = 'Your Feed',
+  GLOBAL = 'Global Feed',
+  MY = 'My Articles',
+  FAVORITED = 'Favorited Articles'
+}

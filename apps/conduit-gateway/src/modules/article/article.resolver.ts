@@ -8,11 +8,15 @@ import { CreateCommentInput } from '../../shared/types/article/input/create-comm
 import { DeleteArticleInput } from '../../shared/types/article/input/delete-article.input';
 import { DeleteCommentInput } from '../../shared/types/article/input/delete-comment.input';
 import { FavoriteArticleInput } from '../../shared/types/article/input/favorite-article.input';
+import { GetAllArticlesInput } from '../../shared/types/article/input/get-all-articles.input';
 import { GetArticleByIdInput } from '../../shared/types/article/input/get-article-by-id.input';
+import { GetArticleByTagInput } from '../../shared/types/article/input/get-article-by-tag.input';
+import { GetFavoritedArticlesInput } from '../../shared/types/article/input/get-favorited-articles.input';
 import { GetAuthorArticleInput } from '../../shared/types/article/input/get-author-article.input';
 import { GetCommentByArticleInput } from '../../shared/types/article/input/get-comment-by-article.input';
+import { GetPopularTagsInput } from '../../shared/types/article/input/get-popular-tags.input';
 import { UpdateArticleInput } from '../../shared/types/article/input/update-article.input';
-import { UpdateArticleOutput } from '../../shared/types/article/output/update-article.output';
+import { Tag } from '../../shared/types/article/tag.dto';
 import { ArticleService } from './article.service';
 
 @Resolver()
@@ -28,7 +32,7 @@ export class ArticleResolver {
     return this.articleService.create(article);
   }
 
-  @Mutation(() => UpdateArticleOutput)
+  @Mutation(() => Article)
   @UseGuards(GraphQLAuthGuard)
   updateArticle(@Args('article') article: UpdateArticleInput) {
     return this.articleService.update(article);
@@ -36,20 +40,32 @@ export class ArticleResolver {
 
   @Query(() => [Article])
   @UseGuards(GraphQLAuthGuard)
-  getAllArticles(@Args('currentUser') currentUser: string) {
-    return this.articleService.getAll(currentUser);
+  getAllArticles(@Args('payload') payload: GetAllArticlesInput) {
+    return this.articleService.getAll(payload.currentUser);
   }
 
   @Query(() => [Article])
   @UseGuards(GraphQLAuthGuard)
-  getArticlesByAuthor(@Args('authorAndUser') authorAndUser: GetAuthorArticleInput) {
-    return this.articleService.getByAuthor(authorAndUser.author, authorAndUser.currentUser);
+  getArticlesByAuthor(@Args('payload') payload: GetAuthorArticleInput) {
+    return this.articleService.getByAuthor(payload.author, payload.currentUser);
   }
 
   @Query(() => Article)
   @UseGuards(GraphQLAuthGuard)
   getArticleByID(@Args('payload') payload: GetArticleByIdInput) {
     return this.articleService.getByID(payload);
+  }
+
+  @Query(() => [Article])
+  @UseGuards(GraphQLAuthGuard)
+  getArticlesByTag(@Args('payload') payload: GetArticleByTagInput) {
+    return this.articleService.getByTag(payload);
+  }
+
+  @Query(() => [Article])
+  @UseGuards(GraphQLAuthGuard)
+  getFavoritedArticles(@Args('payload') payload: GetFavoritedArticlesInput) {
+    return this.articleService.getUserFavorited(payload);
   }
 
   @Mutation(() => String)
@@ -88,5 +104,13 @@ export class ArticleResolver {
   @UseGuards(GraphQLAuthGuard)
   deleteComment(@Args('payload') payload: DeleteCommentInput) {
     return this.articleService.deleteComment(payload);
+  }
+
+  // Tag APIs
+
+  @Query(() => [Tag])
+  @UseGuards(GraphQLAuthGuard)
+  getPopularTags(@Args('payload') payload: GetPopularTagsInput) {
+    return this.articleService.getPopularTags(payload);
   }
 }

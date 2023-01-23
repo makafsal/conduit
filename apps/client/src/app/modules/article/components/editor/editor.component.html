@@ -8,7 +8,7 @@
 
         <form [formGroup]="articleForm" (ngSubmit)="onSubmit()">
           <fieldset>
-            <fieldset class="form-group">
+            <fieldset class="form-group" [disabled]="disableTitle">
               <input formControlName="title" type="text" class="form-control form-control-lg"
                 placeholder="Article Title" />
             </fieldset>

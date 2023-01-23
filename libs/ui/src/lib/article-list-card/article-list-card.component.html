@@ -1,0 +1,26 @@
+<div class="article-preview" *ngFor="let article of articles">
+  <div class="article-meta">
+    <a role="button" (click)="onProfileClick(article)"><img src="{{article.author.image}}" /></a>
+    <div class="info">
+      <a role="button" (click)="onProfileClick(article)" class="author">{{article.author.username}}</a>
+      <span class="date">{{article && datePipe.transform(article.updatedAt || article.createdAt, 'longDate')}}</span>
+    </div>
+    <button class="btn btn-sm pull-xs-right"
+      [ngClass]="article && article.favorited ? 'btn-primary' : 'btn-outline-primary'" (click)="onFavorite(article)"
+      [disabled]="disableFavIcon">
+      <i class="ion-heart"></i> {{article.favoriteCount}}
+    </button>
+  </div>
+  <a role="button" (click)="onArticleClick(article)" class="preview-link">
+    <h1>{{article.title}}</h1>
+    <p>{{article.description}}</p>
+    <span>Read more...</span>
+    <ul class="tag-list" *ngFor="let tag of article.tags.split(',')">
+      <li class="tag-default tag-pill tag-outline">{{tag}}</li>
+    </ul>
+  </a>
+</div>
+
+<div class="article-preview" *ngIf="!articles || articles?.length === 0">
+  No articles are here...
+</div>

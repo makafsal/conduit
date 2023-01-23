@@ -2,8 +2,7 @@ import { Module } from '@nestjs/common';
 // import { CassandraService } from '../cassandra/cassandra.service';
 import { CassandraService } from '@conduit/cassandra-service';
 import { UserController } from './user.controller';
-import { UserRepository } from './user.repository';
-import { UserService } from './user.service';
+import { UserRepository, UserService } from '@conduit/repositories';
 
 @Module({
   controllers: [UserController],

@@ -1,6 +1,6 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
-import { ProfileService } from './profile.service';
+import { ProfileService } from '@conduit/repositories';
 
 @Controller()
 export class ProfileController {

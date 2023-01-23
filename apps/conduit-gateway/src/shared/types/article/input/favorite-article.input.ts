@@ -7,4 +7,7 @@ export class FavoriteArticleInput {
 
   @Field()
   favorited_by: string;
+
+  @Field()
+  token: string;
 }

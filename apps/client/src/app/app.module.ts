@@ -42,6 +42,8 @@ import { ArticleModule } from './modules/article/article.module';
     },
   ],
   bootstrap: [AppComponent],
-  exports: [RouterModule]
+  exports: [
+    RouterModule
+  ],
 })
-export class AppModule { }
+export class AppModule {}

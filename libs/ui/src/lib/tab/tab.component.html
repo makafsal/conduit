@@ -1,0 +1,9 @@
+<div class="tab-toggle">
+  <ul class="nav nav-pills outline-active">
+    <li *ngFor="let tab of tabs" class="nav-item">
+      <a role="button" class="nav-link" [ngClass]="currentTabTitle === tab.title ? 'active' : ''" (click)="tabChange(tab)">
+        {{tab.title}}
+      </a>
+    </li>
+  </ul>
+</div>

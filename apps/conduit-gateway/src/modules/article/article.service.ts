@@ -24,6 +24,9 @@ export class ArticleService implements OnModuleInit {
     this.articleClient.subscribeToResponseOf('create_comment');
     this.articleClient.subscribeToResponseOf('get_comments_by_article');
     this.articleClient.subscribeToResponseOf('delete_comment');
+    this.articleClient.subscribeToResponseOf('popular_tags');
+    this.articleClient.subscribeToResponseOf('get_articles_by_tag');
+    this.articleClient.subscribeToResponseOf('get_favorited_articles');
   }
 
   create(article: CreateArticleInput) {
@@ -93,6 +96,29 @@ export class ArticleService implements OnModuleInit {
     return this.articleClient.send('get_article_by_id', payload);
   }
 
+  getByTag(payload) {
+    logger.log('GATEWAY - Calling Article Service');
+
+    return this.articleClient.send('get_articles_by_tag', payload).pipe(
+      map(articles => {
+        logger.log('GATEWAY - Article by tag retrieved');
+
+        return articles;
+      })
+    );
+  }
+
+  getUserFavorited(payload) {
+    logger.log('GATEWAY - Calling Article Service');
+
+    return this.articleClient.send('get_favorited_articles', payload)
+    .pipe(map(articles => {
+      logger.log('GATEWAY - Favorited articles retrieved');
+
+      return articles;
+    }));
+  }
+
   favoriteArticle(favoriteArgs) {
     logger.log('GATEWAY - Calling Article Service Favorite Method');
 
@@ -131,5 +157,19 @@ export class ArticleService implements OnModuleInit {
     logger.log('GATEWAY - Calling Article Service');
 
     return this.articleClient.send('delete_comment', payload.id);
+  }
+
+  // Tag Services
+
+  getPopularTags(payload) {
+    logger.log('GATEWAY - Calling Article Service');
+
+    return this.articleClient.send('popular_tags', payload).pipe(
+      map(tags => {
+        logger.log('GATEWAY - Popular Tags retrieved');
+
+        return tags;
+      })
+    );
   }
 }

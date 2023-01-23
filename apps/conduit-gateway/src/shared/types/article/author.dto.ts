@@ -14,4 +14,7 @@ export class Author {
 
   @Field({ nullable: true })
   image: string;
+
+  @Field()
+  following: boolean;
 }

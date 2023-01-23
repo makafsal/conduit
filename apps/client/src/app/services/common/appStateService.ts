@@ -18,7 +18,7 @@ export class AppStateService {
 
   static getCurrentUserStatic() {
     const userInfo = SLSService.getValueByKey(AppConstants.USER_INFO_KEY);
-    return JSON.parse(userInfo);
+    return userInfo && JSON.parse(userInfo);
   }
 
   public setUserToken(token: string) {

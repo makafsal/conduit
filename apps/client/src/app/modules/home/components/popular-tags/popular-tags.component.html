@@ -1,0 +1,5 @@
+<p>Popular Tags</p>
+
+<div class="tag-list">
+  <a *ngFor="let tag of tags" role="button" class="tag-pill tag-default" (click)="tagClick(tag)">{{tag.name}}</a>
+</div>

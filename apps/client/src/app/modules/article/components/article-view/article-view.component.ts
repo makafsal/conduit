@@ -4,11 +4,12 @@ import { IUser } from '../../../../shared/model/IUser';
 import { Subscription } from 'rxjs';
 import { ArticleService } from '../../../../services/article.service';
 import { AppStateService } from '../../../../services/common/appStateService';
-import { ERR } from '../../../../shared/constants/common';
 import { IArticle } from '../../../../shared/model/IArticle';
 import { DatePipe } from '@angular/common';
 import { IComment } from '../../../../shared/model/IComment';
 import { CommentService } from '../../../../services/comment.service';
+import { Utilities } from '../../../../shared/utilities/utilities';
+import { ProfileService } from '../../../../services/profile.service';
 
 @Component({
   selector: 'conduit-article-view',
@@ -25,26 +26,33 @@ export class ArticleViewComponent implements OnInit, OnDestroy {
   public comments: IComment[] = [];
   public disableCommentDelete = false;
   public disableDeleteArticle = false;
+  public disableFavBtn = false;
+  public disableFollowBtn = false;
 
   constructor(
     private router: Router,
     public datePipe: DatePipe,
     private route: ActivatedRoute,
     private readonly articleService: ArticleService,
-    private readonly appStateService: AppStateService,
-    private readonly commentService: CommentService
+    private readonly commentService: CommentService,
+    private readonly utilities: Utilities,
+    private readonly profileService: ProfileService,
   ) { }
 
   ngOnInit(): void {
+    this.init();
+  }
+
+  init() {
     this.routeSubscription = this.route.url.subscribe(urlSegment => {
       const slug = urlSegment[urlSegment.length - 1].path;
       this.articleID = slug.split('_').pop() || '';
-      this.init();
+      this.getFeed();
       this.getComments();
     });
   }
 
-  init() {
+  getFeed() {
     this.currentUser = AppStateService.getCurrentUserStatic();
     this.token = AppStateService.getUserTokenStatic();
 
@@ -54,7 +62,7 @@ export class ArticleViewComponent implements OnInit, OnDestroy {
         .subscribe({
           next: (response) => {
             if (response?.errors) {
-              this.onErr(response.errors[0]);
+              this.utilities.onErr(response.errors[0]);
             }
 
             if (response.data) {
@@ -63,9 +71,9 @@ export class ArticleViewComponent implements OnInit, OnDestroy {
             }
           },
           error: err => {
-            this.onErr(err);
+            this.utilities.onErr(err);
           }
-        })
+        });
     }
   }
 
@@ -76,7 +84,7 @@ export class ArticleViewComponent implements OnInit, OnDestroy {
         next: response => {
           if (response.errors) {
             this.comments = [];
-            this.onErr(response.errors[0]);
+            this.utilities.onErr(response.errors[0]);
           }
 
           if (response.data) {
@@ -86,7 +94,7 @@ export class ArticleViewComponent implements OnInit, OnDestroy {
           }
         },
         error: (err) => {
-          this.onErr(err);
+          this.utilities.onErr(err);
         }
       });
   }
@@ -104,7 +112,7 @@ export class ArticleViewComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response) => {
           if (response.errors) {
-            this.onErr(response.errors[0]);
+            this.utilities.onErr(response.errors[0]);
           }
 
           this.comment = '';
@@ -113,9 +121,110 @@ export class ArticleViewComponent implements OnInit, OnDestroy {
         error: (err) => {
           this.comment = '';
           this.getComments();
-          this.onErr(err);
+          this.utilities.onErr(err);
         }
       });
+  }
+
+  onFavorite(article: IArticle) {
+    this.disableFavBtn = true;
+
+    if (article.favorited) {
+      this.articleService
+        .unfavoriteArticle(article.title, this.currentUser.email, this.token)
+        .subscribe({
+          next: (response) => {
+            this.disableFavBtn = false;
+
+            if (response.errors) {
+              this.utilities.onErr(response.errors[0]);
+            }
+            if (response.data) {
+              this.init();
+            }
+          },
+          error: (err) => {
+            this.disableFavBtn = false;
+
+            this.utilities.onErr(err);
+          }
+        });
+    } else {
+      this.articleService
+        .favoriteArticle(article.title, this.currentUser.email, this.token)
+        .subscribe({
+          next: (response) => {
+            this.disableFavBtn = false;
+
+            if (response.errors) {
+              this.utilities.onErr(response.errors[0]);
+            }
+            if (response.data) {
+              this.init();
+            }
+          },
+          error: (err) => {
+            this.disableFavBtn = false;
+
+            this.utilities.onErr(err);
+          }
+        });
+    }
+  }
+
+  onFollow() {
+    this.disableFollowBtn = true;
+    if (this.article.author.following) {
+      this.unfollow();
+    } else {
+      this.follow();
+    }
+  }
+
+  follow() {
+    this.profileService.follow(
+      this.article.author.email,
+      this.currentUser.email,
+      this.token
+    ).subscribe({
+      next: (response) => {
+        this.disableFollowBtn = false;
+        if (response.errors) {
+          this.utilities.onErr(response.errors[0]);
+        }
+
+        if (response && response.data) {
+          this.init();
+        }
+      },
+      error: (err) => {
+        this.disableFollowBtn = false;
+        this.utilities.onErr(err);
+      }
+    })
+  }
+
+  unfollow() {
+    this.profileService.unfollow(
+      this.article.author.email,
+      this.currentUser.email,
+      this.token
+    ).subscribe({
+      next: (response) => {
+        this.disableFollowBtn = false;
+        if (response.errors) {
+          this.utilities.onErr(response.errors[0]);
+        }
+
+        if (response && response.data) {
+          this.init();
+        }
+      },
+      error: (err) => {
+        this.disableFollowBtn = false;
+        this.utilities.onErr(err);
+      }
+    })
   }
 
   deleteArticle() {
@@ -127,13 +236,13 @@ export class ArticleViewComponent implements OnInit, OnDestroy {
         next: (response) => {
           this.disableDeleteArticle = true;
           if (response.errors) {
-            this.onErr(response.errors[0]);
+            this.utilities.onErr(response.errors[0]);
           }
           this.router.navigate(['/']);
         },
         error: (err) => {
           this.disableDeleteArticle = true;
-          this.onErr(err);
+          this.utilities.onErr(err);
         }
       })
   }
@@ -148,28 +257,15 @@ export class ArticleViewComponent implements OnInit, OnDestroy {
           next: (response) => {
             this.disableCommentDelete = false;
             if (response.errors) {
-              this.onErr(response.errors[0]);
+              this.utilities.onErr(response.errors[0]);
             }
             this.getComments();
           },
           error: (err) => {
             this.disableCommentDelete = false;
-            this.onErr(err);
+            this.utilities.onErr(err);
           }
         })
-    }
-  }
-
-  onErr(err: unknown) {
-    const error: Error = err as Error;
-
-    if (error['message'] && error['message'] === ERR.UNAUTHORIZED) {
-      this.appStateService.resetUser();
-      setTimeout(() => {
-        this.router.navigate(['/login']);
-      }, 1000);
-    } else {
-      throw new Error(error['message']);
     }
   }
 
