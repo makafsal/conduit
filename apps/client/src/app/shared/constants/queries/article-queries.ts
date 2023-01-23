@@ -185,6 +185,36 @@ export const GET_ARTICLES_BY_AUTHOR = gql`
   }
 `;
 
+export const GET_FAVORITED_ARTICLES = gql`
+  query getFavoritedArticles($favoritedUser: String!, $currentUser: String!, $token: String!) {
+    getFavoritedArticles(
+      payload: {
+        favoritedUser: $favoritedUser,
+        currentUser: $currentUser, 
+        token: $token
+      }
+    ) {
+      id
+      title
+      description
+      body
+      tags
+      slug
+      author {
+        email
+        username
+        bio
+        image
+        following
+      }
+      createdAt
+      updatedAt
+      favorited
+      favoriteCount
+    }
+  }
+`;
+
 export const FAVORITE_ARTICLE = gql`
   mutation favoriteArticle($article: String!, $favorited_by: String!, $token: String!) {
     favoriteArticle (

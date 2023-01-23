@@ -26,6 +26,7 @@ export class ArticleService implements OnModuleInit {
     this.articleClient.subscribeToResponseOf('delete_comment');
     this.articleClient.subscribeToResponseOf('popular_tags');
     this.articleClient.subscribeToResponseOf('get_articles_by_tag');
+    this.articleClient.subscribeToResponseOf('get_favorited_articles');
   }
 
   create(article: CreateArticleInput) {
@@ -105,6 +106,17 @@ export class ArticleService implements OnModuleInit {
         return articles;
       })
     );
+  }
+
+  getUserFavorited(payload) {
+    logger.log('GATEWAY - Calling Article Service');
+
+    return this.articleClient.send('get_favorited_articles', payload)
+    .pipe(map(articles => {
+      logger.log('GATEWAY - Favorited articles retrieved');
+
+      return articles;
+    }));
   }
 
   favoriteArticle(favoriteArgs) {

@@ -11,6 +11,10 @@ export class FavoriteService {
     return this.favoriteRepository.getAll();
   }
 
+  getByFavoritedUser(user: string) {
+    return this.favoriteRepository.getByFavoritedBy(user);
+  }
+
   async create(payload) {
     await this.favoriteRepository.create(payload);
 

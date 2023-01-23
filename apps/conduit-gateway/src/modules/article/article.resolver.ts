@@ -11,7 +11,7 @@ import { FavoriteArticleInput } from '../../shared/types/article/input/favorite-
 import { GetAllArticlesInput } from '../../shared/types/article/input/get-all-articles.input';
 import { GetArticleByIdInput } from '../../shared/types/article/input/get-article-by-id.input';
 import { GetArticleByTagInput } from '../../shared/types/article/input/get-article-by-tag.input';
-import { GetFavoritedArticlesInput } from '../../shared/types/article/input/get-article-by-tag.input copy';
+import { GetFavoritedArticlesInput } from '../../shared/types/article/input/get-favorited-articles.input';
 import { GetAuthorArticleInput } from '../../shared/types/article/input/get-author-article.input';
 import { GetCommentByArticleInput } from '../../shared/types/article/input/get-comment-by-article.input';
 import { GetPopularTagsInput } from '../../shared/types/article/input/get-popular-tags.input';
@@ -65,7 +65,7 @@ export class ArticleResolver {
   @Query(() => [Article])
   @UseGuards(GraphQLAuthGuard)
   getFavoritedArticles(@Args('payload') payload: GetFavoritedArticlesInput) {
-    return this.articleService.getByTag(payload);
+    return this.articleService.getUserFavorited(payload);
   }
 
   @Mutation(() => String)

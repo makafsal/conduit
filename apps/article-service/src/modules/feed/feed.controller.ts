@@ -44,6 +44,11 @@ export class FeedController {
     return this.feedService.getByID(payload.articleID, payload.currentUser);
   }
 
+  @MessagePattern('get_favorited_articles')
+  handleGetFavoritedArticles(payload) {
+    return this.feedService.getUserFavorited(payload);
+  }
+
   @MessagePattern('favorite_article')
   handleFavoriteArticle(payload) {
     return this.feedService.favoriteArticle(payload);

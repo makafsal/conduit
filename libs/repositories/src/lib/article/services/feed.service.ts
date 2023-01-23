@@ -165,6 +165,44 @@ export class FeedService {
     return tagArticles;
   }
 
+  async getUserFavorited(payload) {
+    const favorites = await this.favoriteService.getAll();
+    const userFavorites = await this.favoriteService.getByFavoritedUser(payload.favoritedUser);
+    const articles = await this.feedRepository.getAll();
+    const users = await this.userService.getAll();
+    const followers = await this.followerService.getAll();
+
+    const favoritedArticles = [];
+
+    userFavorites.forEach((favoriteEntry) => {
+      const articleEntry = articles.find(article => article.title === favoriteEntry.article);
+
+      if (articleEntry) {
+        const articleFavorites = favorites.filter(favorite => favorite.article === articleEntry.title);
+        const user = users.find(_user => _user.email === articleEntry.author);
+        const authorFollowers = followers.filter((entry: any) => entry.followedProfile === user.email);
+        const following = authorFollowers.find((follower: any) => follower.followedBy === payload.currentUser);
+
+        const updatedArticle = {
+          ...articleEntry,
+          favoriteCount: articleFavorites?.length || 0,
+          favorited: true,
+          author: {
+            username: user.username,
+            email: user.email,
+            bio: user.bio,
+            image: user.image,
+            following: following ? true : false
+          }
+        }
+
+        favoritedArticles.push(updatedArticle);
+      }
+    });
+
+    return favoritedArticles;
+  }
+
   async getByAuthor(author, currentUser) {
     logger.log('ARTICLE-SERVICE: Get articles by author triggered');
 

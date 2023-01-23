@@ -5,7 +5,9 @@
       <a role="button" (click)="onProfileClick(article)" class="author">{{article.author.username}}</a>
       <span class="date">{{article && datePipe.transform(article.updatedAt || article.createdAt, 'longDate')}}</span>
     </div>
-    <button class="btn btn-outline-primary btn-sm pull-xs-right" (click)="onFavorite(article)" [disabled]="disableFavIcon">
+    <button class="btn btn-sm pull-xs-right"
+      [ngClass]="article && article.favorited ? 'btn-primary' : 'btn-outline-primary'" (click)="onFavorite(article)"
+      [disabled]="disableFavIcon">
       <i class="ion-heart"></i> {{article.favoriteCount}}
     </button>
   </div>

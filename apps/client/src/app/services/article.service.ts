@@ -8,6 +8,7 @@ import {
   GET_ARTICLES_BY_AUTHOR,
   GET_ARTICLES_BY_TAG,
   GET_ARTICLE_BY_ID,
+  GET_FAVORITED_ARTICLES,
   UNFAVORITE_ARTICLE,
   UPDATE_ARTICLE
 } from "../shared/constants/queries/article-queries";
@@ -73,6 +74,18 @@ export class ArticleService {
       query: GET_ARTICLES_BY_AUTHOR,
       variables: {
         author,
+        currentUser,
+        token
+      },
+      fetchPolicy: 'network-only'
+    });
+  }
+
+  getFavorited(favoritedUser: string, currentUser: string, token: string) {
+    return this.apollo.query({
+      query: GET_FAVORITED_ARTICLES,
+      variables: {
+        favoritedUser,
         currentUser,
         token
       },

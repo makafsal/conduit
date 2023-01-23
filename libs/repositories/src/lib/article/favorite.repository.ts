@@ -29,6 +29,13 @@ export class FavoriteRepository implements OnModuleInit {
     return await (await this.favoriteMapper.findAll()).toArray();
   }
 
+  async getByFavoritedBy(favorited_by: string) {
+    const res = await this.cassandraService.client
+      .execute(`SELECT * FROM favorites WHERE favorited_by = '${favorited_by}' ALLOW FILTERING`);
+
+    return res?.rows;
+  }
+
   create(favorite) {
     return this.favoriteMapper.insert(favorite);
   }
