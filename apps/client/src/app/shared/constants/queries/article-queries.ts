@@ -125,6 +125,36 @@ export const GET_ARTICLES = gql`
   }
 `;
 
+export const GET_ARTICLES_BY_TAG = gql`
+  query getArticlesByTag($tag: String!, $currentUser: String!, $token: String!) {
+    getArticlesByTag(
+      payload: {
+        tag: $tag,
+        currentUser: $currentUser, 
+        token: $token
+      }
+    ) {
+      id
+      title
+      description
+      body
+      tags
+      slug
+      author {
+        email
+        username
+        bio
+        image
+        following
+      }
+      createdAt
+      updatedAt
+      favorited
+      favoriteCount
+    }
+  }
+`;
+
 export const GET_ARTICLES_BY_AUTHOR = gql`
   query getArticlesByAuthor($author: String!, $currentUser: String!, $token: String!) {
     getArticlesByAuthor(

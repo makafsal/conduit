@@ -1,3 +1,3 @@
 export * from './lib/ui.module';
 
-export * from './lib/models/ITab';
+export * from './lib/tab/models/ITab';

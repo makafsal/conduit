@@ -34,6 +34,11 @@ export class FeedController {
     return this.feedService.getByAuthor(payload.author, payload.currentUser);
   }
 
+  @MessagePattern('get_articles_by_tag')
+  handleGetArticlesByTag(payload) {
+    return this.feedService.getByTag(payload.tag, payload.currentUser);
+  }
+
   @MessagePattern('get_article_by_id')
   handleGetArticleByID(payload) {
     return this.feedService.getByID(payload.articleID, payload.currentUser);

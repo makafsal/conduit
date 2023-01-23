@@ -10,11 +10,12 @@ import { DeleteCommentInput } from '../../shared/types/article/input/delete-comm
 import { FavoriteArticleInput } from '../../shared/types/article/input/favorite-article.input';
 import { GetAllArticlesInput } from '../../shared/types/article/input/get-all-articles.input';
 import { GetArticleByIdInput } from '../../shared/types/article/input/get-article-by-id.input';
+import { GetArticleByTagInput } from '../../shared/types/article/input/get-article-by-tag.input';
+import { GetFavoritedArticlesInput } from '../../shared/types/article/input/get-article-by-tag.input copy';
 import { GetAuthorArticleInput } from '../../shared/types/article/input/get-author-article.input';
 import { GetCommentByArticleInput } from '../../shared/types/article/input/get-comment-by-article.input';
 import { GetPopularTagsInput } from '../../shared/types/article/input/get-popular-tags.input';
 import { UpdateArticleInput } from '../../shared/types/article/input/update-article.input';
-import { UpdateArticleOutput } from '../../shared/types/article/output/update-article.output';
 import { Tag } from '../../shared/types/article/tag.dto';
 import { ArticleService } from './article.service';
 
@@ -55,7 +56,17 @@ export class ArticleResolver {
     return this.articleService.getByID(payload);
   }
 
-  // TODO: Get articles by tag (implement)
+  @Query(() => [Article])
+  @UseGuards(GraphQLAuthGuard)
+  getArticlesByTag(@Args('payload') payload: GetArticleByTagInput) {
+    return this.articleService.getByTag(payload);
+  }
+
+  @Query(() => [Article])
+  @UseGuards(GraphQLAuthGuard)
+  getFavoritedArticles(@Args('payload') payload: GetFavoritedArticlesInput) {
+    return this.articleService.getByTag(payload);
+  }
 
   @Mutation(() => String)
   @UseGuards(GraphQLAuthGuard)
@@ -100,6 +111,6 @@ export class ArticleResolver {
   @Query(() => [Tag])
   @UseGuards(GraphQLAuthGuard)
   getPopularTags(@Args('payload') payload: GetPopularTagsInput) {
-    return this.articleService.getPopularTags();
+    return this.articleService.getPopularTags(payload);
   }
 }

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ITab } from '@conduit/ui';
-import { TAB } from '../../shared/constants/home';
+import { TAB } from '../../shared/constants/common';
 import { ITag } from '../../shared/model/ITag';
 
 @Component({

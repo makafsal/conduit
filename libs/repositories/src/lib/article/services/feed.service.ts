@@ -125,6 +125,46 @@ export class FeedService {
     return updated_articles;
   }
 
+  async getByTag(tag, currentUser) {
+    logger.log('ARTICLE-SERVICE: Get articles by tag triggered');
+
+    const articles = await this.feedRepository.getAll();
+    const users = await this.userService.getAll();
+    const favorites = await this.favoriteService.getAll();
+    const followers = await this.followerService.getAll();
+    const tagArticles = [];
+
+    articles.forEach(article => {
+      const tags = article?.tags?.split(',');
+      const isFound = tags.find(tagItem => tagItem.trim().toLocaleLowerCase() === tag.trim().toLocaleLowerCase());
+
+      if (isFound) {
+        const articleFavorites = favorites.filter(favorite => favorite.article === article.title);
+        const favorited = favorites.find(favorite => favorite.article === article.title && favorite.favoritedBy === currentUser);
+        const user = users.find(_user => _user.email === article.author);
+        const authorFollowers = followers.filter((entry: any) => entry.followedProfile === user.email);
+        const following = authorFollowers.find((follower: any) => follower.followedBy === currentUser);
+
+        const updatedArticle = {
+          ...article,
+          favoriteCount: articleFavorites?.length || 0,
+          favorited: favorited ? true : false,
+          author: {
+            username: user.username,
+            email: user.email,
+            bio: user.bio,
+            image: user.image,
+            following: following ? true : false
+          }
+        };
+
+        tagArticles.push(updatedArticle);
+      }
+    });
+
+    return tagArticles;
+  }
+
   async getByAuthor(author, currentUser) {
     logger.log('ARTICLE-SERVICE: Get articles by author triggered');
 

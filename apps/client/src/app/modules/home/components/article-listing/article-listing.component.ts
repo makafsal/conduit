@@ -5,6 +5,7 @@ import { ArticleService } from '../../../../services/article.service';
 import { IUser } from '../../../../shared/model/IUser';
 import { AppStateService } from '../../../../services/common/appStateService';
 import { Utilities } from '../../../../shared/utilities/utilities';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'conduit-article-listing',
@@ -25,7 +26,8 @@ export class ArticleListingComponent implements OnInit {
   constructor(
     public readonly datePipe: DatePipe,
     private readonly articleService: ArticleService,
-    private readonly utilities: Utilities
+    private readonly utilities: Utilities,
+    private router: Router,
   ) { }
 
   ngOnInit(): void {
@@ -77,5 +79,13 @@ export class ArticleListingComponent implements OnInit {
           }
         });
     }
+  }
+
+  profileClick(article: IArticle) {
+    this.router.navigate([`/profile/${article.author.username}`]);
+  }
+
+  articleClick(article: IArticle) {
+    this.router.navigate([`/articles/${article.slug}`]);
   }
 }

@@ -6,6 +6,7 @@ import {
   FAVORITE_ARTICLE,
   GET_ARTICLES,
   GET_ARTICLES_BY_AUTHOR,
+  GET_ARTICLES_BY_TAG,
   GET_ARTICLE_BY_ID,
   UNFAVORITE_ARTICLE,
   UPDATE_ARTICLE
@@ -53,6 +54,17 @@ export class ArticleService {
         token
       },
       fetchPolicy: 'network-only'
+    });
+  }
+
+  getByTag(tag: string, currentUser: string, token: string) {
+    return this.apollo.query({
+      query: GET_ARTICLES_BY_TAG,
+      variables: {
+        tag,
+        currentUser,
+        token
+      }
     });
   }
 

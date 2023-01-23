@@ -7,8 +7,8 @@ export class TagService {
     private readonly tagRepository: TagRepository
   ) { }
 
-  insertTags(tags) {
-    const _tags = tags.split(',');
+  insertTags(tags: string) {
+    const _tags = tags.trim().split(',');
 
     _tags.forEach(async (tag) => {
       const _tag = tag.trim().toLowerCase();

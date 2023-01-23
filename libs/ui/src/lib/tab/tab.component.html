@@ -1,17 +1,9 @@
-<div class="feed-toggle">
+<div class="tab-toggle">
   <ul class="nav nav-pills outline-active">
     <li *ngFor="let tab of tabs" class="nav-item">
-      <a class="nav-link" [ngClass]="currentTab === tab.title ? 'active' : ''" (click)="tabChange(tab)">
+      <a class="nav-link" [ngClass]="currentTabTitle === tab.title ? 'active' : ''" (click)="tabChange(tab)">
         {{tab.title}}
       </a>
     </li>
-    <!-- <li class="nav-item">
-      <a class="nav-link" [ngClass]="currentTab === yourTabName ? 'active' : ''" (click)="tabChange(yourTabName)">Your
-        Feed</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" [ngClass]="currentTab === globalTabName ? 'active' : ''"
-        (click)="tabChange(globalTabName)">Global Feed</a>
-    </li> -->
   </ul>
 </div>
