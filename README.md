@@ -14,6 +14,15 @@ For more information on how to this works with other frontends/backends, head ov
 
 # Getting started
 
+We are using Kafka in this project, you can use Kafdrop to run Kafka locally. Please goto this repo https://github.com/obsidiandynamics/kafdrop and clone the Kafdrop to local.
+
+Then we can easily start the Kafdrop docker-compose by running:
+
+> cd docker-compose/kafka-kafdrop
+
+> docker-compose up
+
+This application needs Node vesion v18.12.1 (npm v8.19.2). Then run:
 > npm install
 
 Run Backend Services:
