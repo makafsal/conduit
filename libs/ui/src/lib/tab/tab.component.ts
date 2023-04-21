@@ -6,7 +6,6 @@ import {
   OnChanges,
   SimpleChanges
 } from '@angular/core';
-import { } from 'stream';
 import { ITab } from './models/ITab';
 
 @Component({
